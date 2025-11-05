@@ -178,7 +178,7 @@ window.startMango = (mountEl) => {
                 rough: 0.6,
                 metal: 0.0
             })
-            makeTextRing('CREATIVE CODING • DIGITAL DESIGN •')
+            makeTextRing('CREATIVE CODING • DIGITAL DESIGN • ')
         })
 
         asteroidParents = []
@@ -226,82 +226,110 @@ window.startMango = (mountEl) => {
 
     }
 
-    let clipY = 0
+    function makeTextRing(text = 'CREATIVE CODING • DIGITAL DESIGN • ') {
+    const W = 8192, H = 512, PADX = 80, PADY = 40
 
-    function makeTextRing(text = 'CREATIVE CODING • DIGITAL DESIGN •') {
-        const W = 10096,
-            H = 768
-        const PADX = 140,
-            PADY = 50
+    const cvs = document.createElement('canvas')
+    cvs.width = W; cvs.height = H
+    const ctx = cvs.getContext('2d')
 
-        const cvs = document.createElement('canvas')
-        cvs.width = W;
-        cvs.height = H
-        const ctx = cvs.getContext('2d')
+    const tex = new THREE.CanvasTexture(cvs)
+    tex.wrapS = THREE.RepeatWrapping
+    tex.wrapT = THREE.ClampToEdgeWrapping
+    tex.repeat.x = 1
+    tex.offset.x = 0
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy()
+    tex.minFilter = THREE.LinearMipmapLinearFilter
+    tex.magFilter = THREE.LinearFilter
+    tex.generateMipmaps = true
 
-        const tex = new THREE.CanvasTexture(cvs)
-        tex.wrapS = THREE.RepeatWrapping
-        tex.wrapT = THREE.ClampToEdgeWrapping
-        tex.repeat.x = -1
-        tex.offset.x = 1
-        tex.anisotropy = renderer.capabilities.getMaxAnisotropy()
-        tex.minFilter = THREE.LinearMipmapLinearFilter
-        tex.magFilter = THREE.LinearFilter
+    function draw() {
+        ctx.clearRect(0, 0, W, H)
+        const size = H - PADY * 2
+        ctx.font = `800 ${size}px "Outfit", Helvetica, Arial, sans-serif`
+        ctx.textBaseline = 'middle'
 
-        function draw() {
-            ctx.clearRect(0, 0, W, H)
-            const size = H - PADY * 2
-            ctx.font = `900 ${size}px Arial Black, Helvetica, Arial, sans-serif`
-            ctx.textAlign = 'center'
-            ctx.textBaseline = 'middle'
-            ctx.save()
-            ctx.shadowColor = 'rgba(255,240,200,1)'
-            ctx.shadowBlur = 100
-            const g = ctx.createLinearGradient(0, 0, 0, H)
-            g.addColorStop(0, '#ffffff')
-            g.addColorStop(1, '#FFDCA8')
-            ctx.fillStyle = g
-            ctx.fillText(text, W / 2, H / 2)
-            ctx.restore()
-            tex.needsUpdate = true
+        const grad = ctx.createLinearGradient(0, 0, 0, H)
+        grad.addColorStop(0, '#ffffff')
+        grad.addColorStop(1, '#FFDCA8')
+        ctx.fillStyle = grad
+        ctx.shadowColor = 'rgba(255,240,200,1)'
+        ctx.shadowBlur = 80
+
+        const phrase = text.endsWith(' ') ? text : text + ' '
+        const m = ctx.measureText(phrase).width
+        let x = -m                     
+        const y = H / 2
+        while (x < W + m) {
+        ctx.fillText(phrase, x + PADX, y)
+        x += m
         }
-
-        const radius = 1.58
-        const height = 0.42
-        const geo = new THREE.CylinderGeometry(radius, radius, height, 256, 1, true)
-
-        textClipPlane = new THREE.Plane()
-        const mat = new THREE.MeshBasicMaterial({
-            map: tex,
-            transparent: true,
-            side: THREE.DoubleSide,
-            toneMapped: false,
-            clippingPlanes: [textClipPlane]
-        })
-
-        textRing = new THREE.Mesh(geo, mat)
-
-        const glow = new THREE.Mesh(geo, mat.clone())
-        glow.material.opacity = 0.25
-        glow.material.depthWrite = false
-        glow.material.clippingPlanes = [textClipPlane]
-        glow.scale.multiplyScalar(1.012)
-
-        textGroup = new THREE.Group()
-        textGroup.rotation.x = Math.PI
-        textGroup.position.y = 0.05
-        textGroup.add(textRing, glow)
-
-        if (mangoParent) mangoParent.add(textGroup)
-        else scene.add(textGroup)
-
-        draw()
-        textRing.updateLabel = (s) => {
-            text = s;
-            draw()
-        }
+        tex.needsUpdate = true
     }
-    addStars()
+
+    const radius = 1.58
+    const height = 0.42
+    const geo = new THREE.CylinderGeometry(radius, radius, height, 256, 1, true)
+
+    const mat = new THREE.MeshBasicMaterial({
+        map: tex,
+        transparent: true,
+        side: THREE.DoubleSide,
+        toneMapped: false
+    })
+
+    mat.onBeforeCompile = (shader) => {
+        shader.vertexShader = shader.vertexShader
+        .replace(
+            '#include <common>',
+            '#include <common>\nvarying float vFacing;'
+        )
+        .replace(
+            '#include <begin_vertex>',
+            `
+            #include <begin_vertex>
+            vec3 n = normalize(normalMatrix * normal);
+            vec3 v = normalize(-(modelViewMatrix * vec4(position,1.0)).xyz);
+            vFacing = dot(n, v);
+            `
+        )
+
+        shader.fragmentShader = shader.fragmentShader
+        .replace(
+            '#include <common>',
+            '#include <common>\nvarying float vFacing;'
+        )
+        .replace(
+            '#include <map_fragment>',
+            `
+            #include <map_fragment>
+            if (vFacing < 0.0) discard;   // hide the back half of the ring
+            `
+        )
+    }
+
+    textRing = new THREE.Mesh(geo, mat)
+
+    const glow = new THREE.Mesh(geo, mat.clone())
+    glow.material.opacity = 0.25
+    glow.material.depthWrite = false
+    glow.scale.multiplyScalar(1.012)
+
+    textGroup = new THREE.Group()
+    textGroup.rotation.x = Math.PI
+    textGroup.position.y = 0.05
+    textGroup.add(textRing, glow)
+
+    if (mangoParent) mangoParent.add(textGroup)
+    else scene.add(textGroup)
+
+    draw()
+
+    if (window.gsap) gsap.to(tex.offset, { x: '-=1', duration: 10, ease: 'none', repeat: -1 })
+
+    textRing.updateLabel = (s) => { text = s; draw() }
+    }
+
 
     function addStars() {
         const totalStars = 750
@@ -338,6 +366,8 @@ window.startMango = (mountEl) => {
 
         scene.add(starsSphere)
     }
+    addStars()
+
 
     function getTexture(type) {
         const canvas = document.createElement('canvas')
