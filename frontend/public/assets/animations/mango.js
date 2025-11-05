@@ -427,116 +427,119 @@ window.startMango = (mountEl) => {
             })
         }
         hideHeroText()
-        function mangoStoryHome() {
-        const storyHome = document.querySelector('.story-home')
-        if (!storyHome || !window.gsap || !window.ScrollTrigger) return
+        const CAM = { scrub: 0.45, ease: 'power3.out', smooth: 0.22, spins: Math.PI, r0: 1, r1: 1, roll0: 0, roll1: 0 }
+        function makeCamScroller(camera, controls) {
         const { gsap, ScrollTrigger } = window
         gsap.registerPlugin(ScrollTrigger)
+        const lerp = (a,b,t)=>a+(b-a)*t
 
-        if (controls) {
-            controls.target.set(0, 0, 0)
-            controls.update()
-        }
-        const yStart = camera.position.y
-        const yEnd = yStart - 0.2
-        const targetX0 = 0.0
-        const targetX1 = 1.0
-        const spins = Math.PI * 1.1
-        const radiusStart = 1.0
-        const radiusEnd = 1.1
-        const rollStart = 0
-        const rollEnd = 0.15
-        ScrollTrigger.create({
-            trigger: storyHome,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 0.4,
-            markers: false,
+        return function section(cfg) {
+            const el = typeof cfg.trigger === 'string' ? document.querySelector(cfg.trigger) : cfg.trigger
+            if (!el) return
+            const spins = cfg.spins ?? CAM.spins
+            const r0 = cfg.radiusStart ?? CAM.r0
+            const r1 = cfg.radiusEnd ?? CAM.r1
+            const roll0 = cfg.rollStart ?? CAM.roll0
+            const roll1 = cfg.rollEnd ?? CAM.roll1
+            const easing = gsap.parseEase(cfg.ease || CAM.ease)
+            const y0 = cfg.yStart ?? camera.position.y
+            const y1 = cfg.yEnd ?? y0
+
+            ScrollTrigger.create({
+            trigger: el,
+            start: cfg.start || 'top bottom',
+            end: cfg.end || 'bottom top',
+            scrub: cfg.scrub ?? CAM.scrub,
+            invalidateOnRefresh: true,
+            refreshPriority: cfg.priority || 1,
             onUpdate: (self) => {
-            const t = self.progress
-            const te = gsap.parseEase('expo.out')(t)
-            const r = gsap.utils.interpolate(radiusStart, radiusEnd, te)
-            const ang = gsap.utils.interpolate(0, spins, t)
-            const x = Math.sin(ang) * r
-            const z = Math.cos(ang) * r
-            const y = gsap.utils.interpolate(yStart, yEnd, t)
+                const t = self.progress
+                const te = easing(t)
+                const r = gsap.utils.interpolate(r0, r1, te)
+                const ang = gsap.utils.interpolate(cfg.angStart || 0, spins, t)
+                const x = Math.sin(ang) * r
+                const z = Math.cos(ang) * r
+                const y = gsap.utils.interpolate(y0, y1, t)
 
-            camera.position.set(x, y, z)
+                if (cfg.posLerp) {
+                camera.position.set(
+                    lerp(camera.position.x, x, cfg.posLerp),
+                    lerp(camera.position.y, y, cfg.posLerp),
+                    lerp(camera.position.z, z, cfg.posLerp)
+                )
+                } else {
+                camera.position.set(x, y, z)
+                }
 
-            const tx = gsap.utils.interpolate(targetX0, targetX1, t)
-            if (controls) {
-                controls.target.set(tx, 0, 0)
+                const tx = gsap.utils.interpolate(cfg.targetX0 || 0, cfg.targetX1 || 0, t)
+                const ty = gsap.utils.interpolate(cfg.targetY0 || 0, cfg.targetY1 || 0, t)
+                const tz = gsap.utils.interpolate(cfg.targetZ0 || 0, cfg.targetZ1 || 0, t)
+
+                if (controls) {
+                const s = cfg.targetLerp ?? CAM.smooth
+                const cur = controls.target
+                cur.set(lerp(cur.x, tx, s), lerp(cur.y, ty, s), lerp(cur.z, tz, s))
                 controls.update()
-            } else {
-                camera.lookAt(tx, 0, 0)
-            }
-
-            camera.rotation.z = gsap.utils.interpolate(rollStart, rollEnd, t)
-            }
-        })
-
-        ScrollTrigger.create({
-            trigger: storyHome,
-            start: 'top bottom',
-            end: 'top top',
-            scrub: 0.4,
-            onUpdate: (self) => {
-            window.clipDist = gsap.utils.interpolate(0, 1, self.progress)
-            }
-        })
-        }
-        mangoStoryHome()
-        function mangoProjects() {
-        const projects = document.querySelector('.projects')
-        if (!projects || !window.gsap || !window.ScrollTrigger) return
-        const { gsap, ScrollTrigger } = window
-        gsap.registerPlugin(ScrollTrigger)
-
-        const yStart = camera.position.y - 0.2   
-        const yEnd = yStart + 0.15 
-        const spins = Math.PI * 0.65
-        const radiusStart = 1.15
-        const radiusEnd = 0.92
-        const rollStart = 0.05
-        const rollEnd = -0.1
-
-        const targetX0 = -0.6, targetX1 = 0.25
-        const targetY0 =  0.00, targetY1 = 0.20
-        const targetZ0 =  0.00, targetZ1 = 0.00
-
-        ScrollTrigger.create({
-            trigger: projects,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 0.5,
-            markers: false,
-            onUpdate: (self) => {
-            const t = self.progress
-            const te = gsap.parseEase('power3.out')(t)
-            const r = gsap.utils.interpolate(radiusStart, radiusEnd, te)
-            const ang = gsap.utils.interpolate(0, spins, t)
-
-            const x = Math.sin(ang) * r
-            const z = Math.cos(ang) * r
-            const y = gsap.utils.interpolate(yStart, yEnd, t)
-            camera.position.set(x, y, z)
-
-            const tx = gsap.utils.interpolate(targetX0, targetX1, t)
-            const ty = gsap.utils.interpolate(targetY0, targetY1, t)
-            const tz = gsap.utils.interpolate(targetZ0, targetZ1, t)
-
-            if (controls) {
-                controls.target.set(tx, ty, tz)
-                controls.update()
-            } else {
+                } else {
                 camera.lookAt(tx, ty, tz)
-            }
+                }
 
-            camera.rotation.z = gsap.utils.interpolate(rollStart, rollEnd, t)
+                camera.rotation.z = gsap.utils.interpolate(roll0, roll1, t)
+                if (cfg.onProgress) cfg.onProgress(t, te)
             }
-        })
+            })
         }
-        mangoProjects()
+        }
+
+        const useSection = makeCamScroller(camera, controls)
+
+        useSection({
+        trigger: '.story-home',
+        spins: Math.PI * 1.1,
+        radiusStart: 1.0, radiusEnd: 1.1,
+        yStart: camera.position.y, yEnd: camera.position.y - 0.2,
+        rollStart: 0, rollEnd: 0.15,
+        targetX0: 0, targetX1: 1,
+        ease: 'expo.out',
+        priority: 1,
+        onProgress: (t)=>{ window.clipDist = gsap.utils.interpolate(0,1,t) }
+        })
+
+        useSection({
+        trigger: '.projects',
+        spins: Math.PI * 0.65,
+        radiusStart: 1.15, radiusEnd: 0.92,
+        yStart: camera.position.y - 0.2, yEnd: camera.position.y + 0.15,
+        rollStart: 0.05, rollEnd: -0.1,
+        targetX0: -0.6, targetX1: 5,
+        targetY0: 0.0,  targetY1: 0.2,
+        targetZ0: 0.0,  targetZ1: -5,
+        priority: 2
+        })
+
+        useSection({
+        trigger: '.about-home',
+        spins: Math.PI * 0.65,
+        radiusStart: 0.92, radiusEnd: 0.5,
+        yStart: camera.position.y - 0.2, yEnd: camera.position.y + 0.15,
+        rollStart: -0.1, rollEnd: -0.3,
+        targetX0: 5, targetX1: 10,
+        targetY0: 0.2, targetY1: 2,
+        targetZ0: -5, targetZ1: 20,
+        priority: 3
+        })
+
+        useSection({
+        trigger: '.blogs',
+        spins: Math.PI * 0.65,
+        radiusStart: 0.5, radiusEnd: 0.5,
+        yStart: camera.position.y + 0.15, yEnd: camera.position.y + 0.15,
+        rollStart: -0.3, rollEnd: -0.3,
+        targetX0: 10, targetX1: 15,
+        targetY0: 2, targetY1: -2,
+        targetZ0: 20, targetZ1: 10,
+        priority: 4
+        })
     }
     mangoGsap();
 

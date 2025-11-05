@@ -363,15 +363,15 @@ a {
 }
 
 .project-card {
+  flex: 1 1 calc(33.333% - 25px);
+  box-sizing: border-box;
+  padding: 15px;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-sizing: border-box;
-  flex: 1 1 calc(25% - 25px);
-  padding: 15px;
-  border-radius: 15px;
-    pointer-events: all;
-    transition: .7s ease-in-out;
+  pointer-events: all;
+  transition: .7s ease-in-out;
 }
 
 .project-card:hover {
