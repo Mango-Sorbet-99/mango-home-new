@@ -49,6 +49,7 @@ body {
 
 #smooth-wrapper, #smooth-content {
     pointer-events: none;
+    background: transparent;
 }
 
 .container {
@@ -532,44 +533,24 @@ a {
 
  /* LOGO STREAM */
 
-.gradinet-left {
-background: #000;
-background: linear-gradient(90deg, rgb(2 7 16) 0%, rgb(1 5 22 / 0%) 100%);
-}
-
-.gradinet-right {
-    background: #000;
-    background: linear-gradient(-90deg, rgb(2 7 16) 0%, rgb(1 5 22 / 0%) 100%);
-}
-
-.logo-ticker .gradinet-right {
-    z-index: 3;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    height: 100%;
-    width: 100px;
-    mix-blend-mode: hard-light;
-}
-
-.logo-ticker .gradinet-left {
-    z-index: 3;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    height: 100%;
-    width: 100px;
-    mix-blend-mode: hard-light;
-}
 .logo-ticker {
   position: relative;
-  width: calc(100% + 100px);
   padding: 40px 0;
   overflow: hidden;
+  transform: none;
+  filter: none;
+  isolation: auto; 
+  z-index: 1; 
+  width: calc(100% + 100px);
 }
 
 .logo-ticker .swiper-wrapper {
   transition-timing-function: linear !important;
+}
+
+.logo-ticker .swiper {
+  position: relative;
+  z-index: 1;               
 }
 
 .logo-ticker .swiper-slide {
@@ -582,7 +563,27 @@ background: linear-gradient(90deg, rgb(2 7 16) 0%, rgb(1 5 22 / 0%) 100%);
   width: 100px;
   height: 44px;
   object-fit: contain;
-  opacity: 0.9;
+  opacity: 0.9;   
+}
+
+.logo-ticker .gradinet-left,
+.logo-ticker .gradinet-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: normal;
+}
+
+.gradinet-left {
+  background: linear-gradient(90deg, rgb(2 7 16) 0%, rgb(1 5 22 / 0%) 100%);
+  left: 0;
+}
+.gradinet-right {
+  background: linear-gradient(-90deg, rgb(2 7 16) 0%, rgb(1 5 22 / 0%) 100%);
+  right: 0;
 }
 
 /* WHEEL */

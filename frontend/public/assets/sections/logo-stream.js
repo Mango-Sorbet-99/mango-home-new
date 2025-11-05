@@ -18,9 +18,6 @@ const Logos = () => {
   React.useEffect(() => {
     if (!swiperRef.current || !window.Swiper || !window.gsap || !window.ScrollTrigger) return
 
-    const { gsap } = window
-    gsap.registerPlugin(window.ScrollTrigger)
-
     if (inst.current && !inst.current.destroyed) inst.current.destroy(true, true)
 
     inst.current = new window.Swiper(swiperRef.current, {
