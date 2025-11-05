@@ -408,7 +408,25 @@ window.startMango = (mountEl) => {
 
     /*GSAP*/
     function mangoGsap() {
-        // STORY: keeps your original behavior
+        function hideHeroText() {
+            const el = document.querySelector('.story-home')
+            if (!el || !window.gsap || !window.ScrollTrigger) return
+            const {
+                gsap,
+                ScrollTrigger
+            } = window
+            gsap.registerPlugin(ScrollTrigger)
+            ScrollTrigger.create({
+                trigger: el,
+                start: 'top bottom',
+                end: 'top top',
+                scrub: 0.4,
+                onUpdate: (self) => {
+                    clipDist = gsap.utils.interpolate(0, 1, self.progress)
+                }
+            })
+        }
+        hideHeroText()
         function mangoStoryHome() {
         const storyHome = document.querySelector('.story-home')
         if (!storyHome || !window.gsap || !window.ScrollTrigger) return
@@ -419,8 +437,6 @@ window.startMango = (mountEl) => {
             controls.target.set(0, 0, 0)
             controls.update()
         }
-
-        // section-local constants
         const yStart = camera.position.y
         const yEnd = yStart - 0.2
         const targetX0 = 0.0
@@ -430,7 +446,6 @@ window.startMango = (mountEl) => {
         const radiusEnd = 1.1
         const rollStart = 0
         const rollEnd = 0.15
-
         ScrollTrigger.create({
             trigger: storyHome,
             start: 'top bottom',
@@ -460,7 +475,6 @@ window.startMango = (mountEl) => {
             }
         })
 
-        // your clipDist driver, kept scoped to this section
         ScrollTrigger.create({
             trigger: storyHome,
             start: 'top bottom',
@@ -471,24 +485,21 @@ window.startMango = (mountEl) => {
             }
         })
         }
-
-        // PROJECTS: different camera arc + lookAt targets
+        mangoStoryHome()
         function mangoProjects() {
         const projects = document.querySelector('.projects')
         if (!projects || !window.gsap || !window.ScrollTrigger) return
         const { gsap, ScrollTrigger } = window
         gsap.registerPlugin(ScrollTrigger)
 
-        // section-local constants (tweak freely)
-        const yStart = camera.position.y - 0.2   // pick up from where story ended
-        const yEnd = yStart + 0.15               // slight rise
-        const spins = Math.PI * 0.65             // gentler sweep
+        const yStart = camera.position.y - 0.2   
+        const yEnd = yStart + 0.15 
+        const spins = Math.PI * 0.65
         const radiusStart = 1.15
         const radiusEnd = 0.92
         const rollStart = 0.05
         const rollEnd = -0.1
 
-        // different targets (now with Y/Z support)
         const targetX0 = -0.6, targetX1 = 0.25
         const targetY0 =  0.00, targetY1 = 0.20
         const targetZ0 =  0.00, targetZ1 = 0.00
@@ -525,8 +536,6 @@ window.startMango = (mountEl) => {
             }
         })
         }
-
-        mangoStoryHome()
         mangoProjects()
     }
     mangoGsap();
