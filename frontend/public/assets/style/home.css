@@ -1,0 +1,83 @@
+canvas {
+    position: fixed;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+.hero {
+    align-items: end;
+    justify-content: space-between;
+    display: flex;
+    padding: 25px 0;
+}
+
+.socials-items {
+    display: flex;
+    flex-direction: column;
+    gap: 7.5px;
+}
+
+.socials {
+    padding: 15px;
+    border-radius: 7.5px;
+}
+
+.story-home {
+    padding: 50% 25% 100px 0;
+}
+
+.projects {
+    margin-top: 50%;
+}
+
+.projects .fifty-fifty {
+    padding-right: 25%;
+}
+    
+.fifty-fifty div .project-text {
+    margin-bottom: 25px;
+}
+
+.about-home {
+    margin-top: 50%;
+}
+
+.about-home img {
+    border-radius: 1000px;
+    width: 100%;
+    height: 100%;
+}
+
+.about-home .fifty-fifty {
+    gap: 100px
+}
+
+.about-home .fifty-fifty .button-1 {
+    margin-top: 25px;
+}
+
+.about-home .fifty-fifty-2 {
+    align-items: start;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.blogs {
+    margin-top: 25%;
+}
+
+.blogs .center-it {
+    margin-top: 25px;
+}
+
+.blogs .fifty-fifty {
+    padding-right: 25%;
+}
+    
+.fifty-fifty div .blog-text {
+    margin-bottom: 25px;
+}
