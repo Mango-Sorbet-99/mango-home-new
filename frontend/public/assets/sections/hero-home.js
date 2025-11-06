@@ -16,7 +16,7 @@ const HeroHome = () => {
 
     if (window.innerWidth > 600) {
       tl.fromTo(
-      '.hero socials',
+      '.hero .socials',
       { opacity: 1 },
       {
         opacity: 0,

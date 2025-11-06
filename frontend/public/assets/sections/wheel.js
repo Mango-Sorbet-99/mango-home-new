@@ -43,8 +43,6 @@ const Wheel = () => {
         <h2 className="wheel-text">Motion Design</h2>
       </div>
     </div>
-
-
   )
 }
 
