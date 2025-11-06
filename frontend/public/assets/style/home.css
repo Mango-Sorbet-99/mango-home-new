@@ -26,7 +26,7 @@ canvas {
 }
 
 .hero .socials {
-    border-radius: 7.5px;
+    transform: translateX(-25px);
 }
 
 .story-home {

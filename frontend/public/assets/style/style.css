@@ -323,7 +323,7 @@ a {
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
-    padding: 25px 50px ;
+    padding: 25px;
     width: calc(100% + 100px);
     border-radius: 15px 15px 0 0;
 }
