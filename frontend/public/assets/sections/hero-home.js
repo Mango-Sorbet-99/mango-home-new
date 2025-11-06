@@ -14,7 +14,8 @@ const HeroHome = () => {
       }
     });
 
-    tl.fromTo(
+    if (window.innerWidth > 600) {
+      tl.fromTo(
       '.hero socials',
       { opacity: 1 },
       {
@@ -22,7 +23,7 @@ const HeroHome = () => {
         duration: 1,
         ease: 'circ.in'
       }
-    );
+    )}
 
     return () => {
       tl.kill();
@@ -32,7 +33,7 @@ const HeroHome = () => {
 
   return (
     <div className="hero full-height">
-      <div className="socials">
+      <div className="socials hidden-mobile">
         <div className="socials-items">
           <h4>socials</h4>
           <a>Whatsapp</a>
