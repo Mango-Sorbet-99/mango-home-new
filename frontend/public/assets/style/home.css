@@ -122,6 +122,12 @@ canvas {
     margin-bottom: 25px;
 }
 
+@media only screen and (max-width: 1000px) {
+    .story-home h2 {
+        line-height: 250%;
+    }
+}
+
 @media only screen and (max-width: 600px) {
 
     .sticky-button {
@@ -139,10 +145,6 @@ canvas {
 
     .story-home {
         padding: 50% 0% 100px;
-    }
-
-    .story-home h2 {
-        line-height: 250%;
     }
 
     .projects .fifty-fifty {

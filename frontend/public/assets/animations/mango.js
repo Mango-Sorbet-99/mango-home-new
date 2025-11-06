@@ -71,7 +71,7 @@ window.startMango = (mountEl) => {
 
         controls = new OrbitControls(camera, renderer.domElement)
         controls.enableDamping = true
-        controls.dampingFactor = 0.12
+        controls.dampingFactor = 1
         controls.enablePan = false
         controls.minDistance = 0.5
         controls.maxDistance = 5
