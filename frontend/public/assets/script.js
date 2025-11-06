@@ -1,3 +1,5 @@
+window.API_URL = window.API_URL || 'http://localhost:1337'
+
 function MangoCanvas() {
   const ref = React.useRef(null)
 

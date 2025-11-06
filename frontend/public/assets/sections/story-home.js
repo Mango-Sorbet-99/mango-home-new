@@ -1,55 +1,72 @@
-const { useEffect, useRef } = React;
+const { useEffect, useRef, useState } = React
 
-const StoryHome = () => {
-  const h2Ref = useRef(null);
+;(function () {
+  const StoryHome = () => {
+    const h2Ref = useRef(null)
+    const splitRef = useRef(null)
+    const tlsRef = useRef([])
+    const [story, setStory] = useState('')
 
-  useEffect(() => {
+    useEffect(() => {
+      let alive = true
+      const url = (window.API_URL || '') + '/api/home'
+      fetch(url)
+        .then((r) => r.json())
+        .then((j) => {
+          if (!alive) return
+          setStory(j?.data?.story || '')
+        })
+        .catch((e) => console.error('Strapi fetch error:', e))
+      return () => { alive = false }
+    }, [])
 
-    const splitText = new SplitText('.story-home h2', {
-      type: 'words'
-    });
+    useEffect(() => {
+      if (!story || !h2Ref.current) return
+      const gsap = window.gsap
+      const ScrollTrigger = window.ScrollTrigger
+      const SplitText = window.SplitText
 
-    splitText.words.forEach((word) => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: word,
-          start: 'top bottom',
-          end: 'top center',
-          scrub: 0.5, 
+      if (!gsap || !ScrollTrigger || !SplitText) return
+
+      splitRef.current = new SplitText(h2Ref.current, { type: 'words' })
+      const words = splitRef.current.words || []
+
+      tlsRef.current = words.map((word) => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: word,
+            start: 'top bottom',
+            end: 'top center',
+            scrub: 0.5,
+          },
+        })
+        tl.fromTo(word, { opacity: 0 }, { opacity: 1, duration: 1, ease: 'expo.in' })
+        return tl
+      })
+
+      return () => {
+        tlsRef.current.forEach((tl) => {
+          if (tl.scrollTrigger) tl.scrollTrigger.kill()
+          tl.kill()
+        })
+        tlsRef.current = []
+        if (splitRef.current) {
+          splitRef.current.revert()
+          splitRef.current = null
         }
-      });
+      }
+    }, [story])
 
-      tl.fromTo(
-        word, {
-          opacity: 0,
-        }, {
-          opacity: 1,
-          duration: 1,
-          ease: 'expo.in'
-        }
-      );
-    });
-
-    return () => {
-      tl.kill();
-      ScrollTrigger.getAll().forEach(st => st.kill());
-      split.revert(); 
-    };
-  }, []);
-
-  return (
-    <div className="story-home">
-      <h2 ref={h2Ref}>
-        I am a creative coder, designer, + artist, with over a decade of experience working at the intersection of technology + creativity.
-      </h2>
-      <div className="button-1 button glass btn-animate">
-        <div className="LED"></div>
-        <p>
-          Want to know more, visit the about page
-        </p>
+    return (
+      <div className="story-home">
+        <h2 ref={h2Ref}>{story}</h2>
+        <div className="button-1 button glass btn-animate">
+          <div className="LED"></div>
+          <p>Want to know more, visit the about page</p>
+        </div>
       </div>
-    </div>
-  );
-};
+    )
+  }
 
-window.StoryHome = StoryHome;
+  window.StoryHome = StoryHome
+})()
