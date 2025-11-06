@@ -5,10 +5,6 @@ canvas {
     transform: translate(-50%, -50%);
 }
 
-.preloader {
-    background: linear-gradient(90deg, var(--dark-gray100), var(--dark-gray50));
-}
-
 .lines {
     position: fixed;
     z-index: 2;
@@ -35,10 +31,6 @@ canvas {
 
 .lines img:nth-of-type(3) {
     transform: translate(-44%, -50%);
-}
-
-.morph {
-    opacity: 0;
 }
 
 .hero {
