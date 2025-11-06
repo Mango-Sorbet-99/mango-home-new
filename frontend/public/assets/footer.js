@@ -14,7 +14,7 @@ const Footer = () => {
         }
       })
       .to(gsap.utils.toArray('.nav'), { opacity: 0, duration: 1.5, ease: 'circ.inOut' })
-      .to(gsap.utils.toArray('.sticky-button'), { opacity: 0, duration: 1.5, ease: 'circ.inOut' }, 0)
+      .to(gsap.utils.toArray('.sticky-button'), { opacity: 0, x: '100%', duration: .7, ease: 'expo.out' }, 0)
       const splitEmail = new SplitText(footerEmail, { type: 'chars' });
       gsap.set(splitEmail.chars, { opacity: 0 });
 
