@@ -9,6 +9,7 @@ html, body {
     width: 100%;
     height: 100%;
     font-family: "Outfit", Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
 }
 
 body {
@@ -693,7 +694,7 @@ a {
     .footer {
         width: calc(100% + 50px);
     }
-    
+
     .swiper-wrapper {
         gap: 0;
     }
@@ -753,5 +754,9 @@ a {
 
     .phonenumbers p {
         font-size: 0.65rem;
+    }
+
+    .preloader svg {
+        width: 200vw;
     }
 }
