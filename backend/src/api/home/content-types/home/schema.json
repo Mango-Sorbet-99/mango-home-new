@@ -13,6 +13,9 @@
   "attributes": {
     "story": {
       "type": "text"
+    },
+    "storyButton": {
+      "type": "string"
     }
   }
 }
