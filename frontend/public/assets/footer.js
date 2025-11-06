@@ -57,9 +57,9 @@ const Footer = () => {
           <a>Terms + Conditions</a>
         </div>
         <div className="phonenumbers">
-          <div className="button-1 button glass"><p>🇬🇧 +44 7519 418 970</p></div>
-          <div className="button-1 button glass"><p>🇫🇷 +33 7531 418 67</p></div>
-          <div className="button-1 button glass"><p>🇳🇱 +31 6847 446 91</p></div>
+          <div className="button-1 button glass"><p>🇬🇧&nbsp;+44&nbsp;7519&nbsp;418&nbsp;970</p></div>
+          <div className="button-1 button glass"><p>🇫🇷&nbsp;+33&nbsp;7531&nbsp;418&nbsp;67</p></div>
+          <div className="button-1 button glass"><p>🇳🇱&nbsp;+31&nbsp;6847&nbsp;446&nbsp;91</p></div>
         </div>
       </div>
     </div>

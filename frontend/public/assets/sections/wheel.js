@@ -31,7 +31,7 @@ const Wheel = () => {
   }, [])
 
   return (
-    <div className="skills">
+    <div className="skills full-height">
       <div className="wheel">
         <h2 className="wheel-text">Creative Coding</h2>
         <h2 className="wheel-text">Digital Design</h2>

@@ -41,8 +41,11 @@ window.startMango = (mountEl) => {
 
     const { clientWidth: W, clientHeight: H } = mountEl
     camera = new THREE.PerspectiveCamera(100, W / H, 0.1, 1000)
-    camera.position.set(0, 0, 1)
-
+    if (window.innerWidth < 600) {
+        camera.position.set(0, 0, 2);
+    } else {
+        camera.position.set(0, 0, 1);
+    }
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(W, H)

@@ -7,8 +7,10 @@ const AboutSnippet = () => {
             toggleActions: 'play none none reverse'
           }
         })
-        .fromTo('.about-home img', { scale: 0},{scale: 1, duration: .7, ease: 'bounce.out'})
-        .fromTo('.about-home img', { rotation: 270},{rotation: 0, duration: 3, ease: 'expo.out'},0)
+        .fromTo('.about-home img', { scale: 0},{scale: 1, duration: 1.5, ease: 'bounce.out'})
+        .fromTo('.about-home img', { rotation: 270},{rotation: 0, duration: 5, ease: 'expo.out'},0)
+        .fromTo('.skills', { opacity: 1},{opacity: 0, duration: .5, ease: 'circ.out'},0)
+
     return () => ctx.revert()
   }, [])
 

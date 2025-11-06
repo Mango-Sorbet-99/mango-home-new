@@ -5,6 +5,42 @@ canvas {
     transform: translate(-50%, -50%);
 }
 
+.preloader {
+    background: linear-gradient(90deg, var(--dark-gray100), var(--dark-gray50));
+}
+
+.lines {
+    position: fixed;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    filter: drop-shadow(0px 0px 50px rgb(79 198 131 / 50%));
+}
+
+.lines img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 110vh;
+    transform: translate(-50%, -50%);
+    clip-path: inset(100% 0% 0% 0%);
+}
+
+.lines img:nth-of-type(1) {
+    transform: translate(-56%, -50%);
+}
+
+.lines img:nth-of-type(3) {
+    transform: translate(-44%, -50%);
+}
+
+.morph {
+    opacity: 0;
+}
+
 .hero {
     align-items: end;
     justify-content: start;
@@ -84,4 +120,45 @@ canvas {
     
 .fifty-fifty div .blog-text {
     margin-bottom: 25px;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .sticky-button {
+        position: absolute;
+        right: 50%;
+        width: calc(100% - 50px);
+        min-width: fit-content;
+        transform: translateX(50%) !important;
+        text-align: center;
+    }
+
+    .hero .socials {
+        display: none;
+    }
+
+    .story-home {
+        padding: 50% 0% 100px;
+    }
+
+    .story-home h2 {
+        line-height: 250%;
+    }
+
+    .projects .fifty-fifty {
+        padding-right: 0px;
+    }
+
+    .project-grid {
+        margin-top: 0px;
+    }
+
+    .project-card, .blog-card {
+        flex: 1 1 100%;
+    }
+
+    .projects .button-1 {
+        margin-bottom: 25px;
+    }
+    
 }
