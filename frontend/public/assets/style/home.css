@@ -7,9 +7,16 @@ canvas {
 
 .hero {
     align-items: end;
-    justify-content: space-between;
+    justify-content: start;
     display: flex;
     padding: 25px 0;
+}
+
+.sticky-button {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    z-index: 9;
 }
 
 .socials-items {
@@ -18,8 +25,7 @@ canvas {
     gap: 7.5px;
 }
 
-.socials {
-    padding: 15px;
+.hero .socials {
     border-radius: 7.5px;
 }
 

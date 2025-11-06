@@ -15,7 +15,7 @@ const HeroHome = () => {
     });
 
     tl.fromTo(
-      '.hero',
+      '.hero socials',
       { opacity: 1 },
       {
         opacity: 0,
@@ -32,7 +32,7 @@ const HeroHome = () => {
 
   return (
     <div className="hero full-height">
-      <div className="socials glass">
+      <div className="socials">
         <div className="socials-items">
           <h4>socials</h4>
           <a>Whatsapp</a>
@@ -40,14 +40,6 @@ const HeroHome = () => {
           <a>LinkedIn</a>
           <a>Chess.com</a>
         </div>
-      </div>
-
-      <div className="button-1 button glass">
-        <div className="LED"></div>
-        <p>
-          Need a project (or a mango)?{' '}
-          <span className="underline">hello@mango-media.eu</span>
-        </p>
       </div>
     </div>
   );
