@@ -1,27 +1,14 @@
-const { useEffect, useRef, useState } = React
-
 const StoryHome = () => {
-  const h2Ref = useRef(null)
-  const splitRef = useRef(null)
-  const tlsRef = useRef([])
-  const [story, setStory] = useState('')
+  const { loading, home } = window.useGlobalData()
+  const h2Ref = React.useRef(null)
+  const splitRef = React.useRef(null)
+  const tlsRef = React.useRef([])
 
-  useEffect(() => {
-    let alive = true
-    const url = (window.API_URL || '') + '/api/home'
-    fetch(url)
-      .then((r) => r.json())
-      .then((j) => {
-        if (!alive) return
-        setStory(j?.data?.story || '')
-      })
-      .catch((e) => console.error('Strapi fetch error:', e))
-    return () => { alive = false }
-  }, [])
+  const story = !loading ? (home?.story || '') : ''
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!story || !h2Ref.current || !window.gsap || !window.SplitText) return
-    const { gsap, ScrollTrigger, SplitText } = window
+    const { gsap, SplitText } = window
 
     splitRef.current = new SplitText(h2Ref.current, { type: 'words' })
     const words = splitRef.current.words || []
@@ -32,7 +19,7 @@ const StoryHome = () => {
           trigger: word,
           start: 'top bottom',
           end: 'top center',
-          scrub: 0.5
+          scrub: 0.5,
         }
       })
       tl.fromTo(word, { opacity: 0 }, { opacity: 1, duration: 1, ease: 'expo.in' })
@@ -54,7 +41,7 @@ const StoryHome = () => {
 
   return (
     <div className="story-home">
-      <h2 ref={h2Ref}>{story}</h2>
+      <h2 ref={h2Ref}>{story || (loading ? '...' : '')}</h2>
       <div className="button-1 button glass btn-animate">
         <div className="LED"></div>
         <p>Want to know more, visit the about page</p>
@@ -62,5 +49,4 @@ const StoryHome = () => {
     </div>
   )
 }
-
 window.StoryHome = StoryHome

@@ -170,7 +170,7 @@ function useTextAnimator() {
         })
 
         tl.fromTo(split.words, { opacity: 0 }, { opacity: 1, stagger: 0.05, duration: 1, ease: 'expo.in' })
-        if (body.length) tl.fromTo(body, { opacity: 0 }, { opacity: 1, delay: 1, duration: 2, stagger: 0.2, ease: 'expo.in' }, 0)
+        if (body.length) tl.fromTo(body, { opacity: 0 }, { opacity: 1, delay: .5, duration: 2, stagger: 0.2, ease: 'expo.in' }, 0)
 
         return () => { if (tl && tl.scrollTrigger && tl.scrollTrigger.kill) tl.scrollTrigger.kill(); if (tl && tl.kill) tl.kill(); if (split && split.revert) split.revert() }
       }, parent)

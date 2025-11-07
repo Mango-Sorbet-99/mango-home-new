@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_shared_other_menus",
+  "info": {
+    "displayName": "otherMenus"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "urls": {
+      "type": "component",
+      "component": "shared.link",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

@@ -1,5 +1,6 @@
 const Wheel = () => {
-  useEffect(() => {
+  const sectionRef = React.useRef(null)
+  React.useLayoutEffect(() => {
    let wheel = document.querySelector(".skills .wheel"),
       numLines = 8,
       radius = numLines * 20,

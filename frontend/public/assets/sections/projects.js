@@ -1,28 +1,4 @@
 const Projects = () => {
-  useEffect(() => {
-    /*
-    const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray('.project-card')
-      cards.forEach((card) => {
-        const kids = card.querySelectorAll('img, .pr-title, .pr-description, a, .pr-catagory > *')
-        gsap.set(card, { opacity: 0 })
-        gsap.set(kids, { opacity: 0 })
-
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 90%',
-            toggleActions: 'play none none reverse'
-          }
-        })
-        .to(card, { opacity: 1, duration: .7, ease: 'expo.inOut'  })
-        .to(kids, { opacity: 1, opacity: 1, stagger: 0.5, duration: 2, ease: 'expo.inOut' })
-      })
-    })
-*/
-    return () => ctx.revert()
-  }, [])
-
   return (
     <div className="projects txt-animate">
       <div className="fifty-fifty">

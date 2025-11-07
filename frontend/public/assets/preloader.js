@@ -1,6 +1,6 @@
 const Preloader = () => {
-  const preloaderRef = useRef(null);
-  const pathRef = useRef(null);
+  const preloaderRef = React.useRef(null);
+  const pathRef = React.useRef(null);
 
   useLayoutEffect(() => {
     const onLoad = () => {

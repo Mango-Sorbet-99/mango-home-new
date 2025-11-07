@@ -10,5 +10,21 @@
     "draftAndPublish": true
   },
   "pluginOptions": {},
-  "attributes": {}
+  "attributes": {
+    "navigation": {
+      "type": "component",
+      "component": "shared.navigation",
+      "repeatable": false
+    },
+    "otherMenus": {
+      "type": "component",
+      "component": "shared.other-menus",
+      "repeatable": true
+    },
+    "email": {
+      "type": "component",
+      "component": "shared.email",
+      "repeatable": true
+    }
+  }
 }

@@ -1,5 +1,6 @@
 const AboutSnippet = () => {
-  useEffect(() => {
+  const sectionRef = React.useRef(null)
+  React.useLayoutEffect(() => {
     gsap.timeline({
           scrollTrigger: {
             trigger: '.about-home img',
