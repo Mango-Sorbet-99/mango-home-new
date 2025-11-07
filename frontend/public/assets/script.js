@@ -1,4 +1,3 @@
-
 window.API_URL = window.API_URL || 'http://localhost:1337'
 
 if (!window.GlobalDataSetup) {
@@ -8,13 +7,6 @@ if (!window.GlobalDataSetup) {
       if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`)
       return r.json()
     })
-  }
-
-  function normalizeStrapi(res) {
-    const d = res?.data
-    if (!d) return null
-    if (Array.isArray(d)) return d.map(x => x?.attributes ? ({ id: x.id, ...x.attributes }) : x)
-    return d?.attributes ? ({ id: d.id, ...d.attributes }) : d
   }
 
   const GlobalDataContext = React.createContext({
@@ -28,26 +20,24 @@ if (!window.GlobalDataSetup) {
 
     React.useEffect(() => {
       let alive = true
-        Promise.all([
-          fetchJSON('/api/home?populate=*'),
-          fetchJSON('/api/global?populate[navigation][populate]=*'),
-        ])
-          .then(([homeRes, globalRes]) => {
-            if (!alive) return
-            const norm = (res) => {
-              const d = res?.data
-              if (!d) return {}
-              return d?.attributes ? { id: d.id, ...d.attributes } : d
-            }
-            const homeObj   = norm(homeRes)
-            const globalObj = norm(globalRes)
-            setState({ loading:false, error:null, home:homeObj, global:globalObj })
-          })
-        .catch((e) => {
-          if (!alive) return
-          console.error('Data bootstrap error:', e)
-          setState({ loading: false, error: e, home: null, global: null })
-        })
+      Promise.all([
+        fetchJSON('/api/home?populate=*'),
+        fetchJSON('/api/global?populate[navigation][populate][logo][populate]=*')
+      ]).then(([homeRes, globalRes]) => {
+        if (!alive) return
+        const norm = (res) => {
+          const d = res?.data
+          if (!d) return {}
+          return d?.attributes ? { id: d.id, ...d.attributes } : d
+        }
+        const homeObj = norm(homeRes)
+        const globalObj = norm(globalRes)
+        setState({ loading: false, error: null, home: homeObj, global: globalObj })
+      }).catch((e) => {
+        if (!alive) return
+        console.error('Data bootstrap error:', e)
+        setState({ loading: false, error: e, home: null, global: null })
+      })
       return () => { alive = false }
     }, [])
 
@@ -80,7 +70,6 @@ function AppInner() {
     <>
       <Preloader />
       <Navigation />
-      {/* <video className="grain" src="./img/grain.mp4" autoPlay loop muted playsInline /> */}
       <div className="button-1 button glass sticky-button">
         <div className="LED"></div>
         <p>
