@@ -4,6 +4,10 @@ const Footer = () => {
   const menuBoxRef = React.useRef(null)
   const menuTitleRef = React.useRef(null)
   const menuLinksRef = React.useRef(null)
+  const socialsTitleRef = React.useRef(null)
+  const socialsLinksRef = React.useRef(null)
+  const boringTitleRef = React.useRef(null)
+  const boringLinksRef = React.useRef(null)
 
   React.useEffect(() => {
     const fetchJSON =
@@ -74,24 +78,20 @@ const Footer = () => {
       .catch(console.error)
       .finally(safeInit)
 
+    // MENUS
     fetchJSON('/api/global?populate[otherMenus][populate][urls][populate]=*')
       .then(j => {
         const G = j?.data?.attributes || j?.data || {}
         const menus = Array.isArray(G.otherMenus) ? G.otherMenus : []
 
-        let menuData = menus.find(m => Number(m?.id) === 5) ||
-                       menus.find(m => String(m?.title || '').toLowerCase() === 'menu') ||
-                       null
+        function renderMenu(menuObj, titleRef, linksRef, fallbackTitle = 'Menu') {
+          if (!menuObj || !titleRef?.current || !linksRef?.current) return
+          const title = menuObj.title || fallbackTitle
+          const urls  = Array.isArray(menuObj.urls) ? menuObj.urls : []
 
-        if (!menuData) return
+          titleRef.current.textContent = title
+          linksRef.current.innerHTML = ''
 
-        const title = menuData.title || 'Menu'
-        const urls  = Array.isArray(menuData.urls) ? menuData.urls : []
-
-        if (menuTitleRef.current) menuTitleRef.current.textContent = title
-
-        if (menuLinksRef.current) {
-          menuLinksRef.current.innerHTML = ''
           urls.forEach(u => {
             const label = u?.label || u?.href || ''
             if (!label) return
@@ -101,15 +101,33 @@ const Footer = () => {
             const a = document.createElement('a')
             a.textContent = label
             a.setAttribute('href', href)
-
             if (isExternal) {
               a.setAttribute('target', '_blank')
               a.setAttribute('rel', 'noopener noreferrer')
             }
-
-            menuLinksRef.current.appendChild(a)
+            linksRef.current.appendChild(a)
           })
         }
+
+        const primaryMenu =
+          menus.find(m => Number(m?.id) === 5) ||
+          menus.find(m => String(m?.title || '').toLowerCase() === 'menu') ||
+          null
+        if (primaryMenu) renderMenu(primaryMenu, menuTitleRef, menuLinksRef, 'Menu')
+
+        const socialsMenu =
+          menus.find(m => /social/i.test(String(m?.title || ''))) ||
+          menus.find(m => primaryMenu ? m !== primaryMenu : false) ||
+          null
+        if (socialsMenu) renderMenu(socialsMenu, socialsTitleRef, socialsLinksRef, 'Socials')
+
+        const boringMenu =
+          menus.find(m => /(boring|legal|terms|privacy|impressum|faq)/i.test(String(m?.title || '')) && m !== socialsMenu && m !== primaryMenu) ||
+          menus.find(m => m !== socialsMenu && m !== primaryMenu) ||
+          null
+        if (boringMenu) renderMenu(boringMenu, boringTitleRef, boringLinksRef, 'Boring Stuff')
+
+        console.log('otherMenus resolved:', { primaryMenu, socialsMenu, boringMenu })
       })
       .catch(console.error)
       .finally(safeInit)
@@ -120,16 +138,13 @@ const Footer = () => {
       <div className="footer-colums">
         <div className="footer-items" ref={menuBoxRef}>
           <h4 ref={menuTitleRef}>Menu</h4>
-          <div ref={menuLinksRef}>
-          </div>
+          <div ref={menuLinksRef}></div>
         </div>
 
         <div className="footer-items">
-          <h4>Socials</h4>
-          <a>Whatsapp</a>
-          <a>Instagram</a>
-          <a>LinkedIn</a>
-          <a>Chess.com</a>
+          <h4 ref={socialsTitleRef}>Socials</h4>
+          <div ref={socialsLinksRef}>
+          </div>
         </div>
       </div>
 
@@ -139,11 +154,11 @@ const Footer = () => {
 
       <div className="footer-colums">
         <div className="footer-items">
-          <h4>Boring Stuff</h4>
-          <a>FAQ</a>
-          <a>Datenschutz</a>
-          <a>Terms + Conditions</a>
+          <h4 ref={boringTitleRef}>Boring Stuff</h4>
+          <div ref={boringLinksRef}>
+          </div>
         </div>
+
         <div className="phonenumbers">
           <div className="phone-num">
             <div className="button-1 button glass"><p>🇬🇧&nbsp;+44&nbsp;7519&nbsp;418&nbsp;970</p></div>
