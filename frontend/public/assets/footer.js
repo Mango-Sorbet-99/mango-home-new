@@ -83,8 +83,6 @@ const Footer = () => {
                        menus.find(m => String(m?.title || '').toLowerCase() === 'menu') ||
                        null
 
-        console.log('Footer menu (id 5) resolved to:', menuData)
-
         if (!menuData) return
 
         const title = menuData.title || 'Menu'
@@ -120,16 +118,9 @@ const Footer = () => {
   return (
     <div className="footer glass full-height">
       <div className="footer-colums">
-        {/* Dynamic Menu from otherMenus (id 5) */}
         <div className="footer-items" ref={menuBoxRef}>
           <h4 ref={menuTitleRef}>Menu</h4>
           <div ref={menuLinksRef}>
-            {/* gets replaced with fetched links */}
-            <a>About</a>
-            <a>Projects</a>
-            <a>Blog</a>
-            <a>Résumé</a>
-            <a>Contact</a>
           </div>
         </div>
 
@@ -155,9 +146,9 @@ const Footer = () => {
         </div>
         <div className="phonenumbers">
           <div className="phone-num">
-            <div className="button-1 button glass"><p>🇬🇧 +44 7519 418 970</p></div>
-            <div className="button-1 button glass"><p>🇫🇷 +33 7531 418 67</p></div>
-            <div className="button-1 button glass"><p>🇳🇱 +31 6847 446 91</p></div>
+            <div className="button-1 button glass"><p>🇬🇧&nbsp;+44&nbsp;7519&nbsp;418&nbsp;970</p></div>
+            <div className="button-1 button glass"><p>🇫🇷&nbsp;+33&nbsp;7531&nbsp;418&nbsp;67</p></div>
+            <div className="button-1 button glass"><p>🇳🇱&nbsp;+31&nbsp;6847&nbsp;446&nbsp;91</p></div>
           </div>
           <p className="phoneStatement p2">*The British number is always on, the French and Dutch numbers are sometimes off.</p>
         </div>
