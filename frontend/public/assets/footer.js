@@ -1,33 +1,84 @@
 const Footer = () => {
-    React.useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger, SplitText);
-    const ctx = gsap.context(() => {
-      const footer = document.querySelector('.footer');
-      const footerEmail = document.querySelector('.footer-email');
-      if (!footer || !footerEmail) return;
+  const emailLinkRef = React.useRef(null)
+  const emailTextRef = React.useRef(null)
+
+  React.useEffect(() => {
+    const fetchJSON =
+      window.fetchJSON ||
+      (path =>
+        fetch((window.API_URL || '') + path).then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`)
+          return r.json()
+        }))
+
+    function initFooterAnims() {
+      const { gsap, ScrollTrigger, SplitText } = window
+      if (!gsap || !ScrollTrigger || !SplitText) return
+      gsap.registerPlugin(ScrollTrigger, SplitText)
+
+      const footer = document.querySelector('.footer')
+      const footerEmail = document.querySelector('.footer-email')
+      if (!footer || !footerEmail) return
 
       gsap.timeline({
-        scrollTrigger: {
-          trigger: footer,
-          start: 'top 25%',
-          toggleActions: 'play none none reverse'
-        }
+        scrollTrigger: { trigger: footer, start: 'top 25%', toggleActions: 'play none none reverse' }
       })
       .to(gsap.utils.toArray('.nav'), { opacity: 0, y: '-100%', duration: 1.5, ease: 'expo.in' })
-      .to(gsap.utils.toArray('.sticky-button'), { opacity: 0, x: '100%', duration: .7, ease: 'expo.in' }, 0)
-      const splitEmail = new SplitText(footerEmail, { type: 'chars' });
-      gsap.set(splitEmail.chars, { opacity: 0 });
+      .to(gsap.utils.toArray('.sticky-button'), { opacity: 0, x: '100%', duration: 0.7, ease: 'expo.in' }, 0)
 
+      const splitEmail = new SplitText(footerEmail, { type: 'chars' })
+      gsap.set(splitEmail.chars, { opacity: 0 })
       gsap.timeline({
-        scrollTrigger: {
-          trigger: footer,
-          start: 'top 75%',
-          toggleActions: 'play none none reverse'
+        scrollTrigger: { trigger: footer, start: 'top 75%', toggleActions: 'play none none reverse' }
+      }).fromTo(splitEmail.chars, { opacity: 0 }, { opacity: 1, stagger: 0.2, duration: 2, ease: 'expo.in' })
+    }
+
+    fetchJSON('/api/global?populate[email][populate][email][populate]=*')
+      .then(j => {
+        const G = j?.data?.attributes || j?.data || {}
+        const list = Array.isArray(G.email) ? G.email : []
+        const first = list[0] || {}
+
+        const node = first.email || first  
+
+        const rawHref = node?.href
+        const label   = node?.label
+        const ext     = node?.isExternal
+
+        if (!rawHref || !label) return
+
+        let href = rawHref
+
+        if (!/^https?:|^mailto:/i.test(rawHref) && /@/.test(rawHref)) {
+          href = 'mailto:' + rawHref
         }
-      }).fromTo(splitEmail.chars, { opacity: 0 }, { opacity: 1, stagger: 0.2, duration: 2, ease: 'expo.in' });
-    });
-    return () => ctx.revert();
-  }, []);
+
+        const isExternal = ext === true || String(ext).toLowerCase() === 'true'
+
+        const a = emailLinkRef.current
+        const h3 = emailTextRef.current
+
+        if (a) {
+          a.setAttribute('href', href)
+          if (isExternal) {
+            a.setAttribute('target', '_blank')
+            a.setAttribute('rel', 'noopener noreferrer')
+          } else {
+            a.removeAttribute('target')
+            a.removeAttribute('rel')
+          }
+        }
+
+        if (h3) {
+          h3.textContent = label
+        }
+      })
+
+      .catch(console.error)
+      .finally(() => {
+        initFooterAnims()
+      })
+  }, [])
 
   return (
     <div className="footer glass full-height">
@@ -48,7 +99,11 @@ const Footer = () => {
           <a>Chess.com</a>
         </div>
       </div>
-      <a className="footer-email underline"><h3>hello@mango-media.eu</h3></a>
+
+      <a className="footer-email underline" href="#" ref={emailLinkRef}>
+        <h3 ref={emailTextRef}></h3>
+      </a>
+
       <div className="footer-colums">
         <div className="footer-items">
           <h4>Boring Stuff</h4>
@@ -68,4 +123,4 @@ const Footer = () => {
     </div>
   )
 }
-window.Footer = Footer;
+window.Footer = Footer

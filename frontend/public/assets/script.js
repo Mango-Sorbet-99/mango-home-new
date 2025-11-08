@@ -22,7 +22,11 @@ if (!window.GlobalDataSetup) {
       let alive = true
       Promise.all([
         fetchJSON('/api/home?populate=*'),
-        fetchJSON('/api/global?populate[navigation][populate][logo][populate]=*')
+        fetchJSON('/api/global?populate[navigation][populate][logo][populate]=*'),
+        fetchJSON('/api/global?populate=*'),
+        fetchJSON('/api/global?populate[email][populate][email][populate]=*'),
+        fetchJSON('/api/global?populate[otherMenus][populate][urls][populate]=*')
+
       ]).then(([homeRes, globalRes]) => {
         if (!alive) return
         const norm = (res) => {
@@ -49,7 +53,7 @@ if (!window.GlobalDataSetup) {
   window.GlobalDataSetup = true
 }
 
-function MangoCanvas() {
+{/*function MangoCanvas() {
   const ref = React.useRef(null)
   React.useEffect(() => {
     if (!window.startMango || !ref.current) return
@@ -63,7 +67,7 @@ function MangoCanvas() {
       style={{ position: 'fixed', inset: 0, zIndex: -1, width: '100vw', height: '100vh', overflow: 'hidden' }}
     />
   )
-}
+} */}
 
 function AppInner() {
   return (
@@ -77,6 +81,7 @@ function AppInner() {
           <span className="underline">hello@mango&#8209;media.eu</span>
         </p>
       </div>
+      {/* <video className="grain" src="./img/grain.mp4" autoPlay loop muted playsInline /> */}
       <div id="smooth-wrapper">
         <div id="smooth-content" className="container">
           <HeroHome />
@@ -91,7 +96,7 @@ function AppInner() {
         </div>
       </div>
       <Main />
-      <MangoCanvas />
+      {/* <MangoCanvas /> */}
     </>
   )
 }

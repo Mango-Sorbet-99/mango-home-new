@@ -48,14 +48,6 @@ const Navigation = () => {
     (Array.isArray(nav.menuItems) && nav.menuItems) ||
     []
 
-  React.useEffect(() => {
-    if (!loading) {
-      console.log('nav:', nav)
-      console.log('logoUrl:', logoUrl)
-      console.log('items:', items)
-    }
-  }, [loading, nav])
-
   return (
     <div className="glass nav">
       <div className="logo">
