@@ -68,6 +68,10 @@ body {
     width: 50%;
 }
 
+.fifty-fifty div .project-text {
+    margin-bottom: 25px;
+}
+
 .sixtysix-thirtythree {
     display: flex;
     align-items: stretch;
@@ -652,6 +656,22 @@ a {
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
     white-space: nowrap;
+}
+
+.projectsPage {
+    margin: 150px 0;
+}
+
+.projectsPage .fifty-fifty {
+    padding-right: 25%;
+}
+
+.project-page-outer .wheel {
+    height: 1800px;
+}
+
+.blog-page-outer .project-grid {
+    margin: 150px 0;
 }
 
 /* SMALL SCREENS */

@@ -1,150 +1,234 @@
 import * as THREE from '../threejs-master/build/three.module.js'
-import {OrbitControls} from '../threejs-master/examples/jsm/controls/OrbitControls.js'
+import { OrbitControls } from '../threejs-master/examples/jsm/controls/OrbitControls.js'
 
-window.startMango = (mountEl) => {
-    let scene, camera, renderer, controls, starsSphere, cameraRig
-    let keyLight, fillLight, ambientLight, spotLight, spotTarget
-    init()
-    animate()
-    function init() {
-        scene = new THREE.Scene()
+window.startSpace = (mountEl) => {
+  let scene, camera, renderer, controls, starsGroup, raf = null
+  let lastProgress = null, progAccum = 0, nudging = false, lastNudgeAt = 0
 
-        new THREE.TextureLoader().setPath('./img/').load('/mango-in-space-bg-2.webp', (ldr) => {
-            ldr.mapping = THREE.EquirectangularReflectionMapping
-            ldr.colorSpace = THREE.SRGBColorSpace
-            scene.background = ldr
-            scene.environment = ldr
-        })
+  const smoothCam = {
+    goalPos: new THREE.Vector3(0, 0, 1),
+    goalTarget: new THREE.Vector3(0, 0, 0),
+    goalRoll: 0,
+    posLerp: 0.12,
+    targetLerp: 0.18,
+    rollLerp: 0.12
+  }
 
-        const { clientWidth: W, clientHeight: H } = mountEl
-        camera = new THREE.PerspectiveCamera(100, W / H, 0.1, 1000)
-        camera.position.set(0, 0, 1)
+  init()
+  animate()
 
-        renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            alpha: false,
-            powerPreference: 'high-performance'
-        })
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-        renderer.setSize(W, H)
-        renderer.toneMapping = THREE.ACESFilmicToneMapping
-        renderer.toneMappingExposure = 1.0
-        renderer.physicallyCorrectLights = true
-        renderer.localClippingEnabled = true
-        mountEl.appendChild(renderer.domElement)
+  function init() {
+    scene = new THREE.Scene()
 
-        controls = new OrbitControls(camera, renderer.domElement)
-        controls.enableDamping = true
-        controls.dampingFactor = 1
-        controls.enablePan = false
-        controls.minDistance = 0.5
-        controls.maxDistance = 5
-        controls.target.set(0, 0, 0)
-        controls.update()
+    new THREE.TextureLoader().setPath('./img/').load('/mango-in-space-bg-2.webp', (ldr) => {
+      ldr.mapping = THREE.EquirectangularReflectionMapping
+      ldr.colorSpace = THREE.SRGBColorSpace
+      scene.background = ldr
+      scene.environment = ldr
+    })
 
-        keyLight = new THREE.DirectionalLight('#4fc683', 2.38)
-        keyLight.position.set(3.98, -4.66, -10)
-        scene.add(keyLight)
+    const { clientWidth: W, clientHeight: H } = mountEl
+    camera = new THREE.PerspectiveCamera(100, W / H, 0.1, 1000)
+    camera.position.set(0, 0, 1)
 
-        fillLight = new THREE.HemisphereLight('#ffffff', '#000000', 1.0)
-        scene.add(fillLight)
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' })
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setSize(W, H)
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.toneMappingExposure = 1.0
+    mountEl.appendChild(renderer.domElement)
 
-        ambientLight = new THREE.AmbientLight('#ff8040', 1.0)
-        scene.add(ambientLight)
+    controls = new OrbitControls(camera, renderer.domElement)
+    controls.enableDamping = true
+    controls.dampingFactor = 1
+    controls.enablePan = false
+    controls.minDistance = 0.5
+    controls.maxDistance = 5
+    controls.target.set(0, 0, 0)
+    controls.update()
 
-        spotTarget = new THREE.Object3D()
-        spotTarget.position.set(0, 0, 0)
-        scene.add(spotTarget)
+    smoothCam.goalPos.copy(camera.position)
+    smoothCam.goalTarget.copy(controls.target)
+    smoothCam.goalRoll = camera.rotation.z
 
-        spotLight = new THREE.SpotLight('#ffffff', 20.0, 0.18, 0.18, 1.0, 2.0)
-        spotLight.position.set(1, 2, 3)
-        spotLight.target = spotTarget
-        spotLight.castShadow = true
-        scene.add(spotLight, spotLight.target)
+    addStars()
+    window.addEventListener('resize', onWindowResize)
 
-        renderer.shadowMap.enabled = true
+    introAndIdle()
+    setupScrollNudger()
+  }
 
-        cameraRig = new THREE.Object3D()
-        scene.add(cameraRig)
-        cameraRig.add(camera)
-
-        addStars()
-        window.addEventListener('resize', onWindowResize)
+  function addStars() {
+    const total = 750
+    const sets = 3
+    starsGroup = new THREE.Group()
+    const base = Math.floor(total / sets)
+    const remainder = total % sets
+    for (let i = 0; i < sets; i++) {
+      const count = base + (i < remainder ? 1 : 0)
+      const geom = new THREE.BufferGeometry()
+      const mat = new THREE.PointsMaterial({
+        size: 4,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthTest: true,
+        depthWrite: false,
+        map: makeStarTexture(i + 1)
+      })
+      const verts = new Float32Array(count * 3)
+      for (let j = 0; j < count; j++) {
+        const idx = j * 3
+        verts[idx] = (Math.random() - 0.5) * 3000
+        verts[idx + 1] = (Math.random() - 0.5) * 3000
+        verts[idx + 2] = (Math.random() - 0.5) * 3000
+      }
+      geom.setAttribute('position', new THREE.BufferAttribute(verts, 3))
+      const stars = new THREE.Points(geom, mat)
+      starsGroup.add(stars)
     }
+    scene.add(starsGroup)
+  }
 
-    function addStars() {
-        const totalStars = 750
-        const sets = 3
-        starsSphere = new THREE.Group()
-        const base = Math.floor(totalStars / sets)
-        const remainder = totalStars % sets
-        for (let i = 0; i < sets; i++) {
-            const count = base + (i < remainder ? 1 : 0)
-            const starsGeometry = new THREE.BufferGeometry()
-            const starsMaterial = new THREE.PointsMaterial({
-                size: 4,
-                transparent: true,
-                blending: THREE.AdditiveBlending,
-                depthTest: true,
-                depthWrite: false,
-                map: getTexture(i + 1)
-            })
-            const verts = new Float32Array(count * 3)
-            for (let j = 0; j < count; j++) {
-                const idx = j * 3
-                verts[idx] = (Math.random() - 0.5) * 3000
-                verts[idx + 1] = (Math.random() - 0.5) * 3000
-                verts[idx + 2] = (Math.random() - 0.5) * 3000
-            }
-            starsGeometry.setAttribute('position', new THREE.BufferAttribute(verts, 3))
-            const stars = new THREE.Points(starsGeometry, starsMaterial)
-            starsSphere.add(stars)
+  function makeStarTexture(type) {
+    const cvs = document.createElement('canvas')
+    cvs.width = 32
+    cvs.height = 32
+    const ctx = cvs.getContext('2d')
+    const g = ctx.createRadialGradient(16, 16, 0, 16, 16, 16)
+    if (type === 1) {
+      g.addColorStop(0, 'rgba(255,255,255,1)')
+      g.addColorStop(0.2, 'rgba(200,255,255,1)')
+      g.addColorStop(0.4, 'rgba(0,0,124,1)')
+      g.addColorStop(1, 'rgba(0,0,0,1)')
+    } else if (type === 2) {
+      g.addColorStop(0, 'rgba(255,255,255,1)')
+      g.addColorStop(0.2, 'rgba(241,220,202,1)')
+      g.addColorStop(0.4, 'rgba(239,120,23,1)')
+      g.addColorStop(1, 'rgba(0,0,0,1)')
+    } else {
+      g.addColorStop(0, 'rgba(255,255,255,1)')
+      g.addColorStop(0.2, 'rgba(255,255,255,1)')
+      g.addColorStop(0.4, 'rgba(192,247,216,1)')
+      g.addColorStop(1, 'rgba(0,0,0,1)')
+    }
+    ctx.fillStyle = g
+    ctx.fillRect(0, 0, 32, 32)
+    const tex = new THREE.Texture(cvs)
+    tex.needsUpdate = true
+    return tex
+  }
+
+  function onWindowResize() {
+    const w = mountEl.clientWidth
+    const h = mountEl.clientHeight
+    camera.aspect = w / h
+    camera.updateProjectionMatrix()
+    renderer.setSize(w, h)
+  }
+
+  function animate() {
+    raf = requestAnimationFrame(animate)
+    camera.position.lerp(smoothCam.goalPos, smoothCam.posLerp)
+    controls.target.lerp(smoothCam.goalTarget, smoothCam.targetLerp)
+    controls.update()
+    camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, smoothCam.goalRoll, smoothCam.rollLerp)
+    if (starsGroup) {
+      starsGroup.rotation.x += 0.0004
+      starsGroup.rotation.y += 0.0004
+    }
+    renderer.render(scene, camera)
+  }
+
+  function introAndIdle() {
+    const { gsap } = window
+    if (!gsap) return
+    gsap.to(smoothCam.goalPos, { z: 0.9, duration: 1.6, ease: 'power2.out' })
+    gsap.to(smoothCam.goalTarget, { y: 0.02, duration: 1.6, ease: 'power2.out' })
+    gsap.to(smoothCam.goalPos, { x: '+=0.06', y: '+=0.03', duration: 6, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+    gsap.to(smoothCam.goalTarget, { x: '+=0.03', y: '+=0.02', duration: 7.5, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+  }
+
+  function setupScrollNudger() {
+    const { gsap, ScrollTrigger } = window
+    if (!gsap || !ScrollTrigger) return
+    gsap.registerPlugin(ScrollTrigger)
+
+    ScrollTrigger.create({
+      trigger: document.documentElement,
+      start: 0,
+      end: 'max',
+      scrub: true,
+      onUpdate: (self) => {
+        const now = performance.now()
+        if (lastProgress == null) lastProgress = self.progress
+        const dp = Math.abs(self.progress - lastProgress)
+        lastProgress = self.progress
+        progAccum += dp
+        if (!nudging && progAccum >= 0.6 && now - lastNudgeAt > 1200) {
+          progAccum = 0
+          nudgeCamera()
         }
-        scene.add(starsSphere)
-    }
+      }
+    })
+  }
 
-    function getTexture(type) {
-        const canvas = document.createElement('canvas')
-        canvas.width = 32
-        canvas.height = 32
-        const context = canvas.getContext('2d')
-        let gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16)
-        if (type === 1) {
-            gradient.addColorStop(0, 'rgba(255,255,255,1)')
-            gradient.addColorStop(0.2, 'rgba(200,255,255,1)')
-            gradient.addColorStop(0.4, 'rgba(0,0,124,1)')
-            gradient.addColorStop(1, 'rgba(0,0,0,1)')
-        } else if (type === 2) {
-            gradient.addColorStop(0, 'rgba(255,255,255,1)')
-            gradient.addColorStop(0.2, 'rgba(241,220,202,1)')
-            gradient.addColorStop(0.4, 'rgba(239,120,23,1)')
-            gradient.addColorStop(1, 'rgba(0,0,0,1)')
-        } else {
-            gradient.addColorStop(0, 'rgba(255,255,255,1)')
-            gradient.addColorStop(0.2, 'rgba(255,255,255,1)')
-            gradient.addColorStop(0.4, 'rgba(192,247,216,1)')
-            gradient.addColorStop(1, 'rgba(0,0,0,1)')
-        }
-        context.fillStyle = gradient
-        context.fillRect(0, 0, 32, 32)
-        const texture = new THREE.Texture(canvas)
-        texture.needsUpdate = true
-        return texture
-    }
+  function nudgeCamera() {
+    const { gsap } = window
+    if (!gsap || nudging) return
+    nudging = true
 
-    function onWindowResize() {
-        const w = mountEl.clientWidth
-        const h = mountEl.clientHeight
-        camera.aspect = w / h
-        camera.updateProjectionMatrix()
-        renderer.setSize(w, h)
-    }
+    const axes = ['x', 'y', 'z'].sort(() => Math.random() - 0.5)
+    const count = 1 + Math.floor(Math.random() * 3)
+    const picks = axes.slice(0, count)
 
-    function animate() {
-        if (starsSphere) {
-            starsSphere.rotation.x += 0.0004
-            starsSphere.rotation.y += 0.0004
-        }
-        renderer.render(scene, camera)
+    const toPos = {}
+    const toTgt = {}
+
+    picks.forEach(a => {
+      const sgn = Math.random() < 0.5 ? -1 : 1
+      const dp = a === 'z' ? 0.06 : 0.8
+      const dt = a === 'z' ? 0.04 : 0.5
+      toPos[a] = `+=${sgn * (dp * (0.6 + Math.random() * 0.8))}`
+      toTgt[a] = `+=${sgn * (dt * (0.5 + Math.random() * 2.0))}`
+    })
+
+    const roll = THREE.MathUtils.lerp(-0.25, 0.25, Math.random())
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        nudging = false
+        lastNudgeAt = performance.now()
+        clampRadius()
+      }
+    })
+    tl.to(smoothCam.goalPos, { ...toPos, duration: 1.2, ease: 'expo.out' }, 0)
+    tl.to(smoothCam.goalTarget, { ...toTgt, duration: 1.2, ease: 'expo.out' }, 0)
+    tl.to(smoothCam, { goalRoll: roll, duration: 1.2, ease: 'expo.out' }, 0)
+  }
+
+  function clampRadius() {
+    const r = smoothCam.goalPos.length()
+    const rMin = 0.6, rMax = 1.4
+    if (r < rMin || r > rMax) {
+      const s = THREE.MathUtils.clamp(r, rMin, rMax) / (r || 1)
+      smoothCam.goalPos.multiplyScalar(s)
     }
+  }
+
+  return () => {
+    if (raf) cancelAnimationFrame(raf)
+    window.removeEventListener('resize', onWindowResize)
+    controls?.dispose()
+    renderer?.dispose()
+    if (renderer?.domElement && renderer.domElement.parentNode === mountEl) {
+      mountEl.removeChild(renderer.domElement)
+    }
+    scene?.traverse((o) => {
+      if (o.geometry) o.geometry.dispose?.()
+      if (o.material) {
+        if (Array.isArray(o.material)) o.material.forEach((m) => m.dispose?.())
+        else o.material.dispose?.()
+      }
+    })
+  }
 }

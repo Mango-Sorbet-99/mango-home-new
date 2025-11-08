@@ -4,7 +4,7 @@ const ProjectsGridPage = () => {
       <div className="fifty-fifty">
         <div className="fifty-fifty-1">
           <h3 className="title-animate">
-            I create interactive experiments that merge art, science, + technology.
+            **NEEDS A FILTER*** I create interactive experiments that merge art, science, + technology.
           </h3>
         </div>
         <div className="fifty-fifty-2">

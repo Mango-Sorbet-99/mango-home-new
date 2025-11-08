@@ -70,18 +70,38 @@ function MangoCanvas() {
   )
 }
 
+function SpaceCanvas() {
+  const ref = React.useRef(null)
+  React.useEffect(() => {
+    if (!window.startSpace || !ref.current) return
+    const cleanup = window.startSpace(ref.current)
+    return () => { if (typeof cleanup === 'function') cleanup() }
+  }, [])
+  return (
+    <div
+      ref={ref}
+      className="space-canvas"
+      style={{ position: 'fixed', inset: 0, zIndex: -1, width: '100vw', height: '100vh', overflow: 'hidden' }}
+    />
+  )
+}
+
 function HomePage() {
+    React.useEffect(() => {
+    const link = document.createElement("link")
+    link.rel = "stylesheet"
+    link.href = "./assets/style/home.css"
+    document.head.appendChild(link)
+
+    return () => {
+      document.head.removeChild(link)
+    }
+  }, [])
   return (
     <>
       <Preloader />
       <Navigation />
-      <div className="button-1 button glass sticky-button">
-        <div className="LED"></div>
-        <p>
-          Need a project (or a mango)?{' '}
-          <span className="underline">hello@mango&#8209;media.eu</span>
-        </p>
-      </div>
+      <StickyBTN />
       {/* <video className="grain" src="./img/grain.mp4" autoPlay loop muted playsInline /> */}
       <div id="smooth-wrapper">
         <div id="smooth-content" className="container">
@@ -110,11 +130,18 @@ function ContactPage() {
         <Footer />
       </div>
       <Main />
+      <SpaceCanvas />
     </>
   )
 }
 
 function ProjectPage() {
+  React.useEffect(() => {
+    document.body.classList.add("project-page-outer")
+    return () => {
+      document.body.classList.remove("project-page-outer")
+    }
+  }, [])
   return (
     <>
       <Preloader />
@@ -122,10 +149,96 @@ function ProjectPage() {
       <div id="smooth-wrapper">
         <div id="smooth-content" className="container">
           <ProjectsGridPage />
+          <Wheel />
           <Footer />
         </div>
       </div>
       <Main />
+      <SpaceCanvas />
+    </>
+  )
+}
+
+function BlogPage() {
+  React.useEffect(() => {
+    document.body.classList.add("blog-page-outer")
+    return () => {
+      document.body.classList.remove("blog-page-outer")
+    }
+  }, [])
+  return (
+    <>
+      <Preloader />
+      <Navigation />
+      <div id="smooth-wrapper">
+        <div id="smooth-content" className="container">
+          <BlogsGridPage />
+          <Footer />
+        </div>
+      </div>
+      <Main />
+      <SpaceCanvas />
+    </>
+  )
+}
+
+function FAQPage() {
+  React.useEffect(() => {
+    const link = document.createElement("link")
+    link.rel = "stylesheet"
+    link.href = "./assets/style/FAQ.css"
+    document.head.appendChild(link)
+
+    return () => {
+      document.head.removeChild(link)
+    }
+  }, [])
+  return (
+    <>
+      <Preloader />
+      <Navigation />
+      <div id="smooth-wrapper">
+        <div id="smooth-content" className="container">
+          <FAQ />
+          <Footer />
+        </div>
+      </div>
+      <Main />
+      <SpaceCanvas />
+    </>
+  )
+}
+
+function AboutPage() {
+  React.useEffect(() => {
+    const links = [
+      "./assets/style/FAQ.css",
+      "./assets/style/about.css"
+    ].map(href => {
+      const link = document.createElement("link")
+      link.rel = "stylesheet"
+      link.href = href
+      document.head.appendChild(link)
+      return link
+    })
+
+    return () => {
+      links.forEach(link => document.head.removeChild(link))
+    }
+  }, [])
+
+  return (
+    <>
+      <Preloader />
+      <Navigation />
+      <div id="smooth-wrapper">
+        <div id="smooth-content" className="container">
+          <FAQ />
+          <Footer />
+        </div>
+      </div>
+      <Main />
+      <SpaceCanvas />
     </>
   )
 }
@@ -160,6 +273,9 @@ function Router() {
   const path = usePathname()
   if (path === '/contact') return <ContactPage />
   if (path === '/projects') return <ProjectPage />
+  if (path === '/blog') return <BlogPage />
+  if (path === '/faq') return <FAQPage />
+  if (path === '/about') return <AboutPage />
   return <HomePage />
 }
 
