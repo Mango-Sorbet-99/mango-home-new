@@ -345,6 +345,12 @@ a {
     gap: 5px;
 }
 
+.footer-colums .footer-items div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .footer-colums .footer-items:nth-of-type(even) {
     text-align: right;
 }
