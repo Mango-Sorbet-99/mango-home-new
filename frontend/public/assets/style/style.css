@@ -169,6 +169,12 @@ p {
     font-weight: 200;
 }
 
+p b {
+    color: var(--primary600);
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
 .p2 {
     font-size: 0.6rem;
 }
@@ -533,6 +539,10 @@ a {
     width: 100%;
     position: relative;
     pointer-events: all;
+}
+
+.testamonies p {
+    text-transform: uppercase;
 }
 
 .swiper { 

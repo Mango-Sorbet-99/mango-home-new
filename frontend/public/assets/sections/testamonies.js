@@ -1,13 +1,22 @@
 const Testamonies = () => {
   const swiperEl = React.useRef(null)
+  const wrapperRef = React.useRef(null)
   const cache = React.useRef(new WeakMap())
-  const state = React.useRef({ swiper:null, st:null })
+  const state = React.useRef({ swiper:null, st:null, ro:null })
 
   React.useEffect(() => {
     const { gsap } = window
     const section = document.querySelector('.testamonies')
-    if (!section || !swiperEl.current || !window.Swiper || !gsap) return
+    if (!section || !swiperEl.current || !gsap) return
     if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger)
+
+    const fetchJSON =
+      window.fetchJSON ||
+      (path =>
+        fetch((window.API_URL || '') + path).then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`)
+          return r.json()
+        }))
 
     function ensureSplit(slide) {
       if (!slide) return null
@@ -18,10 +27,10 @@ const Testamonies = () => {
       let split = null
       if (h3 && window.SplitText) split = new SplitText(h3, { type:'words' })
       const words = split ? split.words : (h3 ? [h3] : [])
-      data = { h3, p, split, words, tlIn:null, tlOut:null }
+      const d = { h3, p, split, words, tlIn:null, tlOut:null }
       gsap.set([h3, p, ...words], { opacity: 0 })
-      cache.current.set(slide, data)
-      return data
+      cache.current.set(slide, d)
+      return d
     }
 
     function killTimelines(d) {
@@ -51,49 +60,86 @@ const Testamonies = () => {
       d.tlOut = tl
     }
 
-    const swiper = new window.Swiper(swiperEl.current, {
-      loop: true,
-      spaceBetween: 25,
-      slidesPerView: 1,
-      speed: 800,
-      autoplay: { delay: 6000, disableOnInteraction: false },
-      grabCursor: true,
-      on: {
-        init() {
-          this.slides.forEach(ensureSplit)
-          animateIn(this.slides[this.activeIndex])
-        },
-        loopFix() {
-          this.slides.forEach(ensureSplit)
-        },
-        slideChangeTransitionStart() {
-          animateOut(this.slides[this.previousIndex])
-        },
-        slideChangeTransitionEnd() {
-          animateIn(this.slides[this.activeIndex])
-        }
-      }
-    })
+    fetchJSON('/api/section?populate[testimonials]=*')
+      .then(j => {
+        const items =
+          Array.isArray(j?.data?.testimonials) ? j.data.testimonials :
+          Array.isArray(j?.data?.attributes?.testimonials) ? j.data.attributes.testimonials :
+          []
 
-    state.current.swiper = swiper
+        console.log('Loaded testimonials:', items)
 
-    if (window.ScrollTrigger) {
-      state.current.st = window.ScrollTrigger.create({
-        trigger: section,
-        start: 'top bottom',
-        end: 'bottom top',
-        onEnter: () => { state.current.swiper?.autoplay?.start(); animateIn(state.current.swiper.slides[state.current.swiper.activeIndex]) },
-        onEnterBack: () => { state.current.swiper?.autoplay?.start(); animateIn(state.current.swiper.slides[state.current.swiper.activeIndex]) },
-        onLeave: () => { state.current.swiper?.autoplay?.stop(); animateOut(state.current.swiper.slides[state.current.swiper.activeIndex]) },
-        onLeaveBack: () => { state.current.swiper?.autoplay?.stop(); animateOut(state.current.swiper.slides[state.current.swiper.activeIndex]) }
+        if (!wrapperRef.current) return
+        wrapperRef.current.innerHTML = ''
+
+        items.forEach(t => {
+          const text = t?.testimonial || ''
+          const name = t?.name || ''
+          if (!text) return
+
+          const slide = document.createElement('div')
+          slide.className = 'swiper-slide carosuel-card'
+
+          const h3 = document.createElement('h3')
+          h3.textContent = text
+
+          const p = document.createElement('p')
+          p.innerHTML = name ? `- ${name}` : ''
+
+          slide.appendChild(h3)
+          slide.appendChild(p)
+          wrapperRef.current.appendChild(slide)
+        })
       })
-    }
+      .then(() => {
+        if (!window.Swiper) return
 
-    const ro = new ResizeObserver(() => state.current.swiper?.update && state.current.swiper.update())
-    ro.observe(section)
+        const swiper = new window.Swiper(swiperEl.current, {
+          loop: true,
+          spaceBetween: 25,
+          slidesPerView: 1,
+          speed: 800,
+          autoplay: { delay: 6000, disableOnInteraction: false },
+          grabCursor: true,
+          on: {
+            init() {
+              this.slides.forEach(ensureSplit)
+              animateIn(this.slides[this.activeIndex])
+            },
+            loopFix() {
+              this.slides.forEach(ensureSplit)
+            },
+            slideChangeTransitionStart() {
+              animateOut(this.slides[this.previousIndex])
+            },
+            slideChangeTransitionEnd() {
+              animateIn(this.slides[this.activeIndex])
+            }
+          }
+        })
+
+        state.current.swiper = swiper
+
+        if (window.ScrollTrigger) {
+          state.current.st = window.ScrollTrigger.create({
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            onEnter: () => { state.current.swiper?.autoplay?.start(); animateIn(state.current.swiper.slides[state.current.swiper.activeIndex]) },
+            onEnterBack: () => { state.current.swiper?.autoplay?.start(); animateIn(state.current.swiper.slides[state.current.swiper.activeIndex]) },
+            onLeave: () => { state.current.swiper?.autoplay?.stop(); animateOut(state.current.swiper.slides[state.current.swiper.activeIndex]) },
+            onLeaveBack: () => { state.current.swiper?.autoplay?.stop(); animateOut(state.current.swiper.slides[state.current.swiper.activeIndex]) }
+          })
+        }
+
+        const ro = new ResizeObserver(() => state.current.swiper?.update && state.current.swiper.update())
+        ro.observe(section)
+        state.current.ro = ro
+      })
+      .catch(console.error)
 
     return () => {
-      ro.disconnect()
+      state.current.ro?.disconnect?.()
       state.current.st?.kill()
       state.current.swiper?.destroy(true, true)
       cache.current.forEach((v) => {
@@ -108,19 +154,7 @@ const Testamonies = () => {
   return (
     <div className="testamonies">
       <div className="swiper" ref={swiperEl}>
-        <div className="swiper-wrapper carosuel-out">
-          <div className="swiper-slide carosuel-card">
-            <h3>A glimpse into my journey, ideas, processes, brain, and random thoughts.</h3>
-            <p>- Seth Troxler</p>
-          </div>
-          <div className="swiper-slide carosuel-card">
-            <h3>Don't count the days, make the days count</h3>
-            <p>- Muhammad Ali</p>
-          </div>
-          <div className="swiper-slide carosuel-card">
-            <h3>Everybody has a plan until they get punched in the mouth</h3>
-            <p>- Mike Tyson</p>
-          </div>
+        <div className="swiper-wrapper carosuel-out" ref={wrapperRef}>
         </div>
       </div>
     </div>
