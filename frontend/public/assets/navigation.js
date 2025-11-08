@@ -1,7 +1,9 @@
 const Navigation = () => {
-  const { loading, global } = window.useGlobalData()
+  const { loading, global } = window.useGlobalData ? window.useGlobalData() : { loading: false, global: {} }
   const g = Array.isArray(global) ? (global[0] || {}) : (global || {})
   const nav = g.navigation || {}
+  const RRD = window.ReactRouterDOM || {}
+  const { Link } = RRD
 
   const findFirstUrl = (node) => {
     if (!node || typeof node !== 'object') return null
@@ -30,14 +32,8 @@ const Navigation = () => {
     return null
   }
 
-  const rawLogoUrl =
-    findFirstUrl(nav.logo?.logo) ||
-    findFirstUrl(nav.logo) ||
-    null
-
-  const logoUrl = rawLogoUrl
-    ? (rawLogoUrl.startsWith('http') ? rawLogoUrl : window.API_URL + rawLogoUrl)
-    : null
+  const rawLogoUrl = findFirstUrl(nav.logo?.logo) || findFirstUrl(nav.logo) || null
+  const logoUrl = rawLogoUrl ? (rawLogoUrl.startsWith('http') ? rawLogoUrl : (window.API_URL || '') + rawLogoUrl) : null
 
   const items =
     (Array.isArray(nav.logo?.menultems) && nav.logo.menultems) ||
@@ -48,25 +44,23 @@ const Navigation = () => {
     (Array.isArray(nav.menuItems) && nav.menuItems) ||
     []
 
+  const renderItem = (it) => {
+    const href = it?.href || it?.url || '#'
+    const label = it?.label || it?.title || ''
+    const isExternal = it?.isExternal === true || /^https?:\/\//i.test(href) || href.startsWith('mailto:') || href.startsWith('tel:')
+    const key = it?.id ?? href + label
+    if (Link && !isExternal) return <Link key={key} to={href.startsWith('/') ? href : `/${href}`}>{label}</Link>
+    return <a key={key} href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>{label}</a>
+  }
+
   return (
     <div className="glass nav">
       <div className="logo">
-        {logoUrl ? <img src={logoUrl} alt="Logo" /> : (loading ? '...' : null)}
+        {logoUrl ? (Link ? <Link to="/"><img src={logoUrl} alt="Logo" /></Link> : <a href="/"><img src={logoUrl} alt="Logo" /></a>) : (loading ? '...' : null)}
       </div>
       <div className="menu">
         <div className="menu-items">
-          {loading && items.length === 0 ? '...' : items.map((it) => {
-            const href = it?.href || '#'
-            const label = it?.label || ''
-            const external = !!it?.isExternal
-            const key = it?.id ?? href
-            return external
-              ? <a key={key} href={href} target="_blank" rel="noopener noreferrer">{label}</a>
-              : <a key={key} href={href}>{label}</a>
-          })}
-          {!loading && items.length === 0 && (
-            <span style={{ opacity: .6 }}>No menu items found</span>
-          )}
+          {loading && items.length === 0 ? '...' : items.map(renderItem)}
         </div>
         <div className="hamburger" />
       </div>

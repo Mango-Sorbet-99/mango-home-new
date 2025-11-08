@@ -184,20 +184,28 @@ function useFullHeight() {
   React.useEffect(() => {
     function setH() {
       const h = window.innerHeight
-      document.querySelectorAll('.full-height').forEach((el) => { el.style.height = h + 'px' })
+      document.querySelectorAll('.full-height')
+        .forEach(el => { el.style.height = h + 'px' })
     }
-    setH()
+    function onLoad() {
+      setH()
+    }
+    window.addEventListener('load', onLoad)
     window.addEventListener('resize', setH)
     history.scrollRestoration = 'manual'
     window.scrollTo(0, 0)
-    function handleBeforeUnload() { window.scrollTo(0, 0) }
+    function handleBeforeUnload() {
+      window.scrollTo(0, 0)
+    }
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => {
+      window.removeEventListener('load', onLoad)
       window.removeEventListener('resize', setH)
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
   }, [])
 }
+
 
 function Main({ children }) {
   useScrollSmoother()

@@ -54,7 +54,7 @@ if (!window.GlobalDataSetup) {
   window.GlobalDataSetup = true
 }
 
-{/*function MangoCanvas() {
+function MangoCanvas() {
   const ref = React.useRef(null)
   React.useEffect(() => {
     if (!window.startMango || !ref.current) return
@@ -68,9 +68,9 @@ if (!window.GlobalDataSetup) {
       style={{ position: 'fixed', inset: 0, zIndex: -1, width: '100vw', height: '100vh', overflow: 'hidden' }}
     />
   )
-} */}
+}
 
-function AppInner() {
+function HomePage() {
   return (
     <>
       <Preloader />
@@ -97,14 +97,62 @@ function AppInner() {
         </div>
       </div>
       <Main />
-      {/* <MangoCanvas /> */}
+      <MangoCanvas />
     </>
   )
 }
 
+function ContactPage() {
+  return (
+    <>
+      <Preloader />
+      <div className="container">
+        <Footer />
+      </div>
+      <Main />
+    </>
+  )
+}
+
+function usePathname() {
+  const [path, setPath] = React.useState(window.location.pathname)
+  React.useEffect(() => {
+    const onPop = () => setPath(window.location.pathname)
+    window.addEventListener('popstate', onPop)
+
+    const onClick = (e) => {
+      const a = e.target.closest('a[data-nav]')
+      if (!a) return
+      const href = a.getAttribute('href')
+      if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return
+      e.preventDefault()
+      if (href !== window.location.pathname) {
+        history.pushState({}, '', href)
+        onPop()
+      }
+    }
+    document.addEventListener('click', onClick)
+    return () => {
+      window.removeEventListener('popstate', onPop)
+      document.removeEventListener('click', onClick)
+    }
+  }, [])
+  return path
+}
+
+function Router() {
+  const path = usePathname()
+  if (path === '/contact') return <ContactPage />
+  return <HomePage />
+}
+
 function App() {
   const Provider = window.GlobalDataProvider
-  return <Provider><AppInner /></Provider>
+  return (
+    <Provider>
+      <Router />
+    </Provider>
+  )
 }
 
 const root = ReactDOM.createRoot(document.getElementById('app-root'))
