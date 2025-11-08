@@ -114,6 +114,22 @@ function ContactPage() {
   )
 }
 
+function ProjectPage() {
+  return (
+    <>
+      <Preloader />
+      <Navigation />
+      <div id="smooth-wrapper">
+        <div id="smooth-content" className="container">
+          <ProjectsGridPage />
+          <Footer />
+        </div>
+      </div>
+      <Main />
+    </>
+  )
+}
+
 function usePathname() {
   const [path, setPath] = React.useState(window.location.pathname)
   React.useEffect(() => {
@@ -143,6 +159,7 @@ function usePathname() {
 function Router() {
   const path = usePathname()
   if (path === '/contact') return <ContactPage />
+  if (path === '/projects') return <ProjectPage />
   return <HomePage />
 }
 
