@@ -26,7 +26,7 @@ const CodeBlock = () => {
   }, [])
 
   return (
-    <div ref={root} className="codeBlox">
+    <div ref={root} className="codeBlox full-height">
       <img src="./img/CodeBlock.webp" />
       <img src="./img/CodeBlock-1.webp" />
       <img src="./img/CodeBlock-2.webp" />

@@ -114,6 +114,8 @@ canvas {
     margin-top: 25%;
     display: flex;
     margin-bottom: -25%;
+    align-items: center;
+    
 }
 
 .codeBlox img {

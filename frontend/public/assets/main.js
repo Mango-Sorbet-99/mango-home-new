@@ -66,7 +66,9 @@ function useScrollSmoother() {
     const smoother = ScrollSmoother.create({
       wrapper: '#smooth-wrapper',
       content: '#smooth-content',
-      smooth: 10,
+      smooth: 3,
+      ease: 'expo.out',
+      speed: 0.5,
       smoothTouch: 0.2,
       effects: true,
       normalizeScroll: true,
