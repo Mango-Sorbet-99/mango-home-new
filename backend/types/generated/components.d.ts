@@ -64,6 +64,17 @@ export interface SharedOtherMenus extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedTestimonials extends Struct.ComponentSchema {
+  collectionName: 'components_shared_testimonials';
+  info: {
+    displayName: 'testimonials';
+  };
+  attributes: {
+    name: Schema.Attribute.String;
+    testimonial: Schema.Attribute.String;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
@@ -73,6 +84,7 @@ declare module '@strapi/strapi' {
       'shared.logo': SharedLogo;
       'shared.navigation': SharedNavigation;
       'shared.other-menus': SharedOtherMenus;
+      'shared.testimonials': SharedTestimonials;
     }
   }
 }

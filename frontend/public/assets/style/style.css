@@ -169,6 +169,10 @@ p {
     font-weight: 200;
 }
 
+.p2 {
+    font-size: 0.6rem;
+}
+
 a {
     font-size: 0.8rem;
     font-weight: 400;
@@ -249,6 +253,7 @@ a {
     position: absolute;
     inset: 0;
     transition: 1s ease-in-out;
+    pointer-events: none;
 }
  .glass:before {
 	border: 1px solid var(--white);
@@ -349,6 +354,13 @@ a {
 }
 
 .phonenumbers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.phone-num {
     display: flex;
     gap: 10px;
 }

@@ -57,9 +57,12 @@ const Footer = () => {
           <a>Terms + Conditions</a>
         </div>
         <div className="phonenumbers">
-          <div className="button-1 button glass"><p>🇬🇧&nbsp;+44&nbsp;7519&nbsp;418&nbsp;970</p></div>
-          <div className="button-1 button glass"><p>🇫🇷&nbsp;+33&nbsp;7531&nbsp;418&nbsp;67</p></div>
-          <div className="button-1 button glass"><p>🇳🇱&nbsp;+31&nbsp;6847&nbsp;446&nbsp;91</p></div>
+          <div className="phone-num">
+            <div className="button-1 button glass"><p>🇬🇧&nbsp;+44&nbsp;7519&nbsp;418&nbsp;970</p></div>
+            <div className="button-1 button glass"><p>🇫🇷&nbsp;+33&nbsp;7531&nbsp;418&nbsp;67</p></div>
+            <div className="button-1 button glass"><p>🇳🇱&nbsp;+31&nbsp;6847&nbsp;446&nbsp;91</p></div>
+          </div>
+          <p className="phoneStatement p2">*The British number is always on, the French and Dutch numbers are sometimes off.</p>
         </div>
       </div>
     </div>
