@@ -17,9 +17,9 @@ const CodeBlock = () => {
         opacity: 0,
       },{
         opacity: 1,
-        duration: 1,
-        ease: 'circ.in',
-        stagger: 0.5
+        duration: 1.3,
+        ease: 'expo.in',
+        stagger: 0.3
       })
     }, root)
 

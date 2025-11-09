@@ -163,7 +163,7 @@ window.startMango = (mountEl) => {
             scene.add(mangoParent)
 
             unifyMaterials(gltf.scene, { env: 1.2, rough: 0.6, metal: 0.0 })
-            makeTextRing('CREATIVE CODING • DIGITAL DESIGN • ')
+            makeTextRing(' • CREATIVE CODING • DIGITAL DESIGN ')
         })
 
         asteroidParents = []
@@ -210,8 +210,8 @@ window.startMango = (mountEl) => {
         hideHeroText()
     }
 
-    function makeTextRing(text = 'CREATIVE CODING • DIGITAL DESIGN • ') {
-        const W = 8192, H = 512, PADX = 80, PADY = 40
+    function makeTextRing(text = ' • CREATIVE CODING • DIGITAL DESIGN ') {
+        const W = 8192, H = 512, PADY = 40, EXTRA_GAP_RATIO = 0.25
         const cvs = document.createElement('canvas')
         cvs.width = W
         cvs.height = H
@@ -220,8 +220,8 @@ window.startMango = (mountEl) => {
         const tex = new THREE.CanvasTexture(cvs)
         tex.wrapS = THREE.RepeatWrapping
         tex.wrapT = THREE.ClampToEdgeWrapping
-        tex.repeat.x = 1
-        tex.offset.x = 0
+        tex.repeat.set(1, 1)
+        tex.offset.set(0, 0)
         tex.anisotropy = renderer.capabilities.getMaxAnisotropy()
         tex.minFilter = THREE.LinearMipmapLinearFilter
         tex.magFilter = THREE.LinearFilter
@@ -230,75 +230,103 @@ window.startMango = (mountEl) => {
         function draw() {
             ctx.clearRect(0, 0, W, H)
             const size = H - PADY * 2
-            ctx.font = `800 ${size}px "Outfit", Helvetica, Arial, sans-serif`
+            ctx.font = `700 ${size}px "Outfit", Helvetica, sans-serif`
             ctx.textBaseline = 'middle'
+
             const grad = ctx.createLinearGradient(0, 0, 0, H)
             grad.addColorStop(0, '#ffffff')
             grad.addColorStop(1, '#FFDCA8')
             ctx.fillStyle = grad
             ctx.shadowColor = 'rgba(255,240,200,1)'
             ctx.shadowBlur = 80
-            const phrase = text.endsWith(' ') ? text : text + ' '
-            const m = ctx.measureText(phrase).width
-            let x = -m
+
+            const phrase = (text.trimEnd() + ' ').replace(/\s+$/, '  ')
+            const phraseW = ctx.measureText(phrase).width
+            const spacingPx = phraseW + size * EXTRA_GAP_RATIO
+
+            let x = -spacingPx
             const y = H / 2
-            while (x < W + m) {
-                ctx.fillText(phrase, x + PADX, y)
-                x += m
+            while (x < W + spacingPx) {
+            ctx.fillText(phrase, x, y)
+            x += spacingPx
             }
+
+            tex.userData = { spacingPx }
             tex.needsUpdate = true
         }
 
+        draw()
+        // 3) Ring geometry + materials
         const radius = 1.58
         const height = 0.42
         const geo = new THREE.CylinderGeometry(radius, radius, height, 256, 1, true)
 
-        const mat = new THREE.MeshBasicMaterial({
+        const baseMat = new THREE.MeshBasicMaterial({
             map: tex,
             transparent: true,
             side: THREE.DoubleSide,
             toneMapped: false
         })
-        mat.onBeforeCompile = (shader) => {
+
+        baseMat.onBeforeCompile = (shader) => {
             shader.vertexShader = shader.vertexShader
-                .replace('#include <common>', '#include <common>\nvarying float vFacing;')
-                .replace('#include <begin_vertex>', `
-        #include <begin_vertex>
-        vec3 n = normalize(normalMatrix * normal);
-        vec3 v = normalize(-(modelViewMatrix * vec4(position,1.0)).xyz);
-        vFacing = dot(n, v);
-      `)
+            .replace('#include <common>', '#include <common>\nvarying float vFacing;')
+            .replace('#include <begin_vertex>', `
+                #include <begin_vertex>
+                vec3 n = normalize(normalMatrix * normal);
+                vec3 v = normalize(-(modelViewMatrix * vec4(position,1.0)).xyz);
+                vFacing = dot(n, v);
+            `)
             shader.fragmentShader = shader.fragmentShader
-                .replace('#include <common>', '#include <common>\nvarying float vFacing;')
-                .replace('#include <map_fragment>', `
-        #include <map_fragment>
-        if (vFacing < 0.0) discard;
-      `)
+            .replace('#include <common>', '#include <common>\nvarying float vFacing;')
+            .replace('#include <map_fragment>', `
+                #include <map_fragment>
+                if (vFacing < 0.0) discard;
+            `)
         }
 
-        textClipPlane = new THREE.Plane()
-        mat.clippingPlanes = [textClipPlane]
+        const textRing = new THREE.Mesh(geo, baseMat)
 
-        textRing = new THREE.Mesh(geo, mat)
+        const glowMat = baseMat.clone()
+        glowMat.map = tex
+        glowMat.opacity = 0.25
+        glowMat.depthWrite = false
+        glowMat.needsUpdate = true
 
-        const glow = new THREE.Mesh(geo, mat.clone())
-        glow.material.opacity = 0.25
-        glow.material.depthWrite = false
-        glow.material.clippingPlanes = [textClipPlane]
+        const glow = new THREE.Mesh(geo, glowMat)
         glow.scale.multiplyScalar(1.012)
 
-        textGroup = new THREE.Group()
-        textGroup.rotation.x = Math.PI
-        textGroup.position.y = 0.05
-        textGroup.add(textRing, glow)
+        const group = new THREE.Group()
+        group.rotation.x = Math.PI
+        group.position.y = 0.05
+        group.add(textRing, glow)
+        ;(mangoParent || scene).add(group)
 
-        if (mangoParent) mangoParent.add(textGroup)
-        else scene.add(textGroup)
+        if (window.gsap) {
+            const spacingPx = tex.userData.spacingPx
+            const stepU = spacingPx / W         
+            const speedSecsPerPhrase = 15 
 
-        draw()
-        if (window.gsap) gsap.to(tex.offset, { x: '-=1', duration: 10, ease: 'none', repeat: -1 })
+            tex.offset.x = 0
+
+            gsap.to(tex.offset, {
+            x: `-=${stepU}`,
+            duration: speedSecsPerPhrase,
+            ease: 'none',
+            repeat: -1,
+            modifiers: {
+                x: (v) => {
+                const f = parseFloat(v)
+                const wrapped = f - Math.floor(f / stepU) * stepU
+                return wrapped
+                }
+            }
+            })
+        }
+
         textRing.updateLabel = (s) => { text = s; draw() }
-    }
+        }
+
 
     function addStars() {
         const totalStars = 750
