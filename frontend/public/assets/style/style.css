@@ -180,6 +180,11 @@ p b {
     font-weight: 800;
 }
 
+button {
+    font-size: 0.8rem;
+    font-weight: 200;
+}
+
 .p2 {
     font-size: 0.6rem;
 }
@@ -676,6 +681,10 @@ a {
 }
 
 .blog-page-outer .project-grid {
+    margin: 150px 0;
+}
+
+.data-pages {
     margin: 150px 0;
 }
 

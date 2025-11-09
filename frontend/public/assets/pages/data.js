@@ -1,223 +1,226 @@
 const Data = () => {
   return (
-    <div>
+    <div className="data-pages">
       <div className="sixtysix-thirtythree">
         <div className="sixtysix-thirtythree-1">
-          <h3>
-            Privacy Policy
-          </h3>
+          <h3>Privacy Policy</h3>
+
           <p>
-            We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, store, and protect your information when you visit our website or contact us.
+            We respect your privacy and are committed to protecting your personal data. 
+            This Privacy Policy explains how we collect, use, store, and protect your information 
+            when you visit our website or contact us.
+            <br/><br/>
             This website is not intended for children, and we do not knowingly collect data relating to children.
           </p>
+
           <p>
-            01 — Who We Are
-
-            Mango Media (“we”, “us”, “our”) is the data controller responsible for your personal data. If you have any questions, please contact:
-
-            Data Protection Contact:
-            Alex Mango
+            <strong>01 — Who We Are</strong>
+            <br/><br/>
+            Mango Media (“we”, “us”, “our”) is the data controller responsible for your personal data.
+            <br/><br/>
+            <strong>Data Protection Contact:</strong><br/>
+            Alex Mango<br/>
             hello@mango-media.eu
+            <br/><br/>
+            This privacy policy supplements any other notices we may provide. 
+            We encourage you to read it together with any additional information 
+            offered during specific interactions or services.
+            <br/><br/>
 
-            This privacy policy supplements any other notices we may provide. We encourage you to read it together with any additional information offered during specific interactions or services.
-
-            02 — What Personal Data We Collect
-
+            <strong>02 — What Personal Data We Collect</strong>
+            <br/><br/>
             Personal data means any information that can identify an individual.
+            <br/><br/>
 
-            We may collect the following:
-
-            Identity Data
-
-            • First name
+            <strong>Identity Data</strong><br/>
+            • First name<br/>
             • Last name
+            <br/><br/>
 
-            Contact Data
-
-            • Email address
+            <strong>Contact Data</strong><br/>
+            • Email address<br/>
             • Telephone number
+            <br/><br/>
 
-            Technical Data
-
-            • IP address
-            • Browser type/version
+            <strong>Technical Data</strong><br/>
+            • IP address<br/>
+            • Browser type/version<br/>
             • Website usage information
+            <br/><br/>
 
-            Aggregated Data
+            <strong>Aggregated Data</strong><br/>
+            We also collect statistical or demographic information. This data does not reveal your identity 
+            unless combined with your personal data.
+            <br/><br/>
 
-            We also collect statistical or demographic information. This data does not reveal your identity unless combined with your personal data.
-
-            We do NOT collect:
-
-            • Special category data
-            • Data on criminal convictions
+            <strong>We do NOT collect:</strong><br/>
+            • Special category data<br/>
+            • Criminal conviction data<br/>
             • Information about children
+            <br/><br/>
 
-            If You Choose Not to Provide Data
+            <strong>If You Choose Not to Provide Data</strong><br/>
+            If you fail to provide information necessary for us to deliver a service, 
+            we may be unable to fulfil that service.
+            <br/><br/>
 
-            If you fail to provide information necessary for us to deliver a service (e.g., providing project details), we may be unable to fulfil that service.
-
-            03 — How We Collect Your Data
-
-            We collect personal data in the following ways:
-
-            Direct interactions
-
-            You may give us your data by:
-            • Filling in the contact form
-            • Requesting a quote
+            <strong>03 — How We Collect Your Data</strong>
+            <br/><br/>
+            <strong>Direct interactions:</strong><br/>
+            • Filling in the contact form<br/>
+            • Requesting a quote<br/>
             • Emailing or calling us
+            <br/><br/>
 
-            Automatic technologies
+            <strong>Automatic technologies:</strong><br/>
+            • Cookies<br/>
+            • Server logs
+            <br/><br/>
 
-            We may collect technical data about your browsing via cookies or server logs.
-
-            04 — How We Use Your Personal Data
-
+            <strong>04 — How We Use Your Personal Data</strong>
+            <br/><br/>
             We use your data only when legally permitted.
+            <br/><br/>
 
-            We rely on three main legal bases:
-            1. Performance of a Contract
+            <strong>Legal Bases:</strong><br/><br/>
+            <strong>1. Performance of a Contract</strong><br/>
+            When we need your data to deliver what you’ve requested.
+            <br/><br/>
 
-            When we need your data to deliver what you’ve requested (e.g., a quote, project work).
+            <strong>2. Legitimate Interests</strong><br/>
+            Used to operate safely and efficiently, without overriding your rights.
+            <br/><br/>
 
-            2. Legitimate Interests
+            <strong>3. Consent</strong><br/>
+            When required (e.g., optional marketing).
+            <br/><br/>
 
-            To operate our business efficiently and securely. We always assess that our interests do not override your rights.
+            <strong>We do NOT use your data for:</strong><br/>
+            • Automated decision-making<br/>
+            • Profiling<br/>
+            • Selling information to third parties
+            <br/><br/>
 
-            3. Consent
+            <strong>05 — Purposes for Using Your Data</strong>
+            <br/><br/>
+            • Responding to enquiries<br/>
+            • Providing quotes<br/>
+            • Communicating about a project<br/>
+            • Managing our relationship with you<br/>
+            • Improving our website (analytics)
+            <br/><br/>
 
-            Where required (e.g., optional marketing).
-
-            We do NOT use your data for:
-            • automated decision-making
-            • profiling
-            • selling information to third parties
-
-            05 — Purposes for Using Your Data
-
-            We use your personal data for:
-
-            • Responding to enquiries
-            • Providing quotes
-            • Communicating about a project
-            • Managing our relationship with you
-            • Improving our website (via analytics)
-
-            06 — Cookies
-
+            <strong>06 — Cookies</strong>
+            <br/><br/>
             Our website uses cookies to improve your experience and analyse traffic.
+            <br/><br/>
+            You can block cookies in your browser settings, but some features may not function correctly.
+            <br/><br/>
 
-            You can block cookies via your browser settings. If disabled, certain parts of the site may not function correctly.
+            <strong>Types of cookies we use:</strong><br/>
+            • Strictly necessary<br/>
+            • Analytical/performance<br/>
+            • Functionality<br/>
+            • Targeting
+            <br/><br/>
 
-            Types of cookies we use:
-
-            • Strictly necessary cookies
-            • Performance/analytical cookies
-            • Functionality cookies
-            • Targeting cookies
-
-            Third parties (e.g., analytics tools) may also use cookies. We do not control these.
-
+            Third parties may also use cookies, which we do not control.
+            <br/><br/>
             Most cookies expire within 90 days.
+            <br/><br/>
 
-            07 — Sharing Your Personal Data
-
+            <strong>07 — Sharing Your Personal Data</strong>
+            <br/><br/>
             We may share your data with:
+            <br/><br/>
 
-            Internal third parties
+            <strong>Internal third parties:</strong><br/>
+            • Contractors or freelancers assisting on a project
+            <br/><br/>
 
-            • Contractors or freelancers assisting on a project.
+            <strong>External third parties:</strong><br/>
+            • Solicitors, accountants, advisers<br/>
+            • HMRC/regulators when required<br/>
+            • Hosting/analytics providers<br/>
+            • Business purchasers (in case of sale/merger)
+            <br/><br/>
 
-            External third parties
+            All third parties must handle your data securely and legally.
+            <br/><br/>
 
-            • Solicitors, accountants, and advisers (where necessary)
-            • HMRC or regulatory authorities (where required)
-            • Third-party services involved in hosting or analytics
-            • Business purchasers in the event of a merger or sale
+            <strong>08 — International Transfers</strong>
+            <br/><br/>
+            We do not intentionally transfer your data outside the EEA. 
+            If required, appropriate GDPR safeguards are applied.
+            <br/><br/>
 
-            All third parties are required to handle your data securely and in line with the law.
+            <strong>09 — Data Security</strong>
+            <br/><br/>
+            We take appropriate security measures to prevent:<br/>
+            • Unauthorised access<br/>
+            • Accidental loss<br/>
+            • Misuse or alteration<br/><br/>
 
-            08 — International Transfers
+            Only individuals with a legitimate business need may access your data.
+            <br/><br/>
 
-            We do not intentionally transfer your data outside the European Economic Area (EEA).
-            If a third-party tool requires such a transfer, it will be protected via GDPR-compliant safeguards.
+            If a data breach occurs, we will notify you and authorities when required.
+            <br/><br/>
 
-            09 — Data Security
+            <strong>10 — Data Retention</strong>
+            <br/><br/>
+            We retain your data only as long as necessary to:<br/>
+            • Deliver services<br/>
+            • Meet legal/accounting requirements
+            <br/><br/>
 
-            We take your privacy seriously and implement security measures to prevent:
+            After this, it is securely deleted.
+            <br/><br/>
 
-            • unauthorised access
-            • accidental loss
-            • misuse or alteration
+            <strong>11 — Your Rights Under Data Protection Law</strong>
+            <br/><br/>
+            You have the right to:<br/>
+            • Access your data<br/>
+            • Correct inaccurate data<br/>
+            • Request erasure<br/>
+            • Withdraw consent<br/>
+            • Request data portability<br/>
+            • Restrict processing<br/>
+            • Object to processing
+            <br/><br/>
 
-            Access is restricted to individuals who have a business need to know and who are bound by confidentiality.
+            To exercise any rights: hello@mango-media.eu
+            <br/><br/>
 
-            In the event of a data breach, we will notify you and the relevant authorities when legally required.
+            <strong>No fee:</strong> Unless your request is excessive or repetitive.
+            <br/><br/>
 
-            10 — Data Retention
+            <strong>Identity check:</strong> We may verify your identity.
+            <br/><br/>
 
-            We retain your data only for as long as necessary to:
+            <strong>Response time:</strong> Usually within one month.
+            <br/><br/>
 
-            • deliver services
-            • satisfy legal or accounting requirements
+            <strong>12 — Changes to This Policy</strong>
+            <br/><br/>
+            We may update this policy from time to time. Check this page for updates.
+            <br/><br/>
 
-            Retention depends on:
-            • the type of data
-            • the purpose collected
-            • legal obligations
+            <strong>13 — Complaints</strong>
+            <br/><br/>
+            Contact us at hello@mango-media.eu for any concerns.
+            <br/><br/>
+            If unresolved, you may contact the ICO:
+            <br/><br/>
+            0303 123 1113<br/>
+            https://ico.org.uk/<br/><br/>
 
-            After this period, data is securely deleted.
-
-            11 — Your Rights Under Data Protection Law
-
-            You have the following rights:
-
-            • Access — request a copy of your data
-            • Correction — fix inaccurate or incomplete data
-            • Erasure — request deletion when appropriate
-            • Withdraw consent — when consent is the basis
-            • Data portability — transfer your data to another provider
-            • Restrict processing — in certain circumstances
-            • Object — to processing based on legitimate interests
-
-            To exercise any rights, email: hello@mango-media.eu
-
-            No fee
-
-            You will not pay for requesting your data unless your request is excessive, repetitive, or clearly unfounded.
-
-            Identity verification
-
-            We may ask for proof of identity to protect your data.
-
-            Response time
-
-            We aim to respond within one month.
-
-            12 — Changes to This Policy
-
-            We may update this policy occasionally. Please check this page for updates.
-
-            If your personal data changes, please let us know so our records remain accurate.
-
-            13 — Complaints
-
-            You can contact us directly at hello@mango-media.eu
-            for any data-related concern.
-
-            If you are not satisfied with our response, you have the right to contact the:
-
-            Information Commissioner’s Office (ICO)
-            0303 123 1113
-            https://ico.org.uk/
-
-            ICO Address:
-            Wycliffe House
-            Water Lane
-            Wilmslow
-            Cheshire
-            SK9 5AF
+            Information Commissioner’s Office<br/>
+            Wycliffe House<br/>
+            Water Lane<br/>
+            Wilmslow<br/>
+            Cheshire<br/>
+            SK9 5AF<br/>
             United Kingdom
           </p>
         </div>

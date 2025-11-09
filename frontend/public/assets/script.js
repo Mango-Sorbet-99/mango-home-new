@@ -227,6 +227,23 @@ function DataPage() {
   )
 }
 
+function TermsPage() {
+  return (
+    <>
+      <Preloader />
+      <Navigation />
+      <div id="smooth-wrapper">
+        <div id="smooth-content" className="container">
+          <Terms />
+          <Footer />
+        </div>
+      </div>
+      <Main />
+      <SpaceCanvas />
+    </>
+  )
+}
+
 function AboutPage() {
   React.useEffect(() => {
     document.body.classList.add("about-page-outer")
@@ -303,6 +320,7 @@ function Router() {
   if (path === '/faq') return <FAQPage />
   if (path === '/about') return <AboutPage />
   if (path === '/datenschutz') return <DataPage />
+  if (path === '/terms') return <TermsPage />
   return <HomePage />
 }
 
