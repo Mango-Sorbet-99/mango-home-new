@@ -696,7 +696,6 @@ a {
         filter: drop-shadow(0px 0px 6px var(--white));
     }
 
-
     .hero .socials {
         transform: translateX(0px)!important;
     }

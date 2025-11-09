@@ -67,8 +67,6 @@ const Testamonies = () => {
           Array.isArray(j?.data?.attributes?.testimonials) ? j.data.attributes.testimonials :
           []
 
-        console.log('Loaded testimonials:', items)
-
         if (!wrapperRef.current) return
         wrapperRef.current.innerHTML = ''
 
@@ -136,7 +134,6 @@ const Testamonies = () => {
         ro.observe(section)
         state.current.ro = ro
       })
-      .catch(console.error)
 
     return () => {
       state.current.ro?.disconnect?.()

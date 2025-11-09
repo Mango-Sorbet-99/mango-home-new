@@ -111,11 +111,12 @@ canvas {
 }
 
 .codeBlox {
-    margin-top: 25%;
+    margin-top: 100px;
     display: flex;
     margin-bottom: -25%;
     align-items: center;
-    
+    justify-content: end;
+
 }
 
 .codeBlox img {

@@ -1,4 +1,4 @@
-import * as THREE from '../threejs-master/build/three.module.js'
+import * as THREE from 'three'
 import { GLTFLoader} from '../threejs-master/examples/jsm/loaders/GLTFLoader.js'
 import {OrbitControls} from '../threejs-master/examples/jsm/controls/OrbitControls.js'
 
@@ -61,7 +61,7 @@ window.startMango = (mountEl) => {
             alpha: false,
             powerPreference: 'high-performance'
         })
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
         renderer.setSize(W, H)
         renderer.toneMapping = THREE.ACESFilmicToneMapping
         renderer.toneMappingExposure = 1.0
@@ -110,9 +110,9 @@ window.startMango = (mountEl) => {
 
         params = {
             mangoSpin: true,
-            mangoSpeed: 0.05,
+            mangoSpeed: 0.005,
             cameraSpin: false,
-            cameraSpeed: 0.01,
+            cameraSpeed: 0.1,
             autorotate: true,
             autorotateSpeed: 0.2
         }

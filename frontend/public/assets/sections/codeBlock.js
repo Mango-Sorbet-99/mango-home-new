@@ -1,4 +1,5 @@
 const CodeBlock = () => {
+  const root = React.useRef(null)
   React.useEffect(() => {
     const { gsap, ScrollTrigger } = window
     if (!gsap || !ScrollTrigger || !root.current) return
@@ -18,7 +19,7 @@ const CodeBlock = () => {
         opacity: 1,
         duration: 1,
         ease: 'circ.in',
-        stagger: 0.3
+        stagger: 0.5
       })
     }, root)
 
@@ -26,7 +27,7 @@ const CodeBlock = () => {
   }, [])
 
   return (
-    <div ref={root} className="codeBlox full-height">
+    <div ref={root} className="codeBlox">
       <img src="./img/CodeBlock.webp" />
       <img src="./img/CodeBlock-1.webp" />
       <img src="./img/CodeBlock-2.webp" />

@@ -19,7 +19,15 @@ const Footer = () => {
         }))
 
     let inited = false
-    const safeInit = () => { if (!inited) { inited = true; initFooterAnims() } }
+    let emailReady = false 
+
+    const safeInit = () => {
+      if (inited) return
+      const h3 = emailTextRef.current
+      if (!h3 || !h3.textContent || !h3.textContent.trim()) return
+      inited = true
+      initFooterAnims()
+    }
 
     function initFooterAnims() {
       const { gsap, ScrollTrigger, SplitText } = window
@@ -27,23 +35,28 @@ const Footer = () => {
       gsap.registerPlugin(ScrollTrigger, SplitText)
 
       const footer = document.querySelector('.footer')
-      const footerEmail = document.querySelector('.footer-email')
-      if (!footer || !footerEmail) return
+      if (!footer) return
 
+      // fade out nav + sticky button
       gsap.timeline({
         scrollTrigger: { trigger: footer, start: 'top 25%', toggleActions: 'play none none reverse' }
       })
       .to(gsap.utils.toArray('.nav'), { opacity: 0, y: '-100%', duration: 1.5, ease: 'expo.in' })
       .to(gsap.utils.toArray('.sticky-button'), { opacity: 0, x: '100%', duration: 0.7, ease: 'expo.in' }, 0)
 
-      const splitEmail = new SplitText(footerEmail, { type: 'chars' })
+      // IMPORTANT: split the H3 text, not the link
+      const h3 = emailTextRef.current
+      if (!h3) return
+      const splitEmail = new SplitText(h3, { type: 'chars' })
+
+      if (!splitEmail.chars || splitEmail.chars.length === 0) return 
+
       gsap.set(splitEmail.chars, { opacity: 0 })
       gsap.timeline({
         scrollTrigger: { trigger: footer, start: 'top 75%', toggleActions: 'play none none reverse' }
       }).fromTo(splitEmail.chars, { opacity: 0 }, { opacity: 1, stagger: 0.2, duration: 2, ease: 'expo.in' })
     }
 
-    // EMAIL
     fetchJSON('/api/global?populate[email][populate][email][populate]=*')
       .then(j => {
         const G = j?.data?.attributes || j?.data || {}
@@ -74,11 +87,13 @@ const Footer = () => {
           }
         }
         if (h3) h3.textContent = label
-      })
-      .catch(console.error)
-      .finally(safeInit)
 
-    // MENUS
+        emailReady = true
+      })
+      .finally(() => {
+        if (emailReady) safeInit()
+      })
+
     fetchJSON('/api/global?populate[otherMenus][populate][urls][populate]=*')
       .then(j => {
         const G = j?.data?.attributes || j?.data || {}
@@ -126,11 +141,7 @@ const Footer = () => {
           menus.find(m => m !== socialsMenu && m !== primaryMenu) ||
           null
         if (boringMenu) renderMenu(boringMenu, boringTitleRef, boringLinksRef, 'Boring Stuff')
-
-        console.log('otherMenus resolved:', { primaryMenu, socialsMenu, boringMenu })
       })
-      .catch(console.error)
-      .finally(safeInit)
   }, [])
 
   return (
@@ -143,8 +154,7 @@ const Footer = () => {
 
         <div className="footer-items">
           <h4 ref={socialsTitleRef}>Socials</h4>
-          <div ref={socialsLinksRef}>
-          </div>
+          <div ref={socialsLinksRef}></div>
         </div>
       </div>
 
@@ -155,15 +165,14 @@ const Footer = () => {
       <div className="footer-colums">
         <div className="footer-items">
           <h4 ref={boringTitleRef}>Boring Stuff</h4>
-          <div ref={boringLinksRef}>
-          </div>
+          <div ref={boringLinksRef}></div>
         </div>
 
         <div className="phonenumbers">
           <div className="phone-num">
-            <div className="button-1 button glass"><p>🇬🇧&nbsp;+44&nbsp;7519&nbsp;418&nbsp;970</p></div>
-            <div className="button-1 button glass"><p>🇫🇷&nbsp;+33&nbsp;7531&nbsp;418&nbsp;67</p></div>
-            <div className="button-1 button glass"><p>🇳🇱&nbsp;+31&nbsp;6847&nbsp;446&nbsp;91</p></div>
+            <div className="button-1 button glass"><p>🇬🇧 +44 7519 418 970</p></div>
+            <div className="button-1 button glass"><p>🇫🇷 +33 7531 418 67</p></div>
+            <div className="button-1 button glass"><p>🇳🇱 +31 6847 446 91</p></div>
           </div>
           <p className="phoneStatement p2">*The British number is always on, the French and Dutch numbers are sometimes off.</p>
         </div>

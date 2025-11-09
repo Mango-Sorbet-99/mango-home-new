@@ -1,4 +1,4 @@
-import * as THREE from '../threejs-master/build/three.module.js'
+import * as THREE from 'three'
 import { OrbitControls } from '../threejs-master/examples/jsm/controls/OrbitControls.js'
 
 window.startSpace = (mountEl) => {
@@ -32,7 +32,7 @@ window.startSpace = (mountEl) => {
     camera.position.set(0, 0, 1)
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' })
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
     renderer.setSize(W, H)
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.0
