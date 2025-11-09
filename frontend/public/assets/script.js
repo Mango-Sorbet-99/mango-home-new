@@ -210,6 +210,23 @@ function FAQPage() {
   )
 }
 
+function DataPage() {
+  return (
+    <>
+      <Preloader />
+      <Navigation />
+      <div id="smooth-wrapper">
+        <div id="smooth-content" className="container">
+          <Data />
+          <Footer />
+        </div>
+      </div>
+      <Main />
+      <SpaceCanvas />
+    </>
+  )
+}
+
 function AboutPage() {
   React.useEffect(() => {
     document.body.classList.add("about-page-outer")
@@ -241,6 +258,7 @@ function AboutPage() {
       <div id="smooth-wrapper">
         <div id="smooth-content" className="container">
           <About />
+          <Logos />
           <FAQ />
           <Footer />
         </div>
@@ -284,6 +302,7 @@ function Router() {
   if (path === '/blog') return <BlogPage />
   if (path === '/faq') return <FAQPage />
   if (path === '/about') return <AboutPage />
+  if (path === '/datenschutz') return <DataPage />
   return <HomePage />
 }
 

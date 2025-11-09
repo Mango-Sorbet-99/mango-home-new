@@ -1,31 +1,75 @@
 const About = () => {
+  const bg = { backgroundImage: "url('./img/mango-wide-lf.webp')" }
+
   return (
     <div className="about-hero">
-      <div className="fifty-fifty">
-        <div className="fifty-fifty-1">
-            <img src="./img/just-eat-it.webp" />
+      <div className="hero-img" style={bg}></div>
+
+      <div className="sixtysix-thirtythree">
+        <div className="sixtysix-thirtythree-2 world-map">
+          <img loading="lazy" src="./img/world.png" />
+          <img loading="lazy" src="./img/world-pin-1.png" />
+          <img loading="lazy" src="./img/world-pin-2.png" />
+          <img loading="lazy" src="./img/world-pin-3.png" />
         </div>
-        <div className="fifty-fifty-2">
+        <div className="sixtysix-thirtythree-1">
+          <h2>
+            For a decade I’ve honed my craft wandering across Europe—inside studios, back-alley cafés, pubs, and far too many Airbnbs.
+          </h2>
+          <h3>
+            Wherever I land, I build things.
+          </h3>
+          <p>
+            I craft digital experiences with the same energy I bring to everything else in my life: obsessive curiosity, a streak of rebellion, and an artist’s instinct for aesthetic. I’ve worked with The FA, fashion houses, musicians, automotive teams, DJs, and a repertoire that would take too long to list.
+            <br/><br/>
+            Years split between Amsterdam, Berlin, London, Nancy, Gothenburg, and Bristol shaped me. I speak multiple languages; I collect people, places, and stories—and I pour all of it into the work.
+          </p>
+        </div>
+      </div>
+
+      <div className="sixtysix-thirtythree">
+        <div className="sixtysix-thirtythree-2">
+          <img loading="lazy" src="./img/amsterdam.webp" />
+        </div>
+        <div className="sixtysix-thirtythree-1">
           <h5>
-            Each project is a piece of my brain, heart, and maybe a bit of what’s inside yours.
+            I’ve built websites my whole career, but the story started long before the code.
           </h5>
           <p>
-            At my core, I’m an artist who probably spends a little too much time wondering how we express ourselves through creativity — how art, music, and design can connect.  
-            <br /><br />
-            For over a decade, I’ve been experimenting at the crossroads of art, science, and technology — fusing motion, design, and code into digital experiences that feel more alive than they probably should.  
-            <br /><br />
-            I don’t just make websites; I build universes. Hence the space theme in most of my projects — because astrophysics isn’t just a passion, it’s the foundation of existence.  
-            Each piece I create is part experiment, part emotion — shaped by curiosity, precision, and just enough chaos to keep it interesting.  
-            <br /><br />
-            I’ve collaborated with artists, agencies, and global brands to uncover what makes them unique — then turned it into something that moves, glows, and occasionally breaks the laws of physics (on purpose).  
-            <br /><br />
-            If you’re looking for something safe and sensible, we might not be a perfect match.  
-            But if you want something unforgettable — let’s get messy, make magic, and see what we can cook up together. 
+            I hold a Master’s in Creative Technology (UWE Bristol) and a Bachelor’s in Graphic Communication (NUA), but most of my real education came at stupid-o’clock—pulling ideas apart, reading behavioural psychology, and refining until it finally hit: “that’s the one.”
+            <br/><br/>
+            I’m a designer and a developer. My design work is rooted in behavioural science and the quiet parts of human psychology—Jung, consciousness, and the physics of perception. I rip colour apart in the lab, then rebuild it in code. That obsession became <em>Spectral Synthesis</em>, my ongoing exploration of light, colour theory, and how we actually see.
+            <br/><br/>
+            I can work across the stack, but I excel at the front end—animation, interaction, performance. I treat code like a paintbrush.
+            <br/><br/>
+            Before screens, there were canvases. Summers hitchhiking through France meant selling paintings on street corners or trading them for food, wine, cigarettes, or a lift. I did my first graffiti piece at 10 after spraying my BMX solid gold. That pull to the city took me to Berlin, Bristol, and Amsterdam—fences jumped, rooftops climbed, pseudonyms written big across tunnels and walls. The mango stuck 🥭.
+            <br/><br/>
+            Music’s always been there too. Hand me an instrument and I’ll make it sing—guitar, bass, drums, saxophone, and keys most of all. I don’t care about genre; if there’s a jam, I’m in.
+            <br/><br/>
+            I built my first website in 2015 using discontinued animation software that exported to HTML and JS. A developer friend on a Swedish island saw it, flew me out, and I fell head-first into JavaScript, WebGL, GSAP, and Three.js—anything that let me bend reality on a screen.
           </p>
-          <div className="button-1 button glass btn-animate">
-            <div className="LED"></div>
-            <p>Get to know me more</p>
-          </div>
+        </div>
+      </div>
+
+      <div className="sixtysix-thirtythree">
+        <div className="sixtysix-thirtythree-2">
+          <img loading="lazy" src="./img/rotterdam.webp" />
+        </div>
+        <div className="sixtysix-thirtythree-1">
+          <h5>
+            First principles. One foot in tradition, one hand on the future.
+          </h5>
+          <p>
+            People pick sides—design or dev. I didn’t. I see code in shapes and design in logic. At this point it’s basically synaesthesia.
+            <br/><br/>
+            Today I travel with my dog, Bernadette, building for agencies, studios, and startups that want work that actually feels alive. I describe my role like a band: I play many instruments. Need a drummer? I’m there. Need a guitarist? Hand me the setlist. Need the whole song rewritten? That’s where it gets fun.
+            <br/><br/>
+            From concept to launch, I build without pretence: celebrate what’s always worked in design, and push what’s next with code. Study the rules at the feet of giants, then bend or break them with intent—finding the balance between old/new, function/beauty, and fiction/reality to create interfaces that feel inevitable.
+            <br/><br/>
+            Outside the screen I keep edges sharp—top-10% chess player, lifelong striker and grappler, comfortable in unarmed combat, equally at home on stage with a guitar. The point isn’t bravado; it’s discipline, pattern-recognition, timing, and flow. The same instincts that win on the board or in a ring make products feel effortless.
+            <br/><br/>
+            I was born days before the first website went live in 1991—black text, white backgrounds, blue links. Ever since, I’ve been trying to see how far we can take this medium. One pixel at a time.
+          </p>
         </div>
       </div>
     </div>

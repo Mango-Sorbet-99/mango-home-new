@@ -19,7 +19,7 @@ const AboutSnippet = () => {
     <div className="about-home">
       <div className="fifty-fifty">
         <div className="fifty-fifty-1">
-            <img src="./img/just-eat-it.webp" />
+            <img loading="lazy" src="./img/mango-lf.webp" />
         </div>
         <div className="fifty-fifty-2">
           <h5>

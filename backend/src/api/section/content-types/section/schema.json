@@ -15,6 +15,16 @@
       "type": "component",
       "component": "shared.testimonials",
       "repeatable": true
+    },
+    "faq": {
+      "type": "component",
+      "component": "shared.faq",
+      "repeatable": true
+    },
+    "terms": {
+      "type": "component",
+      "component": "shared.terms",
+      "repeatable": true
     }
   }
 }

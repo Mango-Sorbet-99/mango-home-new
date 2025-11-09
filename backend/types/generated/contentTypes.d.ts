@@ -500,6 +500,7 @@ export interface ApiSectionSection extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    faq: Schema.Attribute.Component<'shared.faq', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -507,6 +508,7 @@ export interface ApiSectionSection extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    terms: Schema.Attribute.Component<'shared.terms', true>;
     testimonials: Schema.Attribute.Component<'shared.testimonials', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

@@ -10,6 +10,17 @@ export interface SharedEmail extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedFaq extends Struct.ComponentSchema {
+  collectionName: 'components_shared_faqs';
+  info: {
+    displayName: 'faq';
+  };
+  attributes: {
+    body: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedFooter extends Struct.ComponentSchema {
   collectionName: 'components_shared_footers';
   info: {
@@ -64,6 +75,17 @@ export interface SharedOtherMenus extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedTerms extends Struct.ComponentSchema {
+  collectionName: 'components_shared_terms';
+  info: {
+    displayName: 'terms';
+  };
+  attributes: {
+    body: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedTestimonials extends Struct.ComponentSchema {
   collectionName: 'components_shared_testimonials';
   info: {
@@ -79,11 +101,13 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'shared.email': SharedEmail;
+      'shared.faq': SharedFaq;
       'shared.footer': SharedFooter;
       'shared.link': SharedLink;
       'shared.logo': SharedLogo;
       'shared.navigation': SharedNavigation;
       'shared.other-menus': SharedOtherMenus;
+      'shared.terms': SharedTerms;
       'shared.testimonials': SharedTestimonials;
     }
   }

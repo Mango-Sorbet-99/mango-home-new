@@ -21,8 +21,6 @@
   width: 100%;
   padding: 1em 0;
   color: var(--white);
-  font-size: 1.15rem;
-  font-weight: 400;
   border: none;
   background: none;
   outline: none;
@@ -91,9 +89,6 @@
  transition: .7s ease-in-out;
 }
 .accordion .accordion-content p {
-  font-size: 1rem;
-  font-weight: 300;
   margin: 2em 0;
  transition: .7s ease-in-out;
-
 }
