@@ -562,8 +562,12 @@ a {
 
 .swiper-slide.carosuel-card {
     max-width: 66%;
-    padding: 40px;
+    padding: 0 40px;
     user-select: none;
+    align-items: start;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
  }
 
  /* LOGO STREAM */
