@@ -212,6 +212,12 @@ function FAQPage() {
 
 function AboutPage() {
   React.useEffect(() => {
+    document.body.classList.add("about-page-outer")
+    return () => {
+      document.body.classList.remove("about-page-outer")
+    }
+  }, [])
+  React.useEffect(() => {
     const links = [
       "./assets/style/FAQ.css",
       "./assets/style/about.css"
@@ -234,6 +240,7 @@ function AboutPage() {
       <Navigation />
       <div id="smooth-wrapper">
         <div id="smooth-content" className="container">
+          <About />
           <FAQ />
           <Footer />
         </div>

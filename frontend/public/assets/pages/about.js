@@ -1,4 +1,4 @@
-const AboutPage = () => {
+const About = () => {
   return (
     <div className="about-hero">
       <div className="fifty-fifty">
@@ -32,4 +32,4 @@ const AboutPage = () => {
   )
 }
 
-window.AboutPage = AboutPage
+window.About = About

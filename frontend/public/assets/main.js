@@ -11,7 +11,7 @@
     const { ScrollTrigger, ScrollSmoother } = getGSAP()
     if (ScrollSmoother && ScrollSmoother.get) {
       const sm = ScrollSmoother.get()
-      if (sm) sm.refresh()
+      if (sm && sm.refresh) sm.refresh()
     }
     if (ScrollTrigger && ScrollTrigger.refresh) ScrollTrigger.refresh(true)
   }
@@ -54,29 +54,56 @@
   window.resetScrollTriggers = refreshScroll
 })()
 
-function useScrollSmoother() {
+function hasSmoother() {
+  return !!(window && window.gsap && window.ScrollTrigger && window.ScrollSmoother && window.ScrollSmoother.create)
+}
+
+function useScrollSmoother(opts = {}) {
   React.useLayoutEffect(() => {
-    const gsap = window.gsap
-    const ScrollTrigger = window.ScrollTrigger
-    const ScrollSmoother = window.ScrollSmoother
-    if (!gsap || !ScrollTrigger || !ScrollSmoother) return
-    gsap.registerPlugin(ScrollTrigger, ScrollSmoother)
-    const current = ScrollSmoother.get && ScrollSmoother.get()
-    if (current && current.kill) current.kill()
-    const smoother = ScrollSmoother.create({
-      wrapper: '#smooth-wrapper',
-      content: '#smooth-content',
-      smooth: 3,
-      ease: 'expo.out',
-      speed: 0.5,
-      smoothTouch: 0.2,
-      effects: true,
-      normalizeScroll: true,
-      ignoreMobileResize: true,
-      preventDefault: true
-    })
-    if (window.resetScrollTriggers) window.resetScrollTriggers()
-    return () => { if (smoother && smoother.kill) smoother.kill() }
+    let disposed = false, timer = null, smoother = null
+
+    function init() {
+      if (disposed) return
+      const gsap = window.gsap
+      const ScrollTrigger = window.ScrollTrigger
+      const ScrollSmoother = window.ScrollSmoother
+      if (!gsap || !ScrollTrigger || !ScrollSmoother || !ScrollSmoother.create) return
+
+      const wrapperEl = document.querySelector('#smooth-wrapper')
+      const contentEl = document.querySelector('#smooth-content')
+      if (!wrapperEl || !contentEl || !wrapperEl.contains(contentEl)) {
+        timer = setTimeout(init, 16)
+        return
+      }
+
+      gsap.registerPlugin(ScrollTrigger, ScrollSmoother)
+      const existing = ScrollSmoother.get && ScrollSmoother.get()
+      if (existing && existing.kill) existing.kill()
+
+      smoother = ScrollSmoother.create({
+        wrapper: wrapperEl,
+        content: contentEl,
+        smooth: 3,
+        ease: 'expo.out',
+        speed: 0.5,
+        smoothTouch: 0.2,
+        effects: true,
+        normalizeScroll: true,
+        ignoreMobileResize: true,
+        preventDefault: true,
+        ...opts
+      })
+
+      if (window.resetScrollTriggers) window.resetScrollTriggers()
+    }
+
+    timer = setTimeout(init, 0)
+
+    return () => {
+      disposed = true
+      if (timer) clearTimeout(timer)
+      if (smoother && smoother.kill) smoother.kill()
+    }
   }, [])
 }
 
@@ -85,8 +112,8 @@ function useButtonsAnimator() {
     const gsap = window.gsap
     const SplitText = window.SplitText
     if (!gsap || !SplitText) return
-
-    const buttons = gsap.utils.toArray('.btn-animate')
+    const buttons = Array.from(document.querySelectorAll('.btn-animate'))
+    if (!buttons.length) return
 
     function measureAutoWidth(el) {
       const clone = el.cloneNode(true)
@@ -116,7 +143,8 @@ function useButtonsAnimator() {
         if (!p) return () => {}
 
         const split = new SplitText(p, { type: 'chars' })
-        const h = el.getBoundingClientRect().height || el.offsetHeight || 56
+        const rect = el.getBoundingClientRect()
+        const h = rect.height || el.offsetHeight || 56
 
         gsap.set(el, {
           width: h,
@@ -152,13 +180,14 @@ function useTextAnimator() {
     const gsap = window.gsap
     const SplitText = window.SplitText
     if (!gsap || !SplitText) return
+    const parents = Array.from(document.querySelectorAll('.txt-animate'))
+    if (!parents.length) return
 
-    const parents = gsap.utils.toArray('.txt-animate')
     const contexts = parents.map((parent) =>
       gsap.context(() => {
         const title = parent.querySelector('.title-animate')
         if (!title) return () => {}
-        const body = gsap.utils.toArray(parent.querySelectorAll('.body-animate'))
+        const body = Array.from(parent.querySelectorAll('.body-animate'))
 
         const split = new SplitText(title, { type: 'words' })
         gsap.set(split.words, { opacity: 0 })
@@ -172,7 +201,7 @@ function useTextAnimator() {
         })
 
         tl.fromTo(split.words, { opacity: 0 }, { opacity: 1, stagger: 0.05, duration: 1, ease: 'expo.in' })
-        if (body.length) tl.fromTo(body, { opacity: 0 }, { opacity: 1, delay: .5, duration: 2, stagger: 0.2, ease: 'expo.in' }, 0)
+        if (body.length) tl.fromTo(body, { opacity: 0 }, { opacity: 1, delay: 0.5, duration: 2, stagger: 0.2, ease: 'expo.in' }, 0)
 
         return () => { if (tl && tl.scrollTrigger && tl.scrollTrigger.kill) tl.scrollTrigger.kill(); if (tl && tl.kill) tl.kill(); if (split && split.revert) split.revert() }
       }, parent)
@@ -184,21 +213,18 @@ function useTextAnimator() {
 
 function useFullHeight() {
   React.useEffect(() => {
+    const nodes = Array.from(document.querySelectorAll('.full-height'))
+    if (!nodes.length) return
     function setH() {
       const h = window.innerHeight
-      document.querySelectorAll('.full-height')
-        .forEach(el => { el.style.height = h + 'px' })
+      nodes.forEach(el => { el.style.height = h + 'px' })
     }
-    function onLoad() {
-      setH()
-    }
+    function onLoad() { setH() }
     window.addEventListener('load', onLoad)
     window.addEventListener('resize', setH)
     history.scrollRestoration = 'manual'
     window.scrollTo(0, 0)
-    function handleBeforeUnload() {
-      window.scrollTo(0, 0)
-    }
+    function handleBeforeUnload() { window.scrollTo(0, 0) }
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => {
       window.removeEventListener('load', onLoad)
@@ -208,11 +234,10 @@ function useFullHeight() {
   }, [])
 }
 
-
 function Main({ children }) {
+  useFullHeight()
   useScrollSmoother()
   useTextAnimator()
   useButtonsAnimator()
-  useFullHeight()
   return React.createElement(React.Fragment, null, children)
 }

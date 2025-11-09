@@ -1,0 +1,30 @@
+.about-hero {
+    margin-top: 150px;
+}
+
+.about-hero img {
+    border-radius: 1000px;
+    width: 100%;
+    height: 100%;
+}
+
+.about-page-outer .fifty-fifty {
+    gap: 100px
+}
+
+.about-page-outer .fifty-fifty .button-1 {
+    margin-top: 25px;
+}
+
+.about-page-outer .fifty-fifty-2 {
+    align-items: start;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+@media only screen and (max-width: 600px) {
+
+   
+    
+}

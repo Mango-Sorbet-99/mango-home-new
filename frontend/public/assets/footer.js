@@ -30,32 +30,40 @@ const Footer = () => {
     }
 
     function initFooterAnims() {
-      const { gsap, ScrollTrigger, SplitText } = window
-      if (!gsap || !ScrollTrigger || !SplitText) return
-      gsap.registerPlugin(ScrollTrigger, SplitText)
+    const { gsap, ScrollTrigger, SplitText } = window
+    if (!gsap || !ScrollTrigger || !SplitText) return
+    gsap.registerPlugin(ScrollTrigger, SplitText)
 
-      const footer = document.querySelector('.footer')
-      if (!footer) return
+    const footer = document.querySelector('.footer')
+    if (!footer) return
 
-      // fade out nav + sticky button
-      gsap.timeline({
+    const navEls = Array.from(document.querySelectorAll('.nav'))
+    const stickyEls = Array.from(document.querySelectorAll('.stickybtn, .sticky-button'))
+
+    if (navEls.length || stickyEls.length) {
+      const tl = gsap.timeline({
         scrollTrigger: { trigger: footer, start: 'top 25%', toggleActions: 'play none none reverse' }
       })
-      .to(gsap.utils.toArray('.nav'), { opacity: 0, y: '-100%', duration: 1.5, ease: 'expo.in' })
-      .to(gsap.utils.toArray('.sticky-button'), { opacity: 0, x: '100%', duration: 0.7, ease: 'expo.in' }, 0)
-
-      // IMPORTANT: split the H3 text, not the link
-      const h3 = emailTextRef.current
-      if (!h3) return
-      const splitEmail = new SplitText(h3, { type: 'chars' })
-
-      if (!splitEmail.chars || splitEmail.chars.length === 0) return 
-
-      gsap.set(splitEmail.chars, { opacity: 0 })
-      gsap.timeline({
-        scrollTrigger: { trigger: footer, start: 'top 75%', toggleActions: 'play none none reverse' }
-      }).fromTo(splitEmail.chars, { opacity: 0 }, { opacity: 1, stagger: 0.2, duration: 2, ease: 'expo.in' })
+      if (navEls.length) {
+        tl.to(navEls, { opacity: 0, y: '-100%', duration: 1.5, ease: 'expo.in' })
+      }
+      if (stickyEls.length) {
+        tl.to(stickyEls, { opacity: 0, x: '100%', duration: 0.7, ease: 'expo.in' }, navEls.length ? 0 : undefined)
+      }
     }
+
+    const h3 = emailTextRef?.current
+    if (!h3) return
+
+    const splitEmail = new SplitText(h3, { type: 'chars' })
+    if (!splitEmail.chars || !splitEmail.chars.length) return
+
+    gsap.set(splitEmail.chars, { opacity: 0 })
+    gsap.timeline({
+      scrollTrigger: { trigger: footer, start: 'top 75%', toggleActions: 'play none none reverse' }
+    }).fromTo(splitEmail.chars, { opacity: 0 }, { opacity: 1, stagger: 0.2, duration: 2, ease: 'expo.in' })
+  }
+
 
     fetchJSON('/api/global?populate[email][populate][email][populate]=*')
       .then(j => {
