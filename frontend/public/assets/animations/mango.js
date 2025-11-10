@@ -478,7 +478,7 @@ window.startMango = (mountEl) => {
             scrub: 2,
             ease: 'expo.out',
             duration: 2,
-            smooth: 0.2,
+            smooth: 1,
             spins: Math.PI,
             r0: 1,
             r1: 1,
@@ -605,24 +605,24 @@ window.startMango = (mountEl) => {
     }
 
     function hideHeroText() {
-    const el = document.querySelector('.story-home')
-    const { gsap, ScrollTrigger } = window
-    if (!el || !gsap || !ScrollTrigger) return
+        const el = document.querySelector('.story-home')
+        const { gsap, ScrollTrigger } = window
+        if (!el || !gsap || !ScrollTrigger) return
 
-    gsap.registerPlugin(ScrollTrigger)
+        gsap.registerPlugin(ScrollTrigger)
 
-    if (window.__heroST && window.__heroST.kill) window.__heroST.kill()
+        if (window.__heroST && window.__heroST.kill) window.__heroST.kill()
 
-    window.__heroST = ScrollTrigger.create({
-        trigger: el,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-        ringFade = self.progress
-        }
-    })
+        window.__heroST = ScrollTrigger.create({
+            trigger: el,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+            ringFade = self.progress
+            }
+        })
     }
 
     return () => {

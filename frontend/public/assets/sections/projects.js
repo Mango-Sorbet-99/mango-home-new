@@ -1,6 +1,7 @@
 const Projects = () => {
   return (
     <div className="projects txt-animate">
+      <CodeBlock />
       <div className="fifty-fifty">
         <div className="fifty-fifty-1">
           <h3 className="title-animate">

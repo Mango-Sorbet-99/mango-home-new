@@ -107,7 +107,6 @@ function HomePage() {
         <div id="smooth-content" className="container">
           <HeroHome />
           <StoryHome />
-          <CodeBlock />
           <Projects />
           <Wheel />
           <AboutSnippet />

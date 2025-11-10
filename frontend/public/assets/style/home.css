@@ -62,7 +62,7 @@ canvas {
 }
 
 .projects {
-    margin-top: 25%;
+    padding-top: 25%;
 }
 
 .projects .fifty-fifty {
@@ -112,6 +112,7 @@ canvas {
 
 .codeBlox {
     margin-top: 25%;
+    margin-bottom: 25%;
     display: flex;
     align-items: center;
     justify-content: end;
