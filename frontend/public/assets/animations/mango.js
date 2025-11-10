@@ -220,7 +220,6 @@ window.startMango = (mountEl) => {
         window.addEventListener('resize', onWindowResize)
 
         mangoGsap()
-        hideHeroText()
     }
 
     function makeTextRing(text = ' • CREATIVE CODING • DIGITAL DESIGN ') {
@@ -269,14 +268,15 @@ window.startMango = (mountEl) => {
         }
 
         draw()
-        // 3) Ring geometry + materials
+
         const radius = 1.58
         const height = 0.42
         const geo = new THREE.CylinderGeometry(radius, radius, height, 256, 1, true)
 
         const baseMat = new THREE.MeshBasicMaterial({
             map: tex,
-            transparent: true,
+            transparent: true,        // ensure opacity works
+            depthWrite: false,        // avoid sorting artifacts when fading
             side: THREE.DoubleSide,
             toneMapped: false
         })
@@ -289,31 +289,34 @@ window.startMango = (mountEl) => {
                 vec3 n = normalize(normalMatrix * normal);
                 vec3 v = normalize(-(modelViewMatrix * vec4(position,1.0)).xyz);
                 vFacing = dot(n, v);
-            `)
+            `);
             shader.fragmentShader = shader.fragmentShader
             .replace('#include <common>', '#include <common>\nvarying float vFacing;')
             .replace('#include <map_fragment>', `
                 #include <map_fragment>
                 if (vFacing < 0.0) discard;
-            `)
-        }
+            `);
+        };
 
-        const textRing = new THREE.Mesh(geo, baseMat)
+        // ✅ assign to the OUTER variable
+        textRing = new THREE.Mesh(geo, baseMat);
 
-        const glowMat = baseMat.clone()
-        glowMat.map = tex
-        glowMat.opacity = 0.25
-        glowMat.depthWrite = false
-        glowMat.needsUpdate = true
+        const glowMat = baseMat.clone();
+        glowMat.opacity = 0.25;
+        glowMat.depthWrite = false;
 
-        const glow = new THREE.Mesh(geo, glowMat)
-        glow.scale.multiplyScalar(1.012)
+        const glow = new THREE.Mesh(geo, glowMat);
+        glow.scale.multiplyScalar(1.012);
 
-        const group = new THREE.Group()
-        group.rotation.x = Math.PI
-        group.position.y = 0.05
-        group.add(textRing, glow)
-        ;(mangoParent || scene).add(group)
+        const group = new THREE.Group();
+        group.rotation.x = Math.PI;
+        group.position.y = 0.05;
+        group.add(textRing, glow);
+
+        // ✅ assign to the OUTER variable
+        textGroup = group;
+
+        (mangoParent || scene).add(textGroup);
 
         if (window.gsap) {
             const spacingPx = tex.userData.spacingPx
@@ -338,8 +341,7 @@ window.startMango = (mountEl) => {
         }
 
         textRing.updateLabel = (s) => { text = s; draw() }
-        }
-
+    }
 
     function addStars() {
         const totalStars = 750
@@ -427,17 +429,11 @@ window.startMango = (mountEl) => {
         if (textGroup && textRing) {
             const mat = textRing.material
             const glowMat = (textGroup.children[1] && textGroup.children[1].material) || null
-
             mat.transparent = true
             mat.depthWrite = false
-            if (glowMat) {
-                glowMat.transparent = true
-                glowMat.depthWrite = false
-            }
-
+            if (glowMat) { glowMat.transparent = true; glowMat.depthWrite = false }
             mat.opacity = 1 - ringFade
             if (glowMat) glowMat.opacity = 0.25 * (1 - ringFade)
-
             const s = 1 + 0.8 * ringFade
             textGroup.scale.set(s, s, s)
             textGroup.position.y = 0.05 - 2.0 * ringFade
@@ -466,6 +462,26 @@ window.startMango = (mountEl) => {
 
         renderer.render(scene, camera)
     }
+
+    renderer.localClippingEnabled = true;
+
+    function hideHeroText() {
+        const el = document.querySelector('.story-home')
+        const { gsap, ScrollTrigger } = window
+        if (!el || !gsap || !ScrollTrigger) return
+        gsap.registerPlugin(ScrollTrigger)
+
+        ScrollTrigger.create({
+            trigger: el,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: true,
+            onUpdate: (self) => {
+            ringFade = self.progress 
+            }
+        })
+    }
+    hideHeroText()
 
     function mangoGsap() {
         const { gsap, ScrollTrigger } = window
@@ -601,27 +617,6 @@ window.startMango = (mountEl) => {
             targetZ0: 20,
             targetZ1: 10,
             priority: 4
-        })
-    }
-
-    function hideHeroText() {
-        const el = document.querySelector('.story-home')
-        const { gsap, ScrollTrigger } = window
-        if (!el || !gsap || !ScrollTrigger) return
-
-        gsap.registerPlugin(ScrollTrigger)
-
-        if (window.__heroST && window.__heroST.kill) window.__heroST.kill()
-
-        window.__heroST = ScrollTrigger.create({
-            trigger: el,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-            ringFade = self.progress
-            }
         })
     }
 
