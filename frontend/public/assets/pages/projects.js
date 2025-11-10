@@ -22,10 +22,7 @@ const ProjectsGridPage = () => {
             each brand unique, and to harmonize beauty with function in crafting
             bespoke, meaningful experiences.
           </p>
-          <div className="button-1 button glass btn-animate">
-            <div className="LED"></div>
-            <p>Let's create something together</p>
-          </div>
+          <ContactBTN />
         </div>
       </div>
       <div className="project-grid">

@@ -15,7 +15,7 @@ const About = () => {
           start: 'top top',
           scrub: true,
           invalidateOnRefresh: true,
-          onUpdate: (self) => gsap.set(child, { scale: 1 + self.progress })
+          onUpdate: (self) => gsap.set(child, { scale: 1 + self.progress, y: 0 + self.progress * 800, rotate: 0 + self.progress * 10 })
         })
         ScrollTrigger.refresh()
       })
@@ -135,6 +135,7 @@ const About = () => {
             <br/><br/>
             Outside of work, I’m in the top 10% of chess players globally. I’m consistently training and sparring in boxing and kickboxing. I'm into music (Who isn't?) — sometimes creating it, sometimes just enjoying it in the crowd. Most of the time though, I’m out walking my dog on a beach or through the woods, or sitting in a pub with a couple of cold beers.
           </p>
+          <ContactBTN />
         </div>
       </div>
     </div>

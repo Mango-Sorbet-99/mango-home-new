@@ -1,15 +1,12 @@
 const Preloader = () => {
-  const preloaderRef = React.useRef(null);
-  const pathRef = React.useRef(null);
+  const preloaderRef = React.useRef(null)
+  const pathRef = React.useRef(null)
+  const tlRef = React.useRef(null)
 
-  useLayoutEffect(() => {
-    const onLoad = () => {
-      const tl = gsap.timeline();
-
-      tl.to(preloaderRef.current, {
-        backgroundColor: '#EF781700',
-        duration: 0.1
-      })
+  React.useLayoutEffect(() => {
+    function buildTL() {
+      const tl = gsap.timeline()
+      tl.to(preloaderRef.current, { backgroundColor: '#ff804000', duration: 0.1 })
         .to(pathRef.current, {
           duration: 1,
           delay: 1,
@@ -19,36 +16,63 @@ const Preloader = () => {
         })
         .to(pathRef.current, {
           duration: 1,
-          morphSVG: 'M11.4666 0.913631L0 0.923736V0H1920V0.923736H1908C1897.33 0.923736 1874.27 0.923736 1852 0.903336C1828 0.883698 1805.73 0.841753 1782.67 0.852621C1760 0.862725 1737.2 0.923736 1714.67 0.87283C1692 0.822687 1668.53 0.658722 1645.33 0.659294C1622.67 0.658722 1600 0.822687 1577.33 0.87283C1554.67 0.923736 1531.47 0.862725 1508 0.862725C1485.33 0.862725 1462.8 0.923736 1440 0.913631C1417.33 0.902764 1394.27 0.822687 1372 0.81182C1348 0.801715 1325.73 0.862725 1302.67 0.893231C1280 0.923736 1257.2 0.923736 1234.67 0.862725C1212 0.801715 1188.53 0.679694 1165.33 0.608579C1142.67 0.536701 1120 0.517635 1097.33 0.598283C1074.67 0.679694 1051.47 0.862725 1028 0.944136C1005.33 1.02478 982.8 1.00572 960 0.964346C937.333 0.923736 914.267 0.862725 892 0.842325C868 0.822687 845.733 0.841753 822.667 0.842325C800 0.841753 777.2 0.822687 754.667 0.761105C732 0.700666 708.533 0.597711 685.333 0.557673C662.667 0.517635 640 0.536701 617.333 0.567778C594.667 0.597711 571.467 0.639656 548 0.618683C525.333 0.597711 502.8 0.517635 480 0.537273C457.333 0.557673 434.267 0.679694 412 0.740704C388 0.801715 365.733 0.801715 342.667 0.77121C320 0.740704 297.2 0.679694 274.667 0.669589C252.62 0.659019 229.816 0.698412 207.237 0.737417L205.333 0.740704L199.979 0.750186C179.097 0.78721 158.215 0.824234 137.333 0.842325C114.667 0.862725 91.4667 0.862725 68 0.87283C45.3333 0.883698 22.8 0.902764 11.4666 0.913631Z',
+          morphSVG:
+            'M11.4666 0.913631L0 0.923736V0H1920V0.923736H1908C1897.33 0.923736 1874.27 0.923736 1852 0.903336C1828 0.883698 1805.73 0.841753 1782.67 0.852621C1760 0.862725 1737.2 0.923736 1714.67 0.87283C1692 0.822687 1668.53 0.658722 1645.33 0.659294C1622.67 0.658722 1600 0.822687 1577.33 0.87283C1554.67 0.923736 1531.47 0.862725 1508 0.862725C1485.33 0.862725 1462.8 0.923736 1440 0.913631C1417.33 0.902764 1394.27 0.822687 1372 0.81182C1348 0.801715 1325.73 0.862725 1302.67 0.893231C1280 0.923736 1257.2 0.923736 1234.67 0.862725C1212 0.801715 1188.53 0.679694 1165.33 0.608579C1142.67 0.536701 1120 0.517635 1097.33 0.598283C1074.67 0.679694 1051.47 0.862725 1028 0.944136C1005.33 1.02478 982.8 1.00572 960 0.964346C937.333 0.923736 914.267 0.862725 892 0.842325C868 0.822687 845.733 0.841753 822.667 0.842325C800 0.841753 777.2 0.822687 754.667 0.761105C732 0.700666 708.533 0.597711 685.333 0.557673C662.667 0.517635 640 0.536701 617.333 0.567778C594.667 0.597711 571.467 0.639656 548 0.618683C525.333 0.597711 502.8 0.517635 480 0.537273C457.333 0.557673 434.267 0.679694 412 0.740704C388 0.801715 365.733 0.801715 342.667 0.77121C320 0.740704 297.2 0.679694 274.667 0.669589C252.62 0.659019 229.816 0.698412 207.237 0.737417L205.333 0.740704L199.979 0.750186C179.097 0.78721 158.215 0.824234 137.333 0.842325C114.667 0.862725 91.4667 0.862725 68 0.87283C45.3333 0.883698 22.8 0.902764 11.4666 0.913631Z',
           ease: 'expo.out'
         })
-        .set(preloaderRef.current, { display: 'none' });
+        .set(preloaderRef.current, { display: 'none' })
+      tlRef.current = tl
+    }
 
-      tl.play();
-    };
+    function shouldIntercept(a, e) {
+      if (!a) return false
+      if (a.classList.contains('external')) return false
+      const href = a.getAttribute('href') || ''
+      if (!href || href === '#' || href.startsWith('#')) return false
+      if (href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) return false
+      if (a.target === '_blank' || a.hasAttribute('download')) return false
+      if (e && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1)) return false
+      return true
+    }
 
-    window.addEventListener('load', onLoad);
+    function delegatedClick(e) {
+      const a = e.target.closest('a')
+      if (!shouldIntercept(a, e)) return
+      e.preventDefault()
+      const goTo = a.getAttribute('href')
+      const tl = tlRef.current
+      gsap.set(preloaderRef.current, { display: 'block' })
+      if (!tl) { window.location.href = goTo; return }
+      tl.eventCallback('onReverseComplete', () => {
+        tl.eventCallback('onReverseComplete', null)
+        window.location.href = goTo
+      })
+      tl.time(tl.duration()).reverse()
+    }
 
+    function onLoad() {
+      buildTL()
+      document.addEventListener('click', delegatedClick, true)
+    }
+
+    window.addEventListener('load', onLoad)
     return () => {
-      window.removeEventListener('load', onLoad);
-    };
-  }, []);
+      window.removeEventListener('load', onLoad)
+      document.removeEventListener('click', delegatedClick, true)
+    }
+  }, [])
 
   return (
     <div ref={preloaderRef} className="preloader full-height">
-      <svg
-        className="morph full-height"
-        viewBox="0 0 1920 1080"
-        preserveAspectRatio="none"
-      >
+      <svg className="morph full-height" viewBox="0 0 1920 1080" preserveAspectRatio="none">
         <path
           ref={pathRef}
           className="morph-me"
           d="M11.4666 2870.63L0 2902.38V0H1920V2902.38H1908C1897.33 2902.38 1874.27 2902.38 1852 2838.28C1828 2776.58 1805.73 2644.79 1782.67 2678.93C1760 2710.68 1737.2 2902.38 1714.67 2742.43C1692 2584.88 1668.53 2069.7 1645.33 2071.5C1622.67 2069.7 1600 2584.88 1577.33 2742.43C1554.67 2902.38 1531.47 2710.68 1508 2710.68C1485.33 2710.68 1462.8 2902.38 1440 2870.63C1417.33 2836.48 1394.27 2584.88 1372 2550.74C1348 2518.99 1325.73 2710.68 1302.67 2806.53C1280 2902.38 1257.2 2902.38 1234.67 2710.68C1212 2518.99 1188.53 2135.6 1165.33 1912.15C1142.67 1686.31 1120 1626.41 1097.33 1879.81C1074.67 2135.6 1051.47 2710.68 1028 2966.48C1005.33 3219.87 982.8 3159.97 960 3029.98C937.333 2902.38 914.267 2710.68 892 2646.59C868 2584.88 845.733 2644.79 822.667 2646.59C800 2644.79 777.2 2584.88 754.667 2391.39C732 2201.49 708.533 1878.01 685.333 1752.21C662.667 1626.41 640 1686.31 617.333 1783.96C594.667 1878.01 571.467 2009.8 548 1943.9C525.333 1878.01 502.8 1626.41 480 1688.11C457.333 1752.21 434.267 2135.6 412 2327.29C388 2518.99 365.733 2518.99 342.667 2423.14C320 2327.29 297.2 2135.6 274.667 2103.85C252 2069.7 228.533 2201.49 205.333 2327.29C182.667 2453.09 160 2584.88 137.333 2646.59C114.667 2710.68 91.4667 2710.68 68 2742.43C45.3333 2776.58 22.8 2836.48 11.4666 2870.63Z"
-          fill="#EF7817"
+          fill="#ff8040"
         />
       </svg>
     </div>
-  );
-};
-window.Preloader = Preloader;
+  )
+}
+window.Preloader = Preloader

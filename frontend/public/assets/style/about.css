@@ -21,6 +21,10 @@
     border-radius: 100px;
 }
 
+.sixtysix-thirtythree-1 .button-1 {
+    margin-top: 25px;
+}
+
 .world-map {
     height: 600px;
     width: 100%;
@@ -70,7 +74,7 @@
 }
 
 .about-page-outer .sixtysix-thirtythree {
-    margin: 100px 0;
+    margin: 200px 0;
     gap: 100px;
 }
 

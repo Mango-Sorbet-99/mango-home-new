@@ -570,7 +570,7 @@ window.startMango = (mountEl) => {
             spins: Math.PI * 0.65,
             radiusStart: 1.1,
             radiusEnd: 0.92,
-            yStart: camera.position.y - 0.2,
+            yStart: camera.position.y,
             yEnd: camera.position.y + 0.15,
             rollStart: 0.15,
             rollEnd: -0.1,

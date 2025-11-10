@@ -13,7 +13,7 @@ html, body {
 }
 
 body {
-    background: linear-gradient(90deg, var(--dark-gray100), var(--dark-gray50));
+    background:var(--secondary500);
     color: var(--white);
 }
 
@@ -348,6 +348,7 @@ a {
     padding: 25px;
     width: calc(100% + 100px);
     border-radius: 15px 15px 0 0;
+    height: 100vh;
 }
 
 .footer-colums {
