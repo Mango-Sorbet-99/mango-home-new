@@ -183,13 +183,11 @@ const Footer = () => {
                 <p>🇬🇧&nbsp;+44&nbsp;7519&nbsp;418&nbsp;970</p>
               </div>
             </a>
-
             <a href="tel:+33753141867">
               <div className="button-1 button glass">
                 <p>🇫🇷&nbsp;+33&nbsp;7531&nbsp;418&nbsp;67</p>
               </div>
             </a>
-
             <a href="tel:+31684744691">
               <div className="button-1 button glass">
                 <p>🇳🇱&nbsp;+31&nbsp;6847&nbsp;446&nbsp;91</p>
