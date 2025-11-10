@@ -234,10 +234,40 @@ function useFullHeight() {
   }, [])
 }
 
+function useImageScaler() {
+  React.useLayoutEffect(() => {
+    const { gsap, ScrollTrigger } = window
+    if (!gsap || !ScrollTrigger) return
+    gsap.registerPlugin(ScrollTrigger)
+
+    const parents = gsap.utils.toArray('.image-scaler')
+    if (!parents.length) return
+
+    const ctx = gsap.context(() => {
+      parents.forEach((parent) => {
+        const img = parent.querySelector('img')
+        gsap.set(img, { scale: 1, transformOrigin: 'center center' })
+        ScrollTrigger.create({
+          trigger: parent,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => gsap.set(img, { scale: 1 + self.progress })
+        })
+      })
+      ScrollTrigger.refresh()
+    })
+
+    return () => ctx.revert()
+  }, [])
+}
+
 function Main({ children }) {
   useFullHeight()
   useScrollSmoother()
   useTextAnimator()
   useButtonsAnimator()
+  useImageScaler()
   return React.createElement(React.Fragment, null, children)
 }

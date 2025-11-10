@@ -7,9 +7,18 @@
     transform: translateX(-50px);
     height: 75vh;
     margin-bottom: 100px;
-    background-position: 100% 40%;
-    background-repeat: no-repeat;
-    background-size: cover;
+    overflow: hidden;
+}
+
+.hero-img img {
+    width: 100%;
+    height: 100%;
+    object-position: 100% 40%;
+    object-fit: cover;
+}
+
+.about-page-outer .sixtysix-thirtythree-2 {
+    border-radius: 100px;
 }
 
 .world-map {
@@ -18,18 +27,17 @@
     position: relative;
 }
 
+.about-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .world-map img {
     position: absolute;
     object-fit: contain;
     height: 100%;
     width: 100%;
-}
-
-.about-hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 100px;
 }
 
 .about-hero h2 {

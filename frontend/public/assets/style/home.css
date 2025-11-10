@@ -139,6 +139,10 @@ canvas {
     z-index: 1;
 }
 
+.image-scaler {
+    overflow: hidden;
+}
+
 @media only screen and (max-width: 1000px) {
     .story-home h2 {
         line-height: 250%;

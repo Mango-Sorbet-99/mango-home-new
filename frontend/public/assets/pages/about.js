@@ -1,18 +1,85 @@
 const About = () => {
-  const bg = { backgroundImage: "url('./img/mango-wide-lf.webp')" }
+
+  function useImageScalerHero() {
+    React.useLayoutEffect(() => {
+      const { gsap, ScrollTrigger } = window
+      if (!gsap || !ScrollTrigger) return
+      gsap.registerPlugin(ScrollTrigger)
+
+      const parent = gsap.utils.toArray('.image-scaler-hero')
+      const child = gsap.utils.toArray('.image-scaler-hero img')
+
+      const ctx = gsap.context(() => {
+        ScrollTrigger.create({
+          trigger: parent,
+          start: 'top top',
+          scrub: true,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => gsap.set(child, { scale: 1 + self.progress })
+        })
+        ScrollTrigger.refresh()
+      })
+
+      return () => ctx.revert()
+    }, [])
+  }
+  useImageScalerHero();
+
+  function useMapPins() {
+    React.useLayoutEffect(() => {
+      const { gsap, ScrollTrigger } = window
+      if (!gsap || !ScrollTrigger) return
+      gsap.registerPlugin(ScrollTrigger)
+
+      const ctx = gsap.context(() => {
+        const parents = gsap.utils.toArray('.world-map')
+        parents.forEach((parent) => {
+          const pins = parent.querySelectorAll('.pins-1')
+          if (!pins.length) return
+
+          gsap.set(pins, { opacity: 0 })
+
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: parent,
+              start: 'top 65%', 
+              invalidateOnRefresh: true,
+              toggleActions: 'play none none reverse'
+            }
+          })
+          .fromTo(pins,{
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+            stagger: 0.5,
+            duration: 1,
+            ease: 'expo.out'
+          })
+        })
+
+        ScrollTrigger.refresh()
+      })
+
+      return () => ctx.revert()
+    }, [])
+  }
+  useMapPins();
 
   return (
     <div className="about-hero">
-      <div className="hero-img" style={bg}></div>
+      <div className="hero-img image-scaler-hero">
+          <img loading="lazy" src="/img/mango-wide-lf.webp" />
+      </div>
 
       <div className="sixtysix-thirtythree">
         <div className="sixtysix-thirtythree-2 world-map">
-          <img loading="lazy" src="./img/world.png" />
-          <img loading="lazy" src="./img/world-pin-1.png" />
-          <img loading="lazy" src="./img/world-pin-2.png" />
-          <img loading="lazy" src="./img/world-pin-3.png" />
+          <img loading="lazy" src="./img/world.svg" />
+          <img loading="lazy" className="pins-1" src="./img/world-pin-1.png" />
+          <img loading="lazy" className="pins-1" src="./img/world-pin-2.png" />
+          <img loading="lazy" className="pins-1" src="./img/world-pin-3.png" />
         </div>
-        <div className="sixtysix-thirtythree-1">
+        <div className="sixtysix-thirtythree-1 ">
           <h2>
             For a decade I’ve honed my craft wandering across Europe—inside studios, back-alley cafés, pubs, and far too many Airbnbs.
           </h2>
@@ -28,7 +95,7 @@ const About = () => {
       </div>
 
       <div className="sixtysix-thirtythree">
-        <div className="sixtysix-thirtythree-2">
+        <div className="sixtysix-thirtythree-2 image-scaler">
           <img loading="lazy" src="./img/amsterdam.webp" />
         </div>
         <div className="sixtysix-thirtythree-1">
@@ -52,7 +119,7 @@ const About = () => {
       </div>
 
       <div className="sixtysix-thirtythree">
-        <div className="sixtysix-thirtythree-2">
+        <div className="sixtysix-thirtythree-2 image-scaler">
           <img loading="lazy" src="./img/rotterdam.webp" />
         </div>
         <div className="sixtysix-thirtythree-1">

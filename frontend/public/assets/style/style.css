@@ -688,6 +688,10 @@ a {
     margin: 150px 0;
 }
 
+.image-scaler {
+    overflow: hidden;
+}
+
 /* SMALL SCREENS */
 
 @media only screen and (max-width: 1000px) {
