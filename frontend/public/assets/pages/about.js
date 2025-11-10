@@ -60,15 +60,13 @@ const About = () => {
             First principles. One foot in tradition, one hand on the future.
           </h5>
           <p>
-            People pick sides—design or dev. I didn’t. I see code in shapes and design in logic. At this point it’s basically synaesthesia.
+            People pick sides—design or dev. I didn’t. I see code in shapes and design in logic. At this point it’s basically synaesthesia. Today I travel with my dog, Bernadette, building for agencies, studios, and startups that want work that actually feels alive. I describe my role like a band: I play many instruments. Need a drummer? I’m there. Need a guitarist? Hand me the setlist. Need the whole song rewritten? That’s where it gets fun.
             <br/><br/>
-            Today I travel with my dog, Bernadette, building for agencies, studios, and startups that want work that actually feels alive. I describe my role like a band: I play many instruments. Need a drummer? I’m there. Need a guitarist? Hand me the setlist. Need the whole song rewritten? That’s where it gets fun.
+            From initial concept to actualisation, each website I have created has been made without pretense or artifice, with the simple aim of celebrating what is good and has always been good about design. By studying the rules at the foot of the giants, I was then able to learn how and when to bend or break these rules, finding the perfect equilibrium between old/new, function/beauty, fiction/reality in order to create websites that captivate and inspire those who interact with them.
             <br/><br/>
-            From concept to launch, I build without pretence: celebrate what’s always worked in design, and push what’s next with code. Study the rules at the feet of giants, then bend or break them with intent—finding the balance between old/new, function/beauty, and fiction/reality to create interfaces that feel inevitable.
+            Experience and exploration have taught me the importance of knowing when to fiercely preserve tradition whilst also adapting to the new technologies, trends and styles that make and will always make websites special within the inescapably changing world we live in - one pixel at a time. Changes will continue to come and I hope to embrace them with the confidence and determination that has made me who I am today.
             <br/><br/>
-            Outside the screen I keep edges sharp—top-10% chess player, lifelong striker and grappler, comfortable in unarmed combat, equally at home on stage with a guitar. The point isn’t bravado; it’s discipline, pattern-recognition, timing, and flow. The same instincts that win on the board or in a ring make products feel effortless.
-            <br/><br/>
-            I was born days before the first website went live in 1991—black text, white backgrounds, blue links. Ever since, I’ve been trying to see how far we can take this medium. One pixel at a time.
+            Outside of work, I’m in the top 10% of chess players globally. I’m consistently training and sparring in boxing and kickboxing. I'm into music (Who isn't?) — sometimes creating it, sometimes just enjoying it in the crowd. Most of the time though, I’m out walking my dog on a beach or through the woods, or sitting in a pub with a couple of cold beers.
           </p>
         </div>
       </div>
