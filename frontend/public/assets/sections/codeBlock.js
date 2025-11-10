@@ -10,14 +10,15 @@ const CodeBlock = () => {
       gsap.timeline({
         scrollTrigger: {
           trigger: root.current,
-          start: 'top 85%',
+          start: 'top bottom',
+          end: 'top 45%',
           toggleActions: 'play none none reverse',
         }
       }).fromTo(imgs, {
         opacity: 0,
       },{
         opacity: 1,
-        duration: 1.3,
+        duration: 1.5,
         ease: 'expo.in',
         stagger: 0.3
       })
