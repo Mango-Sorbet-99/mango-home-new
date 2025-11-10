@@ -1,13 +1,9 @@
-.about-hero {
-
-}
-
 .hero-img {
     width: calc(100% + 100px);
     transform: translateX(-50px);
     height: 75vh;
-    margin-bottom: 100px;
     overflow: hidden;
+    margin-bottom: -100px;
 }
 
 .hero-img img {

@@ -24,6 +24,10 @@ body {
     flex-direction: column;
 }
 
+.button-in-container {
+    margin: 50px 0 200px;
+}
+
 :root {
 	 --hue-primary: 223;
 	 --hue-secondary: 178;
@@ -453,6 +457,7 @@ a:hover {
     flex-wrap: wrap;
     gap: 5px;
     margin-top: auto;
+    margin-top: 15px;
 }
 
 .project-card .pr-catagory div {
@@ -468,6 +473,10 @@ a:hover {
     color: var(--secondary500);
     text-decoration: underline;
     font-weight: 200;
+}
+
+.project-card a:hover {
+    color: var(--primary500);
 }
 
 /* BLOG CARDS */

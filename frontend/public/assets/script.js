@@ -26,7 +26,8 @@ if (!window.GlobalDataSetup) {
         fetchJSON('/api/global?populate=*'),
         fetchJSON('/api/global?populate[email][populate][email][populate]=*'),
         fetchJSON('/api/global?populate[otherMenus][populate][urls][populate]=*'),
-        fetchJSON('/api/section?populate[testimonials][populate]=*')
+        fetchJSON('/api/project?populate=*'),
+        fetchJSON('/api/project?populate[ProjectDirect][populate]=*')
 
       ]).then(([homeRes, globalRes]) => {
         if (!alive) return

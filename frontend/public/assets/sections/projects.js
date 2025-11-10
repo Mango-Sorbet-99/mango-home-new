@@ -1,4 +1,83 @@
 const Projects = () => {
+  const gridRef = React.useRef(null)
+
+  React.useEffect(() => {
+    const fetchJSON =
+      window.fetchJSON ||
+      (path =>
+        fetch((window.API_URL || '') + path).then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status} for ${(window.API_URL||'')+path}`)
+          return r.json()
+        }))
+
+    const truncate = (str, n = 300) =>
+      (str && str.length > n) ? str.slice(0, n).trim() + '…' : str
+
+    async function load() {
+      const j = await fetchJSON('/api/project?populate[ProjectDirect][populate]=Image')
+
+      const list =
+        (j?.data?.ProjectDirect) ||
+        (j?.data?.attributes?.ProjectDirect) ||
+        []
+
+      if (!gridRef.current) return
+      gridRef.current.innerHTML = ''
+
+      list.forEach(pd => {
+        const imgObj = pd?.Image || null
+        const imgUrl = (imgObj?.formats?.small?.url) || imgObj?.url || ''
+        const absImg = imgUrl ? ((window.API_URL || '') + imgUrl) : ''
+        const title = pd?.Title || ''
+        const desc = truncate(pd?.Description || '')
+        const url = pd?.URL || ''
+        const cats = (pd?.catagories || '').split(/\s+/).filter(Boolean)
+
+        const card = document.createElement('div')
+        card.className = 'project-card glass'
+
+        if (absImg) {
+          const img = document.createElement('img')
+          img.src = absImg
+          img.alt = title
+          card.appendChild(img)
+        }
+
+        const h4 = document.createElement('h4')
+        h4.className = 'pr-title'
+        h4.textContent = title
+        card.appendChild(h4)
+
+        const p = document.createElement('p')
+        p.className = 'pr-description'
+        p.textContent = desc
+        card.appendChild(p)
+
+        const link = document.createElement('a')
+        link.textContent = 'view project'
+        if (url) {
+          link.href = url
+          link.target = '_blank'
+          link.rel = 'noopener noreferrer'
+        }
+        card.appendChild(link)
+
+        const catsWrap = document.createElement('div')
+        catsWrap.className = 'pr-catagory'
+        cats.forEach(c => {
+          const tag = document.createElement('div')
+          tag.textContent = c
+          catsWrap.appendChild(tag)
+        })
+        card.appendChild(catsWrap)
+
+        gridRef.current.appendChild(card)
+      })
+    }
+
+    load().catch(err => console.error(err))
+  }, [])
+
   return (
     <div className="projects txt-animate">
       <CodeBlock />
@@ -12,90 +91,28 @@ const Projects = () => {
           <p className="project-text body-animate">
             Through design, motion, and code, I explore the physics of perception —
             where interaction becomes emotion, and light becomes language.
-            <br />
-            <br />
+            <br /><br />
             Each project is an exploration of how technology can tell stories,
             evoke feeling, and give brands a living presence in the digital world.
-            <br />
-            <br />
+            <br /><br />
             Over the past decade, I've collaborated with artists, agencies,
             and global brands — always with the same goal: to uncover what makes
             each brand unique, and to harmonize beauty with function in crafting
             bespoke, meaningful experiences.
           </p>
-          <div className="button-1 button glass btn-animate">
-            <div className="LED"></div>
-            <p>Let's create something together</p>
-          </div>
+          <ContactBTN />
         </div>
       </div>
-      <div className="project-grid">
-        <div className="project-card glass">
-          <img src="https://mango-media.eu/media/pages/projects/green-king/668393e359-1738847672/green-king.webp" />
-          <h4 className="pr-title">Green King - Level Head</h4>
-          <p className="pr-description">This project uses scrollytelling—a UX technique where a narrative unfolds as the user scrolls—to bring Level Head Session IPA to life. Inspired by St Edmund, the beheaded King of East Anglia, the experience isn’t just about selling a beer, but telling a legend. A 3D can dynamically follows the user’s journey, immersing them in the story while reinforcing the beer’s identity. From a UX perspective, the goal is clear: to not just introduce a drink, but to create an experience that convinces landlords to stock it in their venues.</p>
-          <a>read more</a>
-          <div className="pr-catagory">
-            <div>3D</div><div>motion-design</div><div>UX UI</div><div>creative-coding</div>
+
+      <div className="project-grid" ref={gridRef}>
+      </div>
+      <div className="container button-in-container">
+        <a href="/projects">
+          <div className="button-1 button glass btn-animate">
+            <div className="LED"></div>
+            <p>View all projects</p>
           </div>
-        </div>
-        <div className="project-card glass">
-          <img src="https://mango-media.eu/media/pages/projects/colas-cup/78d70d365f-1739179454/colas9.png" />
-          <h4 className="pr-title">Colas Cup</h4>
-          <p className="pr-description">
-            La Colas Team Cup est une compétition ouverte à tous les collaborateurs et collaboratrices majeurs du groupe Colas en contrat à durée indéterminée (CDI), en contrat de travail longue durée (hors CDD, stage, apprentissage et intérim) et en contrat d’alternance. Cette compétition est organisée autour de trois disciplines : le football à 5, la course à pied et Incroyables Talents.
-          </p>
-          <a>read more</a>
-          <div className="pr-catagory">
-            <div>3D</div><div>motion-design</div><div>UX UI</div><div>creative-coding</div>
-          </div>
-        </div>
-        <div className="project-card glass">
-          <img src="https://mango-media.eu/media/pages/projects/spectral-synthesis/ba8ea2c0e8-1738576295/spectral-3.png" />
-          <h4 className="pr-title">
-            Spectral Synthesis - Colour Theory in Physics
-          </h4>
-          <p className="pr-description">
-            A Three.js creative coding project that delves into the fundamental relationship between colour and light in physics. Through an interactive experience, we explore the pioneering experiments of Isaac Newton, including his work with prisms and the visible spectrum, alongside other key scientific concepts such as the Doppler Effect and redshift. This project is not just about physics—it also touches on behavioural science, examining how colour influences perception and emotion. Using red, green, and blue spotlights, representing the three primary colours of the RGB spectrum, users can manipulate light to experience additive colour mixing in real time. By merging code, art, and science, …
-          </p>
-          <a>read more</a>
-          <div className="pr-catagory">
-            <div>3D</div><div>motion-design</div><div>UX UI</div><div>creative-coding</div>
-          </div>
-        </div>
-        <div className="project-card glass">
-          <img src="https://mango-media.eu/media/pages/projects/colas-cup/78d70d365f-1739179454/colas9.png" />
-          <h4 className="pr-title">Colas Cup</h4>
-          <p className="pr-description">
-            La Colas Team Cup est une compétition ouverte à tous les collaborateurs et collaboratrices majeurs du groupe Colas en contrat à durée indéterminée (CDI), en contrat de travail longue durée (hors CDD, stage, apprentissage et intérim) et en contrat d’alternance. Cette compétition est organisée autour de trois disciplines : le football à 5, la course à pied et Incroyables Talents.
-          </p>
-          <a>read more</a>
-          <div className="pr-catagory">
-            <div>3D</div><div>motion-design</div><div>UX UI</div><div>creative-coding</div>
-          </div>
-        </div>
-        <div className="project-card glass">
-          <img src="https://mango-media.eu/media/pages/projects/green-king/668393e359-1738847672/green-king.webp" />
-          <h4 className="pr-title">Green King - Level Head</h4>
-          <p className="pr-description">This project uses scrollytelling—a UX technique where a narrative unfolds as the user scrolls—to bring Level Head Session IPA to life. Inspired by St Edmund, the beheaded King of East Anglia, the experience isn’t just about selling a beer, but telling a legend. A 3D can dynamically follows the user’s journey, immersing them in the story while reinforcing the beer’s identity. From a UX perspective, the goal is clear: to not just introduce a drink, but to create an experience that convinces landlords to stock it in their venues.</p>
-          <a>read more</a>
-          <div className="pr-catagory">
-            <div>3D</div><div>motion-design</div><div>UX UI</div><div>creative-coding</div>
-          </div>
-        </div>
-        <div className="project-card glass">
-          <img src="https://mango-media.eu/media/pages/projects/spectral-synthesis/ba8ea2c0e8-1738576295/spectral-3.png" />
-          <h4 className="pr-title">
-            Spectral Synthesis - Colour Theory in Physics
-          </h4>
-          <p className="pr-description">
-            A Three.js creative coding project that delves into the fundamental relationship between colour and light in physics. Through an interactive experience, we explore the pioneering experiments of Isaac Newton, including his work with prisms and the visible spectrum, alongside other key scientific concepts such as the Doppler Effect and redshift. This project is not just about physics—it also touches on behavioural science, examining how colour influences perception and emotion. Using red, green, and blue spotlights, representing the three primary colours of the RGB spectrum, users can manipulate light to experience additive colour mixing in real time. By merging code, art, and science, …
-          </p>
-          <a>read more</a>
-          <div className="pr-catagory">
-            <div>3D</div><div>motion-design</div><div>UX UI</div><div>creative-coding</div>
-          </div>
-        </div>
+        </a>
       </div>
     </div>
   )

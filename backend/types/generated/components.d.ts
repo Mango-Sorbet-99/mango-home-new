@@ -75,6 +75,20 @@ export interface SharedOtherMenus extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedProjectDirect extends Struct.ComponentSchema {
+  collectionName: 'components_shared_project_directs';
+  info: {
+    displayName: 'Project Direct';
+  };
+  attributes: {
+    catagories: Schema.Attribute.String;
+    Description: Schema.Attribute.Text;
+    Image: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
+    Title: Schema.Attribute.String;
+    URL: Schema.Attribute.String;
+  };
+}
+
 export interface SharedTerms extends Struct.ComponentSchema {
   collectionName: 'components_shared_terms';
   info: {
@@ -107,6 +121,7 @@ declare module '@strapi/strapi' {
       'shared.logo': SharedLogo;
       'shared.navigation': SharedNavigation;
       'shared.other-menus': SharedOtherMenus;
+      'shared.project-direct': SharedProjectDirect;
       'shared.terms': SharedTerms;
       'shared.testimonials': SharedTestimonials;
     }
