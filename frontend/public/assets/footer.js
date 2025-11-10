@@ -178,9 +178,23 @@ const Footer = () => {
 
         <div className="phonenumbers">
           <div className="phone-num">
-            <div className="button-1 button glass"><p>🇬🇧 +44 7519 418 970</p></div>
-            <div className="button-1 button glass"><p>🇫🇷 +33 7531 418 67</p></div>
-            <div className="button-1 button glass"><p>🇳🇱 +31 6847 446 91</p></div>
+            <a href="tel:+447519418970">
+              <div className="button-1 button glass">
+                <p>🇬🇧&nbsp;+44&nbsp;7519&nbsp;418&nbsp;970</p>
+              </div>
+            </a>
+
+            <a href="tel:+33753141867">
+              <div className="button-1 button glass">
+                <p>🇫🇷&nbsp;+33&nbsp;7531&nbsp;418&nbsp;67</p>
+              </div>
+            </a>
+
+            <a href="tel:+31684744691">
+              <div className="button-1 button glass">
+                <p>🇳🇱&nbsp;+31&nbsp;6847&nbsp;446&nbsp;91</p>
+              </div>
+            </a>
           </div>
           <p className="phoneStatement p2">*The British number is always on, the French and Dutch numbers are sometimes off.</p>
         </div>
