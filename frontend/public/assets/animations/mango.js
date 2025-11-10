@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { GLTFLoader} from '../threejs-master/examples/jsm/loaders/GLTFLoader.js'
 import {OrbitControls} from '../threejs-master/examples/jsm/controls/OrbitControls.js'
+import GUI from '../threejs-master/examples/jsm/libs/lil-gui.module.min.js'
 
 window.startMango = (mountEl) => {
     let scene, camera, renderer, controls, mango, mangoParent, starsSphere, cameraRig, params, asteroidParents, sphere
@@ -93,14 +94,26 @@ window.startMango = (mountEl) => {
         scene.add(ambientLight)
 
         spotTarget = new THREE.Object3D()
-        spotTarget.position.set(0, 0, 0)
+        spotTarget.position.set(-0.33, 0, 0)
         scene.add(spotTarget)
 
-        spotLight = new THREE.SpotLight('#ffffff', 20.0, 0.18, 0.18, 1.0, 2.0)
-        spotLight.position.set(1, 2, 3)
+        spotLight = new THREE.SpotLight('#ffffff', 25)
+        spotLight.position.set(3, 1.5, -0.2)
+
         spotLight.target = spotTarget
+        spotLight.angle = 0.5
+        spotLight.penumbra = 0.3
+        spotLight.decay = 2
+        spotLight.distance = 0 
         spotLight.castShadow = true
-        scene.add(spotLight, spotLight.target)
+
+        spotLight.shadow.mapSize.set(1024, 1024)
+        spotLight.shadow.bias = -0.00025
+        spotLight.shadow.normalBias = 0.01
+
+        scene.add(spotLight)
+        scene.add(spotLight.target)
+
 
         renderer.shadowMap.enabled = true
 
@@ -592,19 +605,24 @@ window.startMango = (mountEl) => {
     }
 
     function hideHeroText() {
-        const el = document.querySelector('.story-home')
-        const { gsap, ScrollTrigger } = window
-        if (!el || !gsap || !ScrollTrigger) return
-        gsap.registerPlugin(ScrollTrigger)
-        ScrollTrigger.create({
-            trigger: el,
-            start: 'top bottom',
-            end: 'top top',
-            scrub: true,
-            onUpdate: (self) => {
-                ringFade = self.progress
-            }
-        })
+    const el = document.querySelector('.story-home')
+    const { gsap, ScrollTrigger } = window
+    if (!el || !gsap || !ScrollTrigger) return
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    if (window.__heroST && window.__heroST.kill) window.__heroST.kill()
+
+    window.__heroST = ScrollTrigger.create({
+        trigger: el,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+        ringFade = self.progress
+        }
+    })
     }
 
     return () => {

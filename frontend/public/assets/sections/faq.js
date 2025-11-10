@@ -46,7 +46,6 @@ const FAQ = () => {
         wrapperRef.current.appendChild(item)
       })
 
-      // After inserting DOM, activate accordion logic
       initAccordion()
     }
 
