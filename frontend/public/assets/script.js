@@ -285,6 +285,45 @@ function AboutPage() {
   )
 }
 
+function ProjectSinglePage() {
+  React.useEffect(() => {
+    document.body.classList.add("project-page-outer")
+    return () => {
+      document.body.classList.remove("project-page-outer")
+    }
+  }, [])
+  React.useEffect(() => {
+    const links = [
+      "./assets/style/project-single.css"
+    ].map(href => {
+      const link = document.createElement("link")
+      link.rel = "stylesheet"
+      link.href = href
+      document.head.appendChild(link)
+      return link
+    })
+
+    return () => {
+      links.forEach(link => document.head.removeChild(link))
+    }
+  }, [])
+
+  return (
+    <>
+      <Preloader />
+      <Navigation />
+      <div id="smooth-wrapper">
+        <div id="smooth-content" className="container">
+          <ProjectSingle />
+          <Footer />
+        </div>
+      </div>
+      <Main />
+      <SpaceCanvas />
+    </>
+  )
+}
+
 function usePathname() {
   const [path, setPath] = React.useState(window.location.pathname)
   React.useEffect(() => {
@@ -316,8 +355,9 @@ function Router() {
   if (path === '/contact') return <ContactPage />
   if (path === '/projects') return <ProjectPage />
   if (path === '/blog') return <BlogPage />
-  if (path === '/faq') return <FAQPage />
+  if (path === '/FAQ-OFF') return <FAQPage />
   if (path === '/about') return <AboutPage />
+  if (path === '/projectSingle') return <ProjectSinglePage />
   if (path === '/datenschutz') return <DataPage />
   if (path === '/terms') return <TermsPage />
   return <HomePage />

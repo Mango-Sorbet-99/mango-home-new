@@ -197,6 +197,11 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    color: var(--secondary500);
+    transition: .7s ease-in-out;
+}
+
 .underline {
     text-decoration: underline;
 }

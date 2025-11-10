@@ -12,7 +12,7 @@
   border-bottom: 1px solid var(--white200);
 }
 .accordion .accordion-item button[aria-expanded='true'] {
-  border-bottom: 1px solid var(--primary500);
+  border-bottom: 1px solid var(--secondary500);
 }
 .accordion button {
   position: relative;
@@ -28,12 +28,12 @@
 }
 .accordion button:hover, .accordion button:focus {
   cursor: pointer;
-  color: var(--primary500);
+  color: var(--secondary500);
 }
 .accordion button:hover::after, .accordion button:focus::after {
   cursor: pointer;
-  color: var(--primary500);
-  border: 1px solid var(--primary500);
+  color: var(--secondary500);
+  border: 1px solid var(--secondary500);
 }
 .accordion button .accordion-title {
   padding: 1em 1.5em 1em 0;
@@ -69,7 +69,7 @@
   background: currentColor;
 }
 .accordion button[aria-expanded='true'] {
-  color: var(--primary500);
+  color: var(--secondary500);
 }
 .accordion button[aria-expanded='true'] .icon::after {
   width: 0;

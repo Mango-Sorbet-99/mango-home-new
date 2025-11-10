@@ -61,6 +61,7 @@ const Navigation = () => {
       <div className="menu">
         <div className="menu-items">
           {loading && items.length === 0 ? '...' : items.map(renderItem)}
+          <a href="projectSingle">BOOBIES</a>
         </div>
         <div className="hamburger" />
       </div>
