@@ -22,6 +22,8 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    max-width: 1600px;
+    margin: auto;
 }
 
 .button-in-container {
