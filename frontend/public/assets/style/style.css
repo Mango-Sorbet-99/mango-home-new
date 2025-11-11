@@ -545,7 +545,7 @@ a:hover {
 .blog-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: start;
     box-sizing: border-box;
     flex: 1 1 calc(25% - 25px);
     padding: 15px;
@@ -590,7 +590,7 @@ a:hover {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    margin-top: auto;
+    margin-bottom: 10px;
 }
 
 .blog-card .pr-catagory div {

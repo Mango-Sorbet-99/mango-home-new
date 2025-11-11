@@ -181,7 +181,7 @@ function ProjectPage() {
   )
 }
 
-function BlogPage() {
+function BlogsGridPage2() {
   React.useEffect(() => {
     document.body.classList.add("blog-page-outer")
     return () => {
@@ -393,7 +393,7 @@ function Router() {
   const path = usePathname()
   if (path === '/contact') return <ContactPage />
   if (path === '/projects') return <ProjectPage />
-  if (path === '/blog') return <BlogPage />
+  if (path === '/blog') return <BlogsGridPage2 />
   if (path === '/FAQ-OFF') return <FAQPage />
   if (path === '/about') return <AboutPage />
   if (path === '/projectSingle') return <ProjectSinglePage />

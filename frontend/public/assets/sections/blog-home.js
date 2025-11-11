@@ -293,6 +293,7 @@ const BlogHome = () => {
           return (
             <div className="blog-card glass" key={slug || i}>
               {cover ? <img src={cover} alt={title}/> : null}
+              <div className="pr-catagory">{dateStr ? <div>{dateStr}</div> : null}</div>
               <h4 className="pr-title">{title}</h4>
               {desc ? <p className="pr-description">{desc}</p> : null}
               {isExternal ? (
@@ -307,7 +308,6 @@ const BlogHome = () => {
                   onKeyDown={handleKey}
                 >read more</a>
               )}
-              <div className="pr-catagory">{dateStr ? <div>{dateStr}</div> : null}</div>
             </div>
           )
         })}
