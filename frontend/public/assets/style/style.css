@@ -367,6 +367,10 @@ a:hover {
     height: 100vh;
 }
 
+.contact-page-outer .footer {
+    border-radius: 0;
+}
+
 .footer-colums {
     display: flex;
     justify-content: space-between;
@@ -522,6 +526,10 @@ a:hover {
 
 .project-card a:hover {
     color: var(--primary500);
+}
+
+.project-page-outer .nav .menu-items a:nth-of-type(3) {
+    display: none;
 }
 
 /* BLOG CARDS */

@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_shared_blogs",
+  "info": {
+    "displayName": "Blog"
+  },
+  "options": {},
+  "attributes": {
+    "Image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "Title": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "text"
+    },
+    "Date": {
+      "type": "string"
+    },
+    "introduction": {
+      "type": "text"
+    },
+    "section": {
+      "type": "component",
+      "component": "shared.section",
+      "repeatable": true
+    },
+    "conclusion": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

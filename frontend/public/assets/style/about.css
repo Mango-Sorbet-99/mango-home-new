@@ -144,3 +144,7 @@ object-fit: contain;
     }
     
 }
+
+.nav .menu-items a:nth-of-type(2) {
+    display: none;
+}

@@ -124,6 +124,12 @@ function HomePage() {
 }
 
 function ContactPage() {
+    React.useEffect(() => {
+    document.body.classList.add("contact-page-outer")
+    return () => {
+      document.body.classList.remove("contact-page-outer")
+    }
+  }, [])
   return (
     <>
       <Preloader />

@@ -38,6 +38,7 @@ canvas {
     justify-content: start;
     display: flex;
     padding: 25px 0;
+    width: 100%;
 }
 
 .sticky-button {
@@ -211,4 +212,8 @@ canvas {
         transform: translateY(-0) translateX(5vw) scale(.92);
         z-index: 1;
     }
+}
+
+.nav .menu-items a:nth-of-type(1) {
+    display: none;
 }

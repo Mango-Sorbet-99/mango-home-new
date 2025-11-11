@@ -1,5 +1,21 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface SharedBlog extends Struct.ComponentSchema {
+  collectionName: 'components_shared_blogs';
+  info: {
+    displayName: 'Blog';
+  };
+  attributes: {
+    conclusion: Schema.Attribute.Text;
+    Date: Schema.Attribute.String;
+    Description: Schema.Attribute.Text;
+    Image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    introduction: Schema.Attribute.Text;
+    section: Schema.Attribute.Component<'shared.section', true>;
+    Title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedEmail extends Struct.ComponentSchema {
   collectionName: 'components_shared_emails';
   info: {
@@ -89,6 +105,18 @@ export interface SharedProjectDirect extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedSection extends Struct.ComponentSchema {
+  collectionName: 'components_shared_sections';
+  info: {
+    displayName: 'Section';
+  };
+  attributes: {
+    body: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedTerms extends Struct.ComponentSchema {
   collectionName: 'components_shared_terms';
   info: {
@@ -114,6 +142,7 @@ export interface SharedTestimonials extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'shared.blog': SharedBlog;
       'shared.email': SharedEmail;
       'shared.faq': SharedFaq;
       'shared.footer': SharedFooter;
@@ -122,6 +151,7 @@ declare module '@strapi/strapi' {
       'shared.navigation': SharedNavigation;
       'shared.other-menus': SharedOtherMenus;
       'shared.project-direct': SharedProjectDirect;
+      'shared.section': SharedSection;
       'shared.terms': SharedTerms;
       'shared.testimonials': SharedTestimonials;
     }

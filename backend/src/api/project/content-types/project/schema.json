@@ -15,6 +15,11 @@
       "type": "component",
       "component": "shared.project-direct",
       "repeatable": true
+    },
+    "Blog": {
+      "type": "component",
+      "component": "shared.blog",
+      "repeatable": true
     }
   }
 }
