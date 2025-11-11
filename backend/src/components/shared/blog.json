@@ -27,6 +27,11 @@
     "introduction": {
       "type": "text"
     },
+    "largeSection": {
+      "type": "component",
+      "component": "shared.section",
+      "repeatable": true
+    },
     "section": {
       "type": "component",
       "component": "shared.section",

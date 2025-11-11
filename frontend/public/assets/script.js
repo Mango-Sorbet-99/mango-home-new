@@ -27,7 +27,7 @@ if (!window.GlobalDataSetup) {
         fetchJSON('/api/global?populate[email][populate][email][populate]=*'),
         fetchJSON('/api/global?populate[otherMenus][populate][urls][populate]=*'),
         fetchJSON('/api/project?populate=*'),
-        fetchJSON('/api/project?populate[ProjectDirect][populate]=*')
+        fetchJSON('/api/project?populate[ProjectDirect][populate]=*'),
 
       ]).then(([homeRes, globalRes]) => {
         if (!alive) return
@@ -87,23 +87,39 @@ function SpaceCanvas() {
   )
 }
 
+const BLOG_RE = /^\/blog(?:\/[^/?#]+)?\/?$/;
+
 function HomePage() {
-    React.useEffect(() => {
+  React.useEffect(() => {
     const link = document.createElement("link")
     link.rel = "stylesheet"
     link.href = "./assets/style/home.css"
     document.head.appendChild(link)
-
-    return () => {
-      document.head.removeChild(link)
-    }
+    return () => { document.head.removeChild(link) }
   }, [])
+
+  if (BLOG_RE.test(location.pathname)) {
+    return (
+      <>
+        <Preloader />
+        <Navigation />
+        <div id="smooth-wrapper">
+          <div id="smooth-content" className="container">
+            <BlogHome />
+            <Footer />
+          </div>
+        </div>
+        <Main />
+        <SpaceCanvas />
+      </>
+    )
+  }
+
   return (
     <>
       <Preloader />
       <Navigation />
       <StickyBTN />
-      {/* <video className="grain" src="./img/grain.mp4" autoPlay loop muted playsInline /> */}
       <div id="smooth-wrapper">
         <div id="smooth-content" className="container">
           <HeroHome />
@@ -122,6 +138,7 @@ function HomePage() {
     </>
   )
 }
+
 
 function ContactPage() {
     React.useEffect(() => {

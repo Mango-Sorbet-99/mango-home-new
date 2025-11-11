@@ -11,6 +11,7 @@ export interface SharedBlog extends Struct.ComponentSchema {
     Description: Schema.Attribute.Text;
     Image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     introduction: Schema.Attribute.Text;
+    largeSection: Schema.Attribute.Component<'shared.section', true>;
     section: Schema.Attribute.Component<'shared.section', true>;
     Title: Schema.Attribute.String;
   };
