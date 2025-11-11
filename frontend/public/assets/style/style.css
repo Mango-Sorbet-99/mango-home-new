@@ -176,15 +176,17 @@ h2 {
 }
 
 h4 {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     margin-bottom: 0em;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 3px;
+    line-height: 150%;
 }
 
 p {
-    font-size: 0.8rem;
+    font-size: 1rem;
+    line-height: 150%;
     font-weight: 200;
 }
 
@@ -688,8 +690,8 @@ a:hover {
 }
 
 .blogs .hero-img {
-    width: calc(100% + 100px);
-    transform: translateX(-50px);
+    width: calc(100% + 200px);
+    transform: translateX(-100px);
     height: 75vh;
     overflow: hidden;
     margin-bottom: 100px;
