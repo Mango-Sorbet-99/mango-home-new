@@ -1021,4 +1021,12 @@ a:hover {
      .blogs {
         padding-right: 0%;
     }
+
+    .blogs .blog-into, .blog-main {
+        width: 100%;
+    }
+
+    .blogs .hero-img {
+        height: 40vh;
+    }
 }
