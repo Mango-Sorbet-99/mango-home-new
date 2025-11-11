@@ -150,7 +150,6 @@ function ProjectPage() {
       <div id="smooth-wrapper">
         <div id="smooth-content" className="container">
           <ProjectsGridPage />
-          <Wheel />
           <Footer />
         </div>
       </div>
@@ -174,6 +173,23 @@ function BlogPage() {
       <div id="smooth-wrapper">
         <div id="smooth-content" className="container">
           <BlogsGridPage />
+          <Footer />
+        </div>
+      </div>
+      <Main />
+      <SpaceCanvas />
+    </>
+  )
+}
+
+function ResumePage() {
+  return (
+    <>
+      <Preloader />
+      <Navigation />
+      <div id="smooth-wrapper">
+        <div id="smooth-content" className="container">
+          <Resume />
           <Footer />
         </div>
       </div>
@@ -361,6 +377,7 @@ function Router() {
   if (path === '/projectSingle') return <ProjectSinglePage />
   if (path === '/datenschutz') return <DataPage />
   if (path === '/terms') return <TermsPage />
+  if (path === '/resume') return <ResumePage />
   return <HomePage />
 }
 

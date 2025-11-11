@@ -21,10 +21,12 @@ const Projects = () => {
         (j?.data?.attributes?.ProjectDirect) ||
         []
 
+      const limited = list.slice(0, 16)
+
       if (!gridRef.current) return
       gridRef.current.innerHTML = ''
 
-      list.forEach(pd => {
+      limited.forEach(pd => {
         const imgObj = pd?.Image || null
         const imgUrl = (imgObj?.formats?.small?.url) || imgObj?.url || ''
         const absImg = imgUrl ? ((window.API_URL || '') + imgUrl) : ''
@@ -79,9 +81,9 @@ const Projects = () => {
   }, [])
 
   return (
-    <div className="projects txt-animate">
+    <div className="projects ">
       <CodeBlock />
-      <div className="fifty-fifty">
+      <div className="fifty-fifty txt-animate">
         <div className="fifty-fifty-1">
           <h3 className="title-animate">
             I create interactive experiments that merge art, science, + technology.
@@ -104,8 +106,8 @@ const Projects = () => {
         </div>
       </div>
 
-      <div className="project-grid" ref={gridRef}>
-      </div>
+      <div className="project-grid" ref={gridRef}></div>
+
       <div className="container button-in-container">
         <a href="/projects">
           <div className="button-1 button glass btn-animate">

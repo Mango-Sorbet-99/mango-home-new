@@ -263,11 +263,67 @@ function useImageScaler() {
   }, [])
 }
 
+function twoIMG() {
+  const imgs = document.querySelectorAll('img.two-img');
+  const isDesktop = window.matchMedia('(min-width: 601px)').matches;
+
+  imgs.forEach(img => {
+    const mobile  = img.dataset.mobileBkgSrc;
+    const desktop = img.dataset.desktopBkgSrc;
+    const want = isDesktop ? desktop : mobile;
+    if (!want) return;
+    if (img.src !== want) img.src = want;
+  });
+}
+
+const runTwoIMG = () => {
+  requestAnimationFrame(twoIMG);
+};
+
+if (document.readyState !== 'loading') runTwoIMG();
+window.addEventListener('DOMContentLoaded', runTwoIMG);
+window.addEventListener('load', runTwoIMG);
+
+let t;
+window.addEventListener('resize', () => {
+  clearTimeout(t);
+  t = setTimeout(runTwoIMG, 150);
+});
+
+
+/* V I D E O    R E P L A C E */
+
+const twoVideos = document.querySelectorAll('.two-videos');
+twoVideos.forEach(video => {
+  function replaceSource() {
+      const desktopSrc = video.getAttribute('data-desktop-src');
+      const mobileSrc = video.getAttribute('data-mobile-src');
+      const currentSrc = video.getAttribute('src');
+      const newSrc = window.innerWidth > 1080 ? desktopSrc : mobileSrc;
+      if (currentSrc !== newSrc) {
+          const wasPlaying = !video.paused;
+          video.pause();
+          video.setAttribute('src', newSrc);
+          video.load();
+          if (wasPlaying) {
+              video.play();
+          }
+      }
+  }
+  ScrollTrigger.create({
+      trigger: video,
+      start: "top bottom+=200px",
+      end: "bottom top",
+      onEnter: replaceSource,
+  });
+});
+
 function Main({ children }) {
   useFullHeight()
   useScrollSmoother()
   useTextAnimator()
   useButtonsAnimator()
   useImageScaler()
+  twoIMG()
   return React.createElement(React.Fragment, null, children)
 }
