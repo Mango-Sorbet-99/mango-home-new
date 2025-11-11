@@ -212,24 +212,28 @@ function useTextAnimator() {
 }
 
 function useFullHeight() {
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const nodes = Array.from(document.querySelectorAll('.full-height'))
     if (!nodes.length) return
+    function vh() {
+      return (window.visualViewport && window.visualViewport.height) || window.innerHeight
+    }
     function setH() {
-      const h = window.innerHeight
+      const h = vh()
+      document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px')
       nodes.forEach(el => { el.style.height = h + 'px' })
     }
-    function onLoad() { setH() }
-    window.addEventListener('load', onLoad)
-    window.addEventListener('resize', setH)
-    history.scrollRestoration = 'manual'
-    window.scrollTo(0, 0)
-    function handleBeforeUnload() { window.scrollTo(0, 0) }
-    window.addEventListener('beforeunload', handleBeforeUnload)
+    setH()
+    if (window.resetScrollTriggers) window.resetScrollTriggers()
+    const onResize = () => {
+      setH()
+      if (window.resetScrollTriggers) window.resetScrollTriggers()
+    }
+    window.addEventListener('resize', onResize)
+    window.addEventListener('orientationchange', onResize)
     return () => {
-      window.removeEventListener('load', onLoad)
-      window.removeEventListener('resize', setH)
-      window.removeEventListener('beforeunload', handleBeforeUnload)
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('orientationchange', onResize)
     }
   }, [])
 }
@@ -327,3 +331,11 @@ function Main({ children }) {
   twoIMG()
   return React.createElement(React.Fragment, null, children)
 }
+
+window.scrollTo(0, 0);
+window.addEventListener('load', () => {
+  if (window.ScrollTrigger) {
+    window.ScrollTrigger.refresh(true)
+    window.scrollTo(0, 0);
+  }
+})

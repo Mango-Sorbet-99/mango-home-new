@@ -1,16 +1,15 @@
 const StoryHome = () => {
-  const { loading, home } = window.useGlobalData()
   const h2Ref = React.useRef(null)
   const splitRef = React.useRef(null)
   const tlsRef = React.useRef([])
 
-  const story = !loading ? (home?.story || '') : ''
-
   React.useEffect(() => {
-    if (!story || !h2Ref.current || !window.gsap || !window.SplitText) return
+    const storyEl = h2Ref.current
+    if (!storyEl || !window.gsap || !window.SplitText) return
+
     const { gsap, SplitText } = window
 
-    splitRef.current = new SplitText(h2Ref.current, { type: 'words' })
+    splitRef.current = new SplitText(storyEl, { type: 'words' })
     const words = splitRef.current.words || []
 
     tlsRef.current = words.map((word) => {
@@ -19,7 +18,7 @@ const StoryHome = () => {
           trigger: word,
           start: 'top bottom',
           end: 'top center',
-          scrub: 0.5,
+          scrub: 0.5
         }
       })
       tl.fromTo(word, { opacity: 0 }, { opacity: 1, duration: 1, ease: 'expo.in' })
@@ -32,16 +31,21 @@ const StoryHome = () => {
         tl.kill()
       })
       tlsRef.current = []
+
       if (splitRef.current) {
         splitRef.current.revert()
         splitRef.current = null
       }
     }
-  }, [story])
+  }, [])
 
   return (
     <div className="story-home">
-      <h2 ref={h2Ref}>{story || (loading ? '...' : '')}</h2>
+      <h2 ref={h2Ref}>
+        I am a creative coder, designer, + artist, with over a decade of experience
+        working at the intersection of technology + creativity.
+      </h2>
+
       <div className="button-1 button glass btn-animate">
         <div className="LED"></div>
         <p>Want to know more, visit the about page</p>
@@ -49,4 +53,5 @@ const StoryHome = () => {
     </div>
   )
 }
+
 window.StoryHome = StoryHome
