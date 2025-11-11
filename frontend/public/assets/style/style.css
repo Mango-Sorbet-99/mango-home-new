@@ -416,7 +416,7 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 25px;
-  justify-content: space-between;
+  justify-content: start;
   margin-top: 50px;
 }
 
@@ -1052,5 +1052,21 @@ a:hover {
 
     .blogs .fifty-fifty{
         flex-direction: column;
+    }
+
+    .project-grid {
+        flex-direction: column;
+    }
+
+    .blog-page-outer .project-grid {
+        margin: 150px 0;
+    }
+
+    .blog-grid {
+        flex-direction: column;
+    }
+
+    .blog-card {
+        max-width: 100%;
     }
 }
