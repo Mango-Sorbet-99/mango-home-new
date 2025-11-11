@@ -22,6 +22,7 @@ const StoryHome = () => {
         }
       })
       tl.fromTo(word, { opacity: 0 }, { opacity: 1, duration: 1, ease: 'expo.in' })
+
       return tl
     })
 

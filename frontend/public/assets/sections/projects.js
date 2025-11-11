@@ -75,6 +75,14 @@ const Projects = () => {
 
         gridRef.current.appendChild(card)
       })
+
+      const imgs = Array.from(gridRef.current.querySelectorAll('img'))
+      await Promise.all(imgs.map(img => (img.decode ? img.decode().catch(() => {}) : Promise.resolve())))
+      if (window.ScrollTrigger && window.ScrollTrigger.refresh) {
+        requestAnimationFrame(() => {
+          window.ScrollTrigger.refresh(true)
+        })
+      }
     }
 
     load().catch(err => console.error(err))

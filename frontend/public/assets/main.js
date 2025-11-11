@@ -153,13 +153,18 @@ function useButtonsAnimator() {
           transformOrigin: 'center center',
           willChange: 'transform,width,border-radius,opacity',
           boxSizing: 'border-box',
-          overflow: 'hidden'
+          overflow: 'hidden',
         })
 
         const targetW = measureAutoWidth(el)
 
         const tl = gsap.timeline({
-          scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none reverse' }
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 90%',
+            invalidateOnRefresh: true,
+            toggleActions: 'play none none reverse'
+          }
         })
 
         tl.fromTo(el, { scale: 0 }, { scale: 1, duration: 0.5, ease: 'bounce.out' })
@@ -170,7 +175,7 @@ function useButtonsAnimator() {
         return () => { if (tl && tl.kill) tl.kill(); if (split && split.revert) split.revert() }
       }, el)
     )
-
+    window.ScrollTrigger.refresh(true)
     return () => contexts.forEach((c) => c && c.revert && c.revert())
   }, [])
 }
@@ -196,10 +201,12 @@ function useTextAnimator() {
           scrollTrigger: {
             trigger: parent,
             start: 'top 85%',
-            toggleActions: 'play none none reverse'
+            toggleActions: 'play none none reverse',
+            invalidateOnRefresh: true,
+
           }
         })
-
+        window.ScrollTrigger.refresh(true)
         tl.fromTo(split.words, { opacity: 0 }, { opacity: 1, stagger: 0.05, duration: 1, ease: 'expo.in' })
         if (body.length) tl.fromTo(body, { opacity: 0 }, { opacity: 1, delay: 0.5, duration: 2, stagger: 0.2, ease: 'expo.in' }, 0)
 
@@ -332,10 +339,13 @@ function Main({ children }) {
   return React.createElement(React.Fragment, null, children)
 }
 
-window.scrollTo(0, 0);
+history.scrollRestoration = "manual";
+window.addEventListener('beforeunload', function () {
+  window.scrollTo(0, 0);
+});
+
 window.addEventListener('load', () => {
   if (window.ScrollTrigger) {
     window.ScrollTrigger.refresh(true)
-    window.scrollTo(0, 0);
   }
 })
