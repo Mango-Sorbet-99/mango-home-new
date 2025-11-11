@@ -302,7 +302,7 @@ window.addEventListener('resize', () => {
 });
 
 
-/* V I D E O    R E P L A C E */
+/* V I D E O    R E P L A C E 
 
 const twoVideos = document.querySelectorAll('.two-videos');
 twoVideos.forEach(video => {
@@ -328,7 +328,7 @@ twoVideos.forEach(video => {
       onEnter: replaceSource,
   });
 });
-
+*/
 function Main({ children }) {
   useFullHeight()
   useScrollSmoother()

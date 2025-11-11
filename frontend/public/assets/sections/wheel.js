@@ -15,33 +15,57 @@ const Wheel = () => {
       const numLines = 8
       const radius = numLines * 20
       const angle = 360 / numLines
-      const origin = `50% 50% -${radius}px`
 
-      gsap.set(wheel, { transformOrigin: '50% 50%' })
+      gsap.set(wheel, { transformOrigin: '50% 50%', transformStyle: 'preserve-3d' })
       gsap.set(wheel.querySelectorAll('.wheel-text'), {
         z: radius,
         rotationX: (i) => angle * i,
-        transformOrigin: origin
+        transformOrigin: `50% 50% -${radius}px`,
+        backfaceVisibility: 'hidden'
       })
 
-      gsap.to(wheel, {
-        rotationX: -360,
-        duration: 8,
-        ease: 'none',
-        transformOrigin: '50% 50%',
-        scrollTrigger: {
-          trigger: sect,
-          start: 'center center',
-          end: '+=600',
-          scrub: true,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          refreshPriority: 2,
-          scroller: (ScrollSmoother && ScrollSmoother.get) ? (ScrollSmoother.get()?.content()) : undefined
-        }
-      })
+      const makeTrigger = () => {
+        const tl = gsap.to(wheel, {
+          rotationX: -360,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sect,
+            start: 'top top',
+            end: '+=600',
+            scrub: true,
+            pin: true,
+            pinSpacing: true,
+            pinReparent: true,
+            pinType: 'transform',
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          }
+        })
+
+        ScrollTrigger.addEventListener('refreshInit', () => {
+          gsap.set(wheel.querySelectorAll('.wheel-text'), {
+            z: radius,
+            transformOrigin: `50% 50% -${radius}px`
+          })
+        })
+      }
+
+      const afterLayoutStable = () => {
+        const sm = ScrollSmoother && ScrollSmoother.get && ScrollSmoother.get()
+        if (sm && sm.refresh) sm.refresh()
+        requestAnimationFrame(() => {
+          makeTrigger()
+          requestAnimationFrame(() => ScrollTrigger.refresh(true))
+        })
+      }
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          requestAnimationFrame(afterLayoutStable)
+        })
+      } else {
+        requestAnimationFrame(afterLayoutStable)
+      }
     }, sectionRef)
 
     return () => ctx.revert()
