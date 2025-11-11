@@ -29,6 +29,17 @@ const abs = u => {
   return `${base}${path}`
 }
 
+const getImgUrl = (obj, pref=['large','medium','small']) => {
+  if (!obj) return ''
+  const o = obj?.data?.attributes || obj?.attributes || obj
+  if (!o) return ''
+  for (const k of pref) {
+    const u = o?.formats?.[k]?.url
+    if (u) return abs(u)
+  }
+  return abs(o?.url || '')
+}
+
 window.fetchJSON = window.fetchJSON || (path =>
   fetch((window.API_URL || '') + path).then(r => {
     if (!r.ok) throw new Error(`HTTP ${r.status} for ${(window.API_URL||'')+path}`)
@@ -38,14 +49,8 @@ window.fetchJSON = window.fetchJSON || (path =>
 
 // ---------- components ----------
 const BlogSingle = ({ post, onBack }) => {
-  const imgObj = post?.Image || post?.image || null
-  const hero = abs(
-    (imgObj?.formats?.medium?.url) ||
-    (imgObj?.url) ||
-    (imgObj?.data?.attributes?.formats?.medium?.url) ||
-    (imgObj?.data?.attributes?.url) ||
-    ''
-  )
+  const imgObjRoot = post?.Image || null
+  const hero = getImgUrl(imgObjRoot, ['medium','small'])
   const title = post?.Title || ''
   const intro = post?.introduction || post?.Excerpt || post?.Description || ''
   const concl = post?.conclusion || ''
@@ -67,10 +72,8 @@ const BlogSingle = ({ post, onBack }) => {
       const { gsap, ScrollTrigger } = window
       if (!gsap || !ScrollTrigger) return
       gsap.registerPlugin(ScrollTrigger)
-
       const parent = gsap.utils.toArray('.image-scaler-hero')
       const child = gsap.utils.toArray('.image-scaler-hero img')
-
       const ctx = gsap.context(() => {
         ScrollTrigger.create({
           trigger: parent,
@@ -82,7 +85,6 @@ const BlogSingle = ({ post, onBack }) => {
         })
         ScrollTrigger.refresh()
       })
-
       return () => ctx.revert()
     }, [])
   }
@@ -90,7 +92,6 @@ const BlogSingle = ({ post, onBack }) => {
 
   return (
     <div className="blog-detail">
-
       {hero ? (
         <div className="hero-img image-scaler-hero">
           <img loading="lazy" src={hero} alt={title}/>
@@ -107,51 +108,29 @@ const BlogSingle = ({ post, onBack }) => {
       {(large.length || sections.length) ? (
         <div className="blog-main">
           {large.map((s,i)=>{
-          const t = s?.title || ''
-          const b = s?.body || ''
-          const lImgObj = s?.Image || s?.image || null
-          const lImg = abs(
-            (lImgObj?.formats?.large?.url) ||
-            (lImgObj?.formats?.medium?.url) ||
-            (lImgObj?.formats?.small?.url) ||
-            (lImgObj?.url) ||
-            (lImgObj?.data?.attributes?.formats?.large?.url) ||
-            (lImgObj?.data?.attributes?.formats?.medium?.url) ||
-            (lImgObj?.data?.attributes?.formats?.small?.url) ||
-            (lImgObj?.data?.attributes?.url) ||
-            ''
-          )
-          if (!t && !b && !lImg) return null
-
-          return (
-            <div className="fifty-fifty" key={`L${i}`}>
-              <div className="fifty-fifty-1">
-                {t ? <h5>{t}</h5> : null}
-                {b ? <p dangerouslySetInnerHTML={{ __html: b }} /> : null}
-              </div>
-              {lImg ? (
-                <div className="fifty-fifty-2">
-                  <img loading="lazy" src={lImg} alt={t || title || `large-${i}`} />
+            const t = s?.title || ''
+            const b = s?.body || ''
+            const lImg = getImgUrl( s?.image, ['large','medium','small'])
+            if (!t && !b && !lImg) return null
+            return (
+              <div className="lImage-parent" key={`L${i}`}>
+                <div className="">
+                  {t ? <h5>{t}</h5> : null}
+                  {b ? <p dangerouslySetInnerHTML={{ __html: b }} /> : null}
                 </div>
-              ) : null}
-            </div>
-          )
-        })}
-
+                {lImg ? (
+                  <div className="">
+                    <img loading="lazy" src={lImg} alt={t || title || `large-${i}`} />
+                  </div>
+                ) : null}
+              </div>
+            )
+          })}
 
           {sections.map((s,i)=>{
             const t = s?.title || ''
             const b = s?.body || ''
-            const sImgObj = s?.Image || s?.image || null
-            const sImg = abs(
-              (sImgObj?.formats?.medium?.url) ||
-              (sImgObj?.formats?.small?.url) ||
-              (sImgObj?.url) ||
-              (sImgObj?.data?.attributes?.formats?.medium?.url) ||
-              (sImgObj?.data?.attributes?.formats?.small?.url) ||
-              (sImgObj?.data?.attributes?.url) ||
-              ''
-            )
+            const sImg = getImgUrl( s?.image, ['medium','small'])
             return (
               <div className="fifty-fifty" key={`S${i}`}>
                 {sImg ? (
@@ -192,7 +171,6 @@ const BlogHome = () => {
   const BLOG_RE = /^\/blog(?:\/([^/?#]+))?\/?$/
   const IS_ON_BLOG_ROUTE = BLOG_RE.test(location.pathname)
 
-  // stable slug from CMS or title
   const getSlug = React.useCallback((item) => {
     const cms = (item?.Slug || '').trim()
     return cms ? safeSlug(cms) : safeSlug(item?.Title || '')
@@ -228,11 +206,16 @@ const BlogHome = () => {
     window.addEventListener('popstate', onPop)
 
     async function load() {
-      const j = await window.fetchJSON('/api/project?populate[Blog][populate]=*')
+      const path =
+        '/api/project' +
+        '?populate[Blog][populate]=Image,largeSection,section' +
+        '&populate[Blog][populate][Image][populate]=*' +
+        '&populate[Blog][populate][largeSection][populate]=image' +
+        '&populate[Blog][populate][section][populate]=image' +
+        '&populate[Blog][populate]=*'
+      const j = await window.fetchJSON(path)
       const raw = (j?.data?.Blog) || (j?.data?.attributes?.Blog) || []
       setList(raw)
-
-      // index by safe slug
       const entries = raw.map(x => [getSlug(x), x])
       bySlugRef.current = new Map(entries)
 
@@ -281,9 +264,7 @@ const BlogHome = () => {
 
       <div className="blog-grid" ref={gridRef}>
         {list.slice(0, IS_ON_BLOG_ROUTE ? list.length : 3).map((b,i) => {
-          const imgObj = b?.Image || null
-          const imgUrl = (imgObj?.formats?.small?.url) || imgObj?.url || ''
-          const cover = abs(imgUrl)
+          const cover = getImgUrl(b?.Image)
           const title = b?.Title || ''
           const desc = truncate(b?.Description || b?.introduction || '')
           const slug = getSlug(b)
@@ -314,7 +295,6 @@ const BlogHome = () => {
               {cover ? <img src={cover} alt={title}/> : null}
               <h4 className="pr-title">{title}</h4>
               {desc ? <p className="pr-description">{desc}</p> : null}
-
               {isExternal ? (
                 <a className="read-more" href={external} target="_blank" rel="noopener noreferrer">read more</a>
               ) : (
@@ -327,7 +307,6 @@ const BlogHome = () => {
                   onKeyDown={handleKey}
                 >read more</a>
               )}
-
               <div className="pr-catagory">{dateStr ? <div>{dateStr}</div> : null}</div>
             </div>
           )
@@ -338,7 +317,7 @@ const BlogHome = () => {
         <a
           href="/blog"
           onClick={e => {
-            if (!IS_ON_BLOG_ROUTE) return // on homepage let it hard navigate
+            if (!IS_ON_BLOG_ROUTE) return
             e.preventDefault()
             history.pushState({view:'list'},'', '/blog')
             window.scrollTo({ top: 0, behavior:'auto' })

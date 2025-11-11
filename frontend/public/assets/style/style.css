@@ -655,6 +655,18 @@ a:hover {
 
 }
 
+.lImage-parent {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 50px;
+    width: 50%;
+}
+
+.lImage-parent img {
+    width: 100%;
+    object-fit: contain;
+}
+
 .blogs h2 {
     font-size: 2.4rem;
     line-height: 150%;
@@ -1028,5 +1040,17 @@ a:hover {
 
     .blogs .hero-img {
         height: 40vh;
+    }
+
+    .lImage-parent {
+        width: 100%;
+    }
+
+    .blogs .fifty-fifty:nth-last-of-type(odd) {
+        flex-direction: column;
+    }
+
+    .blogs .fifty-fifty{
+        flex-direction: column;
     }
 }
