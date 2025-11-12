@@ -14,7 +14,10 @@ const Logos = () => {
     './img/logos/figma-icon-one-color.svg',
     './img/logos/mercedes-svgrepo-com.svg',
     './img/logos/javascript-svgrepo-com.svg',
-    './img/logos/chrome-svgrepo-com.svg'
+    './img/logos/chrome-svgrepo-com.svg',
+    './img/logos/strapi.svg',
+    './img/logos/shopify.svg',
+    './img/logos/spotify.svg'
   ]
 
   const stream = React.useMemo(() => [...logos, ...logos, ...logos], [])
