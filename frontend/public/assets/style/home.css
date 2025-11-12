@@ -217,3 +217,13 @@ canvas {
 .nav .menu-items a:nth-of-type(1) {
     display: none;
 }
+
+.project-card .pr-description {
+    margin-bottom: 15px;
+    font-size: .6rem;
+}
+
+.pr-catagory div, .filter-outer {
+    padding: 3px 7px;
+    font-size: 0.5rem;
+}

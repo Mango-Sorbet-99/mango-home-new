@@ -4,7 +4,7 @@ const AboutSnippet = () => {
     gsap.timeline({
           scrollTrigger: {
             trigger: '.about-home img',
-            start: 'top 75%',
+            start: 'top 90%',
             toggleActions: 'play none none reverse'
           }
         })

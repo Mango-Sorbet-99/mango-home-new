@@ -238,7 +238,7 @@ const BlogHome = () => {
     return () => window.removeEventListener('popstate', onPop)
   }, [getSlug, IS_ON_BLOG_ROUTE])
 
-  const truncate = (s, n = 260) => (s && s.length > n) ? s.slice(0, n).trim() + '…' : (s || '')
+  const truncate = (s, n = 200) => (s && s.length > n) ? s.slice(0, n).trim() + '…' : (s || '')
 
   if (IS_ON_BLOG_ROUTE && view === 'detail' && active) {
     return (
@@ -295,7 +295,7 @@ const BlogHome = () => {
               {cover ? <img src={cover} alt={title}/> : null}
               <div className="pr-catagory">{dateStr ? <div>{dateStr}</div> : null}</div>
               <h4 className="pr-title">{title}</h4>
-              {desc ? <p className="pr-description">{desc}</p> : null}
+              {desc ? <p className=" pr-description">{desc}</p> : null}
               {isExternal ? (
                 <a className="read-more" href={external} target="_blank" rel="noopener noreferrer">read more</a>
               ) : (
