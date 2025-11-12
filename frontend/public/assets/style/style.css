@@ -269,6 +269,10 @@ a:hover {
     transition: .7s ease-in-out;
 }
 
+.btn-animate p div {
+    opacity: 0;
+}
+
 /* GLASS */
 
 .glass {
