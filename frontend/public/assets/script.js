@@ -9,13 +9,19 @@ if (!window.GlobalDataSetup) {
     })
   }
 
-  const GlobalDataContext = React.createContext({
-    loading: true, error: null, home: null, global: null
+  window.GlobalDataContext = React.createContext({
+    loading: true,
+    error: null,
+    home: null,
+    global: null
   })
 
   function GlobalDataProvider({ children }) {
     const [state, setState] = React.useState({
-      loading: true, error: null, home: null, global: null
+      loading: true,
+      error: null,
+      home: null,
+      global: null
     })
 
     React.useEffect(() => {
@@ -28,29 +34,31 @@ if (!window.GlobalDataSetup) {
         fetchJSON('/api/global?populate[otherMenus][populate][urls][populate]=*'),
         fetchJSON('/api/project?populate=*'),
         fetchJSON('/api/project?populate[ProjectDirect][populate]=*'),
+      ])
+        .then(([homeRes, globalRes]) => {
+          if (!alive) return
+          const norm = (res) => {
+            const d = res?.data
+            if (!d) return {}
+            return d?.attributes ? { id: d.id, ...d.attributes } : d
+          }
+          const homeObj = norm(homeRes)
+          const globalObj = norm(globalRes)
+          setState({ loading: false, error: null, home: homeObj, global: globalObj })
+        })
+        .catch((e) => {
+          if (!alive) return
+          console.error('Data bootstrap error:', e)
+          setState({ loading: false, error: e, home: null, global: null })
+        })
 
-      ]).then(([homeRes, globalRes]) => {
-        if (!alive) return
-        const norm = (res) => {
-          const d = res?.data
-          if (!d) return {}
-          return d?.attributes ? { id: d.id, ...d.attributes } : d
-        }
-        const homeObj = norm(homeRes)
-        const globalObj = norm(globalRes)
-        setState({ loading: false, error: null, home: homeObj, global: globalObj })
-      }).catch((e) => {
-        if (!alive) return
-        console.error('Data bootstrap error:', e)
-        setState({ loading: false, error: e, home: null, global: null })
-      })
       return () => { alive = false }
     }, [])
 
-    return React.createElement(GlobalDataContext.Provider, { value: state }, children)
+    return React.createElement(window.GlobalDataContext.Provider, { value: state }, children)
   }
 
-  window.useGlobalData = () => React.useContext(GlobalDataContext)
+  window.useGlobalData = () => React.useContext(window.GlobalDataContext)
   window.GlobalDataProvider = GlobalDataProvider
   window.GlobalDataSetup = true
 }

@@ -1,7 +1,6 @@
-import * as THREE from 'three'
-import { GLTFLoader} from '../threejs-master/examples/jsm/loaders/GLTFLoader.js'
-import {OrbitControls} from '../threejs-master/examples/jsm/controls/OrbitControls.js'
-import GUI from '../threejs-master/examples/jsm/libs/lil-gui.module.min.js'
+import * as THREE from 'https://unpkg.com/three@0.126.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.126.0/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.126.0/examples/jsm/loaders/GLTFLoader.js';
 
 window.startMango = (mountEl) => {
     let scene, camera, renderer, controls, mango, mangoParent, starsSphere, cameraRig, params, asteroidParents, sphere
