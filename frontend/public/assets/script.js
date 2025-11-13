@@ -9,6 +9,7 @@ if (!window.GlobalDataSetup) {
     })
   }
 
+  // define on window so no weird scope issues in Safari
   window.GlobalDataContext = React.createContext({
     loading: true,
     error: null,
@@ -26,6 +27,7 @@ if (!window.GlobalDataSetup) {
 
     React.useEffect(() => {
       let alive = true
+
       Promise.all([
         fetchJSON('/api/home?populate=*'),
         fetchJSON('/api/global?populate[navigation][populate][logo][populate]=*'),
@@ -33,7 +35,7 @@ if (!window.GlobalDataSetup) {
         fetchJSON('/api/global?populate[email][populate][email][populate]=*'),
         fetchJSON('/api/global?populate[otherMenus][populate][urls][populate]=*'),
         fetchJSON('/api/project?populate=*'),
-        fetchJSON('/api/project?populate[ProjectDirect][populate]=*'),
+        fetchJSON('/api/project?populate[ProjectDirect][populate]=*')
       ])
         .then(([homeRes, globalRes]) => {
           if (!alive) return
@@ -413,12 +415,25 @@ function Router() {
 
 function App() {
   const Provider = window.GlobalDataProvider
+
+  console.log('App render, Provider =', Provider)
+
+  if (!Provider) {
+    return (
+      <div style={{ color: 'white', padding: '40px' }}>
+        <h1>Safari debug</h1>
+        <p>GlobalDataProvider is not defined on window.</p>
+      </div>
+    )
+  }
+
   return (
     <Provider>
       <Router />
     </Provider>
   )
 }
+
 
 const root = ReactDOM.createRoot(document.getElementById('app-root'))
 root.render(<App />)

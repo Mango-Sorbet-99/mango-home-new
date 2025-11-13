@@ -82,14 +82,14 @@ window.startMango = (mountEl) => {
         smoothCam.goalTarget.copy(controls.target)
         smoothCam.goalRoll = camera.rotation.z
 
-        keyLight = new THREE.DirectionalLight('#4fc683', 2.38)
+        keyLight = new THREE.DirectionalLight('#4fc683', 5)
         keyLight.position.set(3.98, -4.66, -10)
         scene.add(keyLight)
 
-        fillLight = new THREE.HemisphereLight('#ffffff', '#000000', 1.0)
+        fillLight = new THREE.HemisphereLight('#ffffff', '#000000', 2.0)
         scene.add(fillLight)
 
-        ambientLight = new THREE.AmbientLight('#ff8040', 1.0)
+        ambientLight = new THREE.AmbientLight('#ff8040', 2.0)
         scene.add(ambientLight)
 
         spotTarget = new THREE.Object3D()
@@ -171,7 +171,7 @@ window.startMango = (mountEl) => {
             mangoParent.add(mango)
             mangoParent.scale.set(0.3, 0.3, 0.3)
             mangoParent.position.set(0, 0, 0)
-            mangoParent.rotation.set(Math.PI, 0, 0.28)
+            mangoParent.rotation.set(Math.PI, Math.PI, 0.28)
             scene.add(mangoParent)
 
             unifyMaterials(gltf.scene, { env: 1.2, rough: 0.6, metal: 0.0 })
