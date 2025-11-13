@@ -471,11 +471,6 @@ a:hover {
     padding-top: 25px;
 }
 
-.project-card:hover {
-    transform: translateY(-15px)!important;
-    cursor: pointer;
-}
-
 .project-card:hover:before {
     border: 1px solid var(--primary500);
     transition: .7s ease-in-out;
