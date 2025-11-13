@@ -518,7 +518,6 @@ window.startMango = (mountEl) => {
                     trigger: el,
                     start: cfg.start || 'top bottom+=100',
                     end: cfg.end || 'bottom top+=100',
-                    markers: true,
                     scrub: 2,
                     ease:'expo.in',
                     invalidateOnRefresh: true,
