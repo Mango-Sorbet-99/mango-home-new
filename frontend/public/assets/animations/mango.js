@@ -275,8 +275,8 @@ window.startMango = (mountEl) => {
 
         const baseMat = new THREE.MeshBasicMaterial({
             map: tex,
-            transparent: true,        // ensure opacity works
-            depthWrite: false,        // avoid sorting artifacts when fading
+            transparent: true,   
+            depthWrite: false,      
             side: THREE.DoubleSide,
             toneMapped: false
         })
@@ -298,7 +298,6 @@ window.startMango = (mountEl) => {
             `);
         };
 
-        // ✅ assign to the OUTER variable
         textRing = new THREE.Mesh(geo, baseMat);
 
         const glowMat = baseMat.clone();
@@ -313,7 +312,6 @@ window.startMango = (mountEl) => {
         group.position.y = 0.05;
         group.add(textRing, glow);
 
-        // ✅ assign to the OUTER variable
         textGroup = group;
 
         (mangoParent || scene).add(textGroup);
@@ -424,7 +422,7 @@ window.startMango = (mountEl) => {
         camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, smoothCam.goalRoll, smoothCam.rollLerp)
 
         if (mangoParent && params.mangoSpin) mangoParent.rotation.y += params.mangoSpeed
-        if (textRing) textRing.rotation.y -= params.mangoSpeed
+        if (textRing) textRing.rotation.y += params.mangoSpeed / 2
 
         if (textGroup && textRing) {
             const mat = textRing.material
@@ -518,9 +516,11 @@ window.startMango = (mountEl) => {
 
                 ScrollTrigger.create({
                     trigger: el,
-                    start: cfg.start || 'top bottom',
-                    end: cfg.end || 'bottom top',
-                    scrub: cfg.scrub ?? CAM.scrub,
+                    start: cfg.start || 'top bottom+=100',
+                    end: cfg.end || 'bottom top+=100',
+                    markers: true,
+                    scrub: 2,
+                    ease:'expo.in',
                     invalidateOnRefresh: true,
                     refreshPriority: cfg.priority || 1,
                     onUpdate: (self) => {
@@ -573,11 +573,11 @@ window.startMango = (mountEl) => {
             yStart: camera.position.y,
             yEnd: camera.position.y + 0.15,
             rollStart: 0.15,
-            rollEnd: -0.1,
+            rollEnd: 0.2,
             targetX0: 1,
             targetX1: 5,
             targetY0: 0.0,
-            targetY1: 0.2,
+            targetY1: 0.0,
             targetZ0: 0.0,
             targetZ1: 0.0,
             priority: 2
