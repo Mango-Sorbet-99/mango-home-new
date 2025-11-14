@@ -17,11 +17,11 @@ const Logos = () => {
     './img/logos/chrome-svgrepo-com.svg',
     './img/logos/strapi.svg',
     './img/logos/shopify.svg',
-    './img/logos/spotify.svg'
+    './img/logos/spotify.svg',
+    './img/logos/gsap.svg'
   ]
 
   const stream = React.useMemo(() => [...logos, ...logos, ...logos], [])
-
   React.useEffect(() => {
     if (!swiperRef.current || !window.Swiper || !window.gsap || !window.ScrollTrigger) return
 
@@ -29,13 +29,13 @@ const Logos = () => {
 
     inst.current = new window.Swiper(swiperRef.current, {
       slidesPerView: 'auto',
-      spaceBetween: 25,
+      spaceBetween: 15,
       allowTouchMove: false,
       loop: true,
       loopedSlides: stream.length,
       loopAdditionalSlides: 16,
       centeredSlides: false,
-      speed: 8000,
+      speed: 6000,
       autoplay: {
         delay: 0,
         disableOnInteraction: false,

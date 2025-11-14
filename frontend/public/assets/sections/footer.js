@@ -193,8 +193,13 @@ const Footer = () => {
                 <p>🇳🇱&nbsp;+31&nbsp;6847&nbsp;446&nbsp;91</p>
               </div>
             </a>
+            <a className="hidden-mobile" href="tel:+4915216873896">
+              <div className="button-1 button glass">
+                <p>🇩🇪&nbsp;+49&nbsp;1521&nbsp;6873&nbsp;896</p>
+              </div>  
+            </a>
           </div>
-          <p className="phoneStatement p2">*The British number is always on, the French and Dutch numbers are sometimes off.</p>
+          <p className="phoneStatement p2">*The British number is always on, the French, Dutch & German numbers are sometimes off.</p>
         </div>
       </div>
     </div>
