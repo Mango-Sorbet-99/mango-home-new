@@ -659,13 +659,6 @@ a:hover {
 
  /* BLOG */
 
-.blogs {
-}
-
-.blogs .back-link {
-
-}
-
 .lImage-parent {
     display: flex;
     flex-direction: column-reverse;
