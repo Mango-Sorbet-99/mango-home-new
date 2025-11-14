@@ -1,4 +1,4 @@
-window.API_URL = window.API_URL || 'http://localhost:1337'
+window.API_URL = window.API_URL || 'https://satisfying-boat-18e59cc8b5.strapiapp.com';
 
 if (!window.GlobalDataSetup) {
   function fetchJSON(path) {

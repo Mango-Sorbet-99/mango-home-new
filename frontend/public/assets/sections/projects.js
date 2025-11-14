@@ -29,7 +29,26 @@ const Projects = () => {
       limited.forEach(pd => {
         const imgObj = pd?.Image || null
         const imgUrl = (imgObj?.formats?.small?.url) || imgObj?.url || ''
-        const absImg = imgUrl ? ((window.API_URL || '') + imgUrl) : ''
+
+        let absImg = ''
+        if (imgUrl) {
+          let u = imgUrl
+
+          // fix "https//" → "https://"
+          if (u.startsWith('https//')) {
+            u = 'https://' + u.slice('https//'.length)
+          }
+
+          if (u.startsWith('http://') || u.startsWith('https://')) {
+            // already a full URL, use as-is
+            absImg = u
+          } else {
+            // relative URL → prefix with Strapi host (without /api)
+            const host = (window.API_URL || '').replace(/\/api\/?$/, '')
+            absImg = host + (u.startsWith('/') ? u : '/' + u)
+          }
+        }
+
         const title = pd?.Title || ''
         const desc = truncate(pd?.Description || '')
         const url = pd?.URL || ''
