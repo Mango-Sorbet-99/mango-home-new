@@ -1,6 +1,6 @@
-import * as THREE from 'https://unpkg.com/three@0.126.0/build/three.module.js';
-import { OrbitControls } from 'https://unpkg.com/three@0.126.0/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'https://unpkg.com/three@0.126.0/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from '../../public/assets/threejs-master/build/three.module.js'
+import { GLTFLoader} from '../../public/assets/threejs-master/examples/jsm/loaders/GLTFLoader.js'
+import {OrbitControls} from '../../public/assets/threejs-master/examples/jsm/controls/OrbitControls.js'
 
 window.startMango = (mountEl) => {
     let scene, camera, renderer, controls, mango, mangoParent, starsSphere, cameraRig, params, asteroidParents, sphere
@@ -82,14 +82,14 @@ window.startMango = (mountEl) => {
         smoothCam.goalTarget.copy(controls.target)
         smoothCam.goalRoll = camera.rotation.z
 
-        keyLight = new THREE.DirectionalLight('#4fc683', 5)
+        keyLight = new THREE.DirectionalLight('#4fc683', 2.38)
         keyLight.position.set(3.98, -4.66, -10)
         scene.add(keyLight)
 
-        fillLight = new THREE.HemisphereLight('#ffffff', '#000000', 2.0)
+        fillLight = new THREE.HemisphereLight('#ffffff', '#000000', 1.0)
         scene.add(fillLight)
 
-        ambientLight = new THREE.AmbientLight('#ff8040', 2.0)
+        ambientLight = new THREE.AmbientLight('#ff8040', 1.0)
         scene.add(ambientLight)
 
         spotTarget = new THREE.Object3D()
