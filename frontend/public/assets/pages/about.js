@@ -69,7 +69,7 @@ const About = () => {
   return (
     <div className="about-hero">
       <div className="hero-img image-scaler-hero">
-          <img loading="lazy" className="two-img" data-desktop-bkg-src="/img/mango-wide-lf.webp" data-mobile-bkg-src="/img/mango-lf.webp" />
+          <img loading="lazy" className="two-img" src="/img/mango-wide-lf.webp" data-desktop-bkg-src="/img/mango-wide-lf.webp" data-mobile-bkg-src="/img/mango-lf.webp" />
       </div>
 
       <div className="sixtysix-thirtythree">

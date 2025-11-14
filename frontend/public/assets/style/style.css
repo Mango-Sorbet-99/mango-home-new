@@ -446,7 +446,6 @@ a:hover {
     flex: 1 1 calc(33.3333333333% - 50px);
     box-sizing: border-box;
     justify-content: start;
-    padding-bottom: 125px;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -539,6 +538,10 @@ a:hover {
     display: none;
 }
 
+.about-home img {
+    object-fit: cover;
+}
+
 /* BLOG CARDS */
 
 .blog-grid {
@@ -598,6 +601,7 @@ a:hover {
     flex-wrap: wrap;
     gap: 5px;
     margin-bottom: 10px;
+    margin-top: 0px;
 }
 
 .blog-card .pr-catagory div {
@@ -666,7 +670,7 @@ a:hover {
     display: flex;
     flex-direction: column-reverse;
     gap: 50px;
-    width: 50%;
+    width: 75%;
 }
 
 .lImage-parent img {
@@ -688,7 +692,7 @@ a:hover {
     flex-direction: column;
     gap: 10px;
     padding-bottom: 50px;
-    width: 50%;
+    width: 75%;
 }
 
 .blogs .hero-img {

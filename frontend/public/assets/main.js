@@ -276,31 +276,33 @@ function useImageScaler() {
 
 function twoIMG() {
   const imgs = document.querySelectorAll('img.two-img');
-  const isDesktop = window.matchMedia('(min-width: 601px)').matches;
+  if (!imgs.length) return;
+
+  const isDesktop = window.innerWidth >= 601;
 
   imgs.forEach(img => {
     const mobile  = img.dataset.mobileBkgSrc;
     const desktop = img.dataset.desktopBkgSrc;
     const want = isDesktop ? desktop : mobile;
+
     if (!want) return;
-    if (img.src !== want) img.src = want;
+
+    if (img.getAttribute('src') !== want) {
+      img.setAttribute('src', want);
+    }
   });
 }
 
-const runTwoIMG = () => {
-  requestAnimationFrame(twoIMG);
-};
-
-if (document.readyState !== 'loading') runTwoIMG();
-window.addEventListener('DOMContentLoaded', runTwoIMG);
-window.addEventListener('load', runTwoIMG);
+setTimeout(twoIMG, 500);
 
 let t;
 window.addEventListener('resize', () => {
   clearTimeout(t);
-  t = setTimeout(runTwoIMG, 150);
+  t = setTimeout(() => {
+    twoIMG();
+    setTimeout(twoIMG, 500);
+  }, 150);
 });
-
 
 /* V I D E O    R E P L A C E 
 

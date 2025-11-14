@@ -77,7 +77,8 @@ canvas {
 .about-home img {
     border-radius: 1000px;
     width: 100%;
-    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 1/1;
 }
 
 .about-home .fifty-fifty {
